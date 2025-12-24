@@ -1,0 +1,244 @@
+{
+  "category": "first_week",
+  "description": "Important tasks for days 3-7 after a death",
+  "tasks": [
+    {
+      "id": "notify-social-security",
+      "title": "Notify Social Security Administration",
+      "description": "Report the death to Social Security. If your loved one was receiving benefits, payments must stop. Surviving spouses or dependents may be eligible for survivor benefits.",
+      "task_type": "paperwork",
+      "priority": 1,
+      "days_after_death": 3,
+      "why_it_matters": "Benefits paid after death must be returned. A surviving spouse may be eligible for survivor benefits, which can be significant—up to 100% of the deceased's benefit amount.",
+      "documents_needed": [
+        "Death certificate",
+        "Deceased's Social Security number",
+        "Your Social Security number (if applying for survivor benefits)",
+        "Marriage certificate (for surviving spouse)",
+        "Birth certificates (for dependent children)"
+      ],
+      "tips": [
+        "The funeral home often reports the death, but verify this was done",
+        "Call SSA at 1-800-772-1213 (TTY 1-800-325-0778)",
+        "Benefits are not prorated—the full month's payment must be returned",
+        "Survivor benefits must be applied for—they're not automatic",
+        "A surviving spouse can receive benefits as early as age 60 (50 if disabled)"
+      ],
+      "estimated_time": "1-2 hours on the phone",
+      "is_paperwork_task": true,
+      "paperwork_wizard_id": "social-security-survivor-benefits",
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "notify-banks",
+      "title": "Notify banks and financial institutions",
+      "description": "Contact all banks where the deceased had accounts. Joint accounts may need to be retitled. Individual accounts may be frozen until probate is complete.",
+      "task_type": "financial",
+      "priority": 2,
+      "days_after_death": 4,
+      "why_it_matters": "Banks need to freeze accounts to protect the estate. If you're a joint account holder, you need to remove the deceased's name. This also prevents identity theft.",
+      "documents_needed": [
+        "Death certificate",
+        "Your identification",
+        "Letters Testamentary or Letters of Administration (for executor access)",
+        "Account numbers if known"
+      ],
+      "tips": [
+        "Start with banks where you know accounts exist",
+        "Check recent mail and email for statements from banks you might not know about",
+        "Ask about any automatic payments set up from these accounts",
+        "Joint accounts usually transfer automatically to the surviving holder",
+        "Safe deposit boxes may require probate court order to access"
+      ],
+      "estimated_time": "1-2 hours per institution",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": true
+    },
+    {
+      "id": "notify-insurance-companies",
+      "title": "Notify insurance companies",
+      "description": "Contact life insurance companies to file claims. Also notify health, auto, and homeowners insurance companies of the death.",
+      "task_type": "financial",
+      "priority": 1,
+      "days_after_death": 4,
+      "why_it_matters": "Life insurance claims should be filed promptly. Auto and home insurance policies may need to be transferred or cancelled. Health insurance claims may still be pending.",
+      "documents_needed": [
+        "Death certificate",
+        "Policy numbers",
+        "Deceased's Social Security number",
+        "Beneficiary identification"
+      ],
+      "tips": [
+        "Life insurance claims typically pay within 30-60 days",
+        "Check for life insurance through employers, credit cards, and associations",
+        "Ask about any accidental death benefits that might apply",
+        "Don't cancel auto or home insurance until the property is transferred",
+        "COBRA allows dependents to continue health coverage (expensive but important)"
+      ],
+      "estimated_time": "30 minutes to 1 hour per company",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "begin-mail-forwarding",
+      "title": "Forward or collect mail",
+      "description": "Set up mail forwarding from the deceased's address to yours, or arrange to collect mail regularly. This helps you discover accounts and bills you might not know about.",
+      "task_type": "logistics",
+      "priority": 3,
+      "days_after_death": 5,
+      "why_it_matters": "Mail reveals accounts, bills, and subscriptions you need to address. Uncollected mail signals an empty home. Some important notices have deadlines.",
+      "documents_needed": [
+        "Death certificate (for some mail forwarding requests)",
+        "Your identification",
+        "Proof of executorship or relationship"
+      ],
+      "tips": [
+        "You can forward mail at usps.com or your local post office",
+        "Consider forwarding for 6-12 months to catch everything",
+        "Watch for bills, statements, and notices from unknown companies",
+        "Some first-class mail won't forward—check the original address periodically",
+        "Put a hold on mail during the funeral period if the home will be empty"
+      ],
+      "estimated_time": "30 minutes",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": true,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "notify-credit-card-companies",
+      "title": "Notify credit card companies",
+      "description": "Contact credit card companies to report the death. Request account closure and final statements. Ask about any life insurance or purchase protection on the cards.",
+      "task_type": "financial",
+      "priority": 2,
+      "days_after_death": 5,
+      "why_it_matters": "Credit card debt is typically paid by the estate, not heirs. Closing accounts prevents fraudulent charges and stops interest from accruing.",
+      "documents_needed": [
+        "Death certificate",
+        "Account numbers",
+        "Executor documentation (Letters Testamentary)"
+      ],
+      "tips": [
+        "You are NOT personally responsible for the deceased's credit card debt (usually)",
+        "Ask about any credit card life insurance that might pay off the balance",
+        "Request final statements for estate accounting",
+        "Cancel any authorized users on the accounts",
+        "Watch for recurring charges that indicate subscriptions to cancel"
+      ],
+      "estimated_time": "20-30 minutes per card",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": true
+    },
+    {
+      "id": "contact-attorney",
+      "title": "Contact an estate attorney (if needed)",
+      "description": "If the estate is complex, involves probate, or there are disputes, consult with an estate attorney. They can guide you through the legal process.",
+      "task_type": "legal",
+      "priority": 2,
+      "days_after_death": 5,
+      "why_it_matters": "An attorney can save time and prevent costly mistakes. Some states have complex probate requirements. If there's no will, an attorney is especially important.",
+      "documents_needed": [
+        "Will (if one exists)",
+        "Trust documents",
+        "List of assets and their approximate values",
+        "List of debts and liabilities",
+        "Beneficiary designations"
+      ],
+      "tips": [
+        "Many attorneys offer free initial consultations",
+        "Not all estates need to go through probate—an attorney can advise",
+        "Ask about flat fees vs. hourly rates vs. percentage of estate",
+        "If the deceased had an attorney, start there—they may know the situation",
+        "Look for attorneys who specialize in probate/estate law"
+      ],
+      "estimated_time": "1-2 hours for initial consultation",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": true
+    },
+    {
+      "id": "gather-financial-records",
+      "title": "Gather financial records and statements",
+      "description": "Collect recent bank statements, tax returns, investment statements, and other financial documents. These are needed for probate and settling the estate.",
+      "task_type": "financial",
+      "priority": 2,
+      "days_after_death": 6,
+      "why_it_matters": "Financial records reveal the full picture of the estate—assets, debts, and income. The executor needs this information to properly administer the estate.",
+      "documents_needed": [],
+      "tips": [
+        "Look for the last 3 years of tax returns",
+        "Gather recent statements from all financial accounts",
+        "Check for online accounts—look through email for financial services",
+        "Note any recurring income (Social Security, pensions, rental income)",
+        "Create a spreadsheet to track all assets and debts discovered"
+      ],
+      "estimated_time": "2-4 hours",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": true
+    },
+    {
+      "id": "write-obituary",
+      "title": "Write and publish obituary",
+      "description": "Write an obituary for publication in newspapers and online. This informs the broader community and provides details about memorial services.",
+      "task_type": "logistics",
+      "priority": 3,
+      "days_after_death": 3,
+      "why_it_matters": "An obituary notifies friends and acquaintances who might not hear through personal channels. It's also a way to honor your loved one's life and legacy.",
+      "documents_needed": [],
+      "tips": [
+        "Include: full name, age, date of death, survivors, service details",
+        "Consider what your loved one would have wanted to be remembered for",
+        "Avoid listing specific funeral times if concerned about home security",
+        "Many newspapers charge by the word—be aware of costs",
+        "Free options include legacy.com and funeral home websites"
+      ],
+      "estimated_time": "1-2 hours to write, varies for publication",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    }
+  ]
+}

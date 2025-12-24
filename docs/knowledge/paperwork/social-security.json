@@ -1,0 +1,362 @@
+{
+  "id": "social-security-survivor-benefits",
+  "title": "Apply for Social Security Survivor Benefits",
+  "description": "Social Security provides monthly payments to eligible family members of a deceased worker. This guide walks you through the application process step by step.",
+  "estimatedTime": "30-60 minutes to gather documents, 20-30 minutes to apply",
+  "introduction": {
+    "overview": "Survivor benefits can provide crucial financial support during this difficult time. The Social Security Administration (SSA) pays benefits to widows, widowers, children, and in some cases, other family members of workers who paid into Social Security.",
+    "reassurance": "This process might feel overwhelming, but we'll take it one step at a time. You don't need to have everything perfect—SSA staff are experienced in helping people through this process.",
+    "deadline": "There's no strict deadline to apply, but benefits may only be paid retroactively for up to 6 months. Applying sooner means you won't miss out on payments you're entitled to."
+  },
+  "beforeYouBegin": {
+    "documentsRequired": [
+      {
+        "item": "Death certificate",
+        "details": "You'll need a certified copy. The funeral home typically orders these for you. If you need more copies, contact your county vital records office.",
+        "required": true
+      },
+      {
+        "item": "Your Social Security number",
+        "details": "Have your Social Security card handy, or know your number.",
+        "required": true
+      },
+      {
+        "item": "Deceased person's Social Security number",
+        "details": "This may be on their Social Security card, tax returns, or other documents. The funeral home may have recorded it.",
+        "required": true
+      },
+      {
+        "item": "Your birth certificate",
+        "details": "Proof of your age. If applying as a widow/widower, this helps verify eligibility.",
+        "required": true
+      },
+      {
+        "item": "Marriage certificate (if applying as spouse)",
+        "details": "Certified copy proving your marriage to the deceased. If you can't find it, you can order one from the county or state where you were married.",
+        "required": false,
+        "conditionalNote": "Required only if applying as a surviving spouse"
+      },
+      {
+        "item": "Divorce decree (if applicable)",
+        "details": "If you were divorced from the deceased but were married for 10+ years, you may still qualify for benefits.",
+        "required": false,
+        "conditionalNote": "Only if you were divorced from the deceased"
+      },
+      {
+        "item": "Children's birth certificates and Social Security numbers",
+        "details": "If applying for benefits for surviving children under 18 (or under 19 if still in high school).",
+        "required": false,
+        "conditionalNote": "Only if applying for benefits for children"
+      },
+      {
+        "item": "Bank account information",
+        "details": "Routing number and account number for direct deposit. This is the fastest and safest way to receive benefits.",
+        "required": false
+      }
+    ],
+    "informationNeeded": [
+      "Deceased person's date and place of birth",
+      "Deceased person's date and place of death",
+      "Whether the deceased filed for or received Social Security benefits",
+      "Whether the deceased worked for the railroad industry (different program applies)",
+      "Whether you or the deceased were ever in the military",
+      "Your current employment status and earnings"
+    ],
+    "tips": [
+      "Don't wait until you have every document. SSA can often verify information and may accept applications while you gather remaining documents.",
+      "Make copies of all documents before submitting them.",
+      "If you're missing a document, SSA staff can often help you figure out how to get it."
+    ]
+  },
+  "steps": [
+    {
+      "id": "gather-documents",
+      "number": 1,
+      "title": "Gather Your Documents",
+      "description": "Before starting your application, collect the documents and information you'll need. Having everything ready will make the process smoother.",
+      "estimatedTime": "30-60 minutes",
+      "instructions": [
+        {
+          "text": "Locate a certified copy of the death certificate",
+          "details": "The funeral home typically provides these. If you need additional copies, contact your county vital records office. Some states allow online ordering."
+        },
+        {
+          "text": "Find your Social Security card or confirm your number",
+          "details": "If you've lost your card, you can often find your number on tax returns, W-2 forms, or bank statements. You can also create a my Social Security account to view it online."
+        },
+        {
+          "text": "Locate the deceased's Social Security number",
+          "details": "Check their Social Security card, tax returns, Medicare card, or any official documents. The funeral home may have recorded this information."
+        },
+        {
+          "text": "Gather proof of relationship documents",
+          "details": "Marriage certificate if you're a surviving spouse, birth certificates for yourself and any children who may be eligible for benefits."
+        },
+        {
+          "text": "Have your bank account information ready",
+          "details": "Your bank's routing number (9 digits) and your account number. This is usually on the bottom of your checks or in your online banking portal."
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "Using a photocopy instead of a certified copy of the death certificate",
+          "prevention": "SSA requires certified copies with an official seal or stamp. Photocopies or printouts are not accepted."
+        },
+        {
+          "mistake": "Not having the deceased's Social Security number",
+          "prevention": "This is essential. If you can't find it anywhere, call SSA at 1-800-772-1213—they may be able to look it up with other information."
+        }
+      ],
+      "checkpoints": [
+        "I have a certified death certificate",
+        "I know my Social Security number",
+        "I know the deceased's Social Security number",
+        "I have my birth certificate",
+        "I have my marriage certificate (if applying as spouse)",
+        "I have bank account information for direct deposit"
+      ]
+    },
+    {
+      "id": "choose-method",
+      "number": 2,
+      "title": "Decide How to Apply",
+      "description": "You can apply for survivor benefits in three ways. Each has advantages depending on your situation.",
+      "estimatedTime": "5 minutes to decide",
+      "options": [
+        {
+          "method": "By Phone",
+          "recommended": true,
+          "description": "Call Social Security at 1-800-772-1213",
+          "hours": "Monday through Friday, 8:00 AM to 7:00 PM local time",
+          "pros": [
+            "You can ask questions as you go",
+            "The representative can guide you through complex situations",
+            "They can tell you immediately if additional documents are needed",
+            "Available if you're not comfortable with computers"
+          ],
+          "cons": [
+            "Wait times can be long, especially early in the week and month",
+            "You'll need to have all documents in front of you"
+          ],
+          "bestFor": "Most people, especially if you have questions or your situation is complicated"
+        },
+        {
+          "method": "In Person",
+          "recommended": false,
+          "description": "Visit your local Social Security office",
+          "hours": "Most offices are open Monday through Friday, 9:00 AM to 4:00 PM",
+          "pros": [
+            "Face-to-face help with your application",
+            "Staff can review your documents on the spot",
+            "Helpful if you have mobility or hearing issues that make phone calls difficult"
+          ],
+          "cons": [
+            "Requires scheduling an appointment (call 1-800-772-1213)",
+            "May involve travel and waiting",
+            "Limited appointment availability"
+          ],
+          "bestFor": "People who prefer in-person assistance or have complex situations"
+        },
+        {
+          "method": "Online (Limited)",
+          "recommended": false,
+          "description": "Some survivor benefits can be started at ssa.gov",
+          "hours": "Available 24/7",
+          "pros": [
+            "Convenient—apply from home anytime",
+            "Can save and return to application"
+          ],
+          "cons": [
+            "Only available for certain types of survivor benefits",
+            "You'll still need to provide original documents",
+            "May still require a phone call to complete"
+          ],
+          "bestFor": "Tech-comfortable people who are only applying for widow/widower benefits and are already receiving their own Social Security"
+        }
+      ],
+      "recommendation": "For most people, we recommend calling by phone. Yes, there may be a wait, but having a real person guide you through the process is worth it. They can answer questions, clarify requirements, and often complete everything in one call.",
+      "tips": [
+        "Best times to call are Wednesday through Friday, later in the month, and later in the day",
+        "If you call, use a landline if possible for better audio quality",
+        "Have a pen and paper ready to write down any case numbers or follow-up instructions"
+      ]
+    },
+    {
+      "id": "complete-application",
+      "number": 3,
+      "title": "Complete the Application",
+      "description": "Whether by phone or in person, here's what to expect during the application process.",
+      "estimatedTime": "20-30 minutes",
+      "sections": [
+        {
+          "name": "Basic Information",
+          "fields": [
+            {
+              "field": "Your full legal name",
+              "explanation": "Use the name exactly as it appears on your Social Security card. If your name has changed (marriage, divorce), you may need to update it with SSA."
+            },
+            {
+              "field": "Your date of birth",
+              "explanation": "Your age affects eligibility. Widows/widowers can receive reduced benefits as early as age 60, or full benefits at full retirement age."
+            },
+            {
+              "field": "Deceased's full legal name",
+              "explanation": "The name as it appeared on their Social Security records."
+            },
+            {
+              "field": "Deceased's date of birth and death",
+              "explanation": "These should match what's on the death certificate."
+            }
+          ]
+        },
+        {
+          "name": "Relationship Information",
+          "fields": [
+            {
+              "field": "Your relationship to the deceased",
+              "explanation": "Spouse, child, parent, etc. Different relationships have different eligibility requirements."
+            },
+            {
+              "field": "Date and place of marriage (if spouse)",
+              "explanation": "You'll need to have been married for at least 9 months, unless the death was accidental or you have children together."
+            },
+            {
+              "field": "Whether you're currently married",
+              "explanation": "Remarriage before age 60 typically ends eligibility for survivor benefits as a widow/widower (with some exceptions)."
+            }
+          ]
+        },
+        {
+          "name": "Benefit Information",
+          "fields": [
+            {
+              "field": "Type of benefits you're applying for",
+              "explanation": "Monthly survivor benefits, lump-sum death benefit ($255), or both. Most people should apply for both if eligible."
+            },
+            {
+              "field": "Whether you're receiving Social Security",
+              "explanation": "If you're already receiving your own retirement benefits, SSA will determine if you're entitled to additional survivor benefits."
+            },
+            {
+              "field": "Your employment status",
+              "explanation": "If you're under full retirement age and earning income, your benefits may be reduced. This is temporary—you get the money back later."
+            }
+          ]
+        },
+        {
+          "name": "Payment Information",
+          "fields": [
+            {
+              "field": "Direct deposit information",
+              "explanation": "Your bank's routing number and your account number. Direct deposit is faster and more secure than paper checks."
+            }
+          ]
+        }
+      ],
+      "commonMistakes": [
+        {
+          "mistake": "Not applying for the one-time lump sum death payment",
+          "prevention": "The $255 death benefit is separate from monthly benefits. Make sure to request it during your application."
+        },
+        {
+          "mistake": "Assuming you're not eligible because you work",
+          "prevention": "You may still qualify even if you're working. Benefits might be reduced temporarily, but often it's still worth applying."
+        },
+        {
+          "mistake": "Not applying for children's benefits",
+          "prevention": "Children under 18 (or 19 if still in high school) may be eligible for their own benefits. Don't forget to ask."
+        }
+      ],
+      "tips": [
+        "If you don't know an answer, say so. The SSA representative can help you figure it out or tell you what documentation you'll need.",
+        "Ask for a receipt or confirmation number at the end of your application.",
+        "Request a written explanation of your benefits determination."
+      ]
+    },
+    {
+      "id": "after-applying",
+      "number": 4,
+      "title": "What to Expect After Applying",
+      "description": "Once you've submitted your application, here's what happens next and what you should do.",
+      "estimatedTime": "Ongoing",
+      "timeline": [
+        {
+          "when": "Immediately after applying",
+          "what": "You should receive a receipt or confirmation number. Write this down and keep it safe."
+        },
+        {
+          "when": "Within a few weeks",
+          "what": "You may receive a letter asking for additional documentation. Respond promptly—delays can hold up your benefits."
+        },
+        {
+          "when": "Within 30-60 days (typically)",
+          "what": "You'll receive a determination letter explaining whether you qualify and how much you'll receive."
+        },
+        {
+          "when": "First payment",
+          "what": "If approved, benefits are paid the month after they're due. For example, January's benefit arrives in February."
+        }
+      ],
+      "whatToSaveForRecords": [
+        "Copy of your application or confirmation number",
+        "All correspondence from SSA",
+        "Copies of all documents you submitted",
+        "Notes from any phone calls (date, time, representative's name)"
+      ],
+      "ifDenied": {
+        "dontPanic": "Denials can often be appealed successfully. Common reasons include missing documentation or misunderstandings about your situation.",
+        "steps": [
+          "Read the denial letter carefully—it explains why and your appeal rights",
+          "You have 60 days to file an appeal",
+          "Consider contacting a Social Security attorney or advocate (many work on contingency)",
+          "You can continue to provide additional documentation"
+        ]
+      },
+      "ongoingResponsibilities": [
+        "Report changes in your marital status, address, or employment",
+        "Report if you start receiving other government benefits",
+        "Keep your contact information updated with SSA",
+        "Review your annual Social Security statement for accuracy"
+      ],
+      "helpfulResources": [
+        {
+          "name": "SSA Survivor Benefits Page",
+          "url": "https://www.ssa.gov/benefits/survivors/",
+          "description": "Official information about survivor benefits"
+        },
+        {
+          "name": "Find Your Local Office",
+          "url": "https://secure.ssa.gov/ICON/main.jsp",
+          "description": "Locate the nearest Social Security office"
+        },
+        {
+          "name": "my Social Security Account",
+          "url": "https://www.ssa.gov/myaccount/",
+          "description": "Create an account to check application status and manage benefits"
+        }
+      ]
+    }
+  ],
+  "frequentlyAskedQuestions": [
+    {
+      "question": "How much will I receive?",
+      "answer": "Survivor benefits are based on the deceased's earnings record. The amount varies widely. A widow/widower at full retirement age can receive 100% of the deceased's benefit. At age 60, you'd receive about 71.5%. Children receive 75% of the deceased's benefit. Call SSA for an estimate based on your specific situation."
+    },
+    {
+      "question": "Can I receive survivor benefits if I'm still working?",
+      "answer": "Yes, but if you're under full retirement age, your benefits may be temporarily reduced based on your earnings. In 2024, you can earn up to $22,320 before benefits are affected. Earnings above this reduce benefits by $1 for every $2 earned. After full retirement age, there's no reduction."
+    },
+    {
+      "question": "What if I'm already receiving Social Security on my own record?",
+      "answer": "You can't receive both your full benefit and the full survivor benefit. SSA will pay your own benefit first, then top it up with survivor benefits if the survivor amount is higher. You'll get the higher of the two amounts."
+    },
+    {
+      "question": "I was divorced from the deceased. Can I still apply?",
+      "answer": "You may qualify if your marriage lasted at least 10 years and you're currently unmarried (or remarried after age 60). The deceased must have been fully insured, meaning they worked and paid Social Security taxes long enough."
+    },
+    {
+      "question": "How long does the process take?",
+      "answer": "Most applications are processed within 30-60 days. Complex cases may take longer. If approved, your first payment typically arrives within a month or two of approval. Benefits can be paid retroactively for up to 6 months."
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+{
+  "category": "first_month",
+  "description": "Important tasks for weeks 2-4 after a death",
+  "tasks": [
+    {
+      "id": "apply-life-insurance",
+      "title": "Apply for life insurance benefits",
+      "description": "File formal claims with all life insurance companies. Gather required documentation and submit claims for each policy.",
+      "task_type": "financial",
+      "priority": 1,
+      "days_after_death": 10,
+      "why_it_matters": "Life insurance proceeds are typically not taxable and don't go through probate. They can provide crucial financial support for surviving family members.",
+      "documents_needed": [
+        "Death certificate (certified copy)",
+        "Insurance policy or policy number",
+        "Claim forms from each insurance company",
+        "Beneficiary identification",
+        "Deceased's Social Security number"
+      ],
+      "tips": [
+        "Claims typically pay within 30-60 days after filing",
+        "Check for policies through employers, banks, and credit cards",
+        "Ask about different payout options (lump sum vs. installments)",
+        "If the policy is less than 2 years old, there may be a contestability period",
+        "Keep copies of everything you submit"
+      ],
+      "estimated_time": "1-2 hours per policy",
+      "is_paperwork_task": true,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "file-survivor-benefits",
+      "title": "File for Social Security survivor benefits",
+      "description": "If eligible, apply for Social Security survivor benefits. Surviving spouses, ex-spouses (in some cases), and dependent children may qualify.",
+      "task_type": "paperwork",
+      "priority": 1,
+      "days_after_death": 14,
+      "why_it_matters": "Survivor benefits can provide significant ongoing income. A surviving spouse may receive up to 100% of the deceased's benefit amount.",
+      "documents_needed": [
+        "Death certificate",
+        "Social Security numbers (yours and deceased's)",
+        "Birth certificate",
+        "Marriage certificate (for spouses)",
+        "Divorce decree (for ex-spouses)",
+        "Dependent children's birth certificates",
+        "W-2 forms or self-employment tax return for previous year"
+      ],
+      "tips": [
+        "Apply by calling SSA at 1-800-772-1213",
+        "You cannot apply online for survivor benefits—it requires a phone call or visit",
+        "Benefits can be retroactive up to 6 months",
+        "A lump-sum death payment of $255 is available to surviving spouse or child",
+        "Divorced spouses may qualify if marriage lasted 10+ years"
+      ],
+      "estimated_time": "1-2 hours for application",
+      "is_paperwork_task": true,
+      "paperwork_wizard_id": "social-security-survivor-benefits",
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": true,
+      "requires_executor_role": false
+    },
+    {
+      "id": "notify-credit-bureaus",
+      "title": "Notify credit bureaus",
+      "description": "Report the death to all three credit bureaus (Equifax, Experian, TransUnion) to prevent identity theft and fraudulent credit applications.",
+      "task_type": "financial",
+      "priority": 2,
+      "days_after_death": 14,
+      "why_it_matters": "Identity thieves target deceased individuals. Placing a deceased alert on credit reports prevents new accounts from being opened fraudulently.",
+      "documents_needed": [
+        "Death certificate",
+        "Deceased's Social Security number",
+        "Your identification as executor or family member",
+        "Proof of your authority (Letters Testamentary or proof of relationship)"
+      ],
+      "tips": [
+        "Request a credit report to see all open accounts",
+        "Each bureau has a deceased notification process",
+        "Consider placing a fraud alert as an extra precaution",
+        "Monitor for any new inquiries that could indicate fraud",
+        "Equifax: 800-685-1111, Experian: 888-397-3742, TransUnion: 800-916-8800"
+      ],
+      "estimated_time": "30 minutes per bureau",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": true
+    },
+    {
+      "id": "cancel-subscriptions",
+      "title": "Cancel subscriptions and memberships",
+      "description": "Review and cancel ongoing subscriptions, memberships, and recurring payments. This includes streaming services, gym memberships, magazines, and clubs.",
+      "task_type": "logistics",
+      "priority": 3,
+      "days_after_death": 14,
+      "why_it_matters": "Ongoing charges continue to accrue until cancelled. Some subscriptions offer partial refunds. This also helps reduce the estate's ongoing expenses.",
+      "documents_needed": [
+        "Death certificate (some companies require it)",
+        "Account information or member numbers"
+      ],
+      "tips": [
+        "Check bank and credit card statements for recurring charges",
+        "Look through email for subscription confirmation messages",
+        "Common subscriptions: Netflix, Spotify, Amazon Prime, newspapers, magazines",
+        "Some companies offer refunds for unused portions",
+        "Don't forget professional memberships, clubs, and associations"
+      ],
+      "estimated_time": "2-3 hours total",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "transfer-utilities",
+      "title": "Transfer or cancel utilities",
+      "description": "If keeping the deceased's property, transfer utilities to your name or the estate. If selling, arrange for eventual disconnection.",
+      "task_type": "logistics",
+      "priority": 2,
+      "days_after_death": 10,
+      "why_it_matters": "Utilities must be maintained if the property is occupied or being prepared for sale. Transferring accounts prevents service interruption and security deposits.",
+      "documents_needed": [
+        "Death certificate",
+        "Proof of executorship or ownership",
+        "Your identification"
+      ],
+      "tips": [
+        "Don't cancel utilities if the home will be shown for sale",
+        "Ask about any deposits that can be refunded to the estate",
+        "Set up forwarding for final bills",
+        "Consider putting accounts in the estate's name temporarily",
+        "Keep minimal service if the home will be vacant for a while"
+      ],
+      "estimated_time": "30 minutes per utility",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": true,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "claim-retirement-accounts",
+      "title": "Claim retirement account benefits",
+      "description": "Contact the institutions holding 401(k)s, IRAs, and pensions to claim benefits. Beneficiaries have specific options and deadlines for distributions.",
+      "task_type": "financial",
+      "priority": 1,
+      "days_after_death": 14,
+      "why_it_matters": "Retirement accounts have specific rules for inherited distributions. Making the right choices can significantly impact taxes and long-term value.",
+      "documents_needed": [
+        "Death certificate",
+        "Beneficiary identification and Social Security number",
+        "Account statements or numbers",
+        "Claim forms from each institution"
+      ],
+      "tips": [
+        "Spouse beneficiaries have the most options (rollover to own IRA, treat as own)",
+        "Non-spouse beneficiaries must withdraw within 10 years (for most accounts)",
+        "Don't withdraw until you understand the tax implications",
+        "Consider consulting a financial advisor for complex situations",
+        "Required Minimum Distributions may need to continue"
+      ],
+      "estimated_time": "1-2 hours per account",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": true,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    },
+    {
+      "id": "update-vehicle-title",
+      "title": "Update vehicle title and registration",
+      "description": "Transfer the deceased's vehicle title to the new owner or the estate. Update registration and insurance as needed.",
+      "task_type": "legal",
+      "priority": 3,
+      "days_after_death": 21,
+      "why_it_matters": "The vehicle cannot be legally sold or driven without proper title transfer. Insurance may not cover an untitled vehicle.",
+      "documents_needed": [
+        "Death certificate",
+        "Vehicle title",
+        "Letters Testamentary or proof of executorship",
+        "Your identification",
+        "Transfer forms from DMV"
+      ],
+      "tips": [
+        "Check if there's a loan on the vehicle—contact the lender",
+        "Some states allow transfer without probate for small estates or surviving spouse",
+        "Update insurance immediately after transfer",
+        "If selling, you may be able to transfer directly to buyer in some states",
+        "Don't forget to cancel or transfer toll transponders"
+      ],
+      "estimated_time": "1-2 hours at DMV",
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": true
+    },
+    {
+      "id": "notify-veterans-affairs",
+      "title": "Notify Veterans Affairs (if applicable)",
+      "description": "If the deceased was a veteran, notify the VA. The family may be eligible for burial benefits, survivor benefits, and assistance with headstone.",
+      "task_type": "paperwork",
+      "priority": 2,
+      "days_after_death": 14,
+      "why_it_matters": "Veterans and their families are entitled to significant benefits including burial allowance, headstone, and possible survivor's pension.",
+      "documents_needed": [
+        "Death certificate",
+        "DD-214 (military discharge papers)",
+        "Marriage certificate (for spouse benefits)",
+        "Veteran's Social Security number"
+      ],
+      "tips": [
+        "VA burial benefits include burial allowance and headstone/marker",
+        "Burial in a VA national cemetery is free for eligible veterans",
+        "Surviving spouses may qualify for Dependency and Indemnity Compensation (DIC)",
+        "Call VA at 1-800-827-1000",
+        "The funeral home may help coordinate VA benefits"
+      ],
+      "estimated_time": "1-2 hours",
+      "is_paperwork_task": true,
+      "paperwork_wizard_id": null,
+      "requires_will": false,
+      "requires_trust": false,
+      "requires_property": false,
+      "requires_retirement_accounts": false,
+      "requires_surviving_spouse": false,
+      "requires_executor_role": false
+    }
+  ]
+}

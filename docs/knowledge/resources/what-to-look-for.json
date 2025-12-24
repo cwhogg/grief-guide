@@ -1,0 +1,480 @@
+{
+  "categories": {
+    "grief_counselor": {
+      "title": "Grief Counselors & Therapists",
+      "icon": "heart",
+      "description": "Mental health professionals who specialize in helping people process loss and grief.",
+      "whenToSeek": [
+        "You're struggling to function in daily life",
+        "Grief feels overwhelming or isn't easing over time",
+        "You want professional support processing your loss",
+        "You're experiencing complicated emotions (guilt, anger, relief)",
+        "You want a safe space to talk without burdening family"
+      ],
+      "whatToLookFor": [
+        {
+          "criteria": "Specialization in grief and bereavement",
+          "why": "General therapists may not understand the unique aspects of grief. Look for someone with specific training or certification in grief counseling."
+        },
+        {
+          "criteria": "Licensed credentials (LCSW, LPC, LMFT, PhD, PsyD)",
+          "why": "Licensure ensures they've met education and training requirements. Common credentials include Licensed Clinical Social Worker (LCSW), Licensed Professional Counselor (LPC), or psychologist."
+        },
+        {
+          "criteria": "Experience with your type of loss",
+          "why": "Losing a parent has unique dynamics. Someone who has worked with adult children grieving parents will understand your experience better."
+        },
+        {
+          "criteria": "Approach that resonates with you",
+          "why": "Some people prefer structured approaches, others want open-ended talk therapy. Ask about their style before committing."
+        },
+        {
+          "criteria": "Practical considerations (cost, location, telehealth)",
+          "why": "Therapy only helps if you can actually attend. Consider whether they take your insurance, offer sliding scale fees, or provide online sessions."
+        }
+      ],
+      "redFlags": [
+        "Promises to 'fix' your grief quickly",
+        "Pushes religious or spiritual frameworks without your consent",
+        "Makes you feel judged for how you're grieving",
+        "Doesn't have proper licensure",
+        "Won't discuss their approach or credentials"
+      ],
+      "questionsToAsk": [
+        "What is your experience working with grief and loss?",
+        "What's your approach to grief counseling?",
+        "Do you have experience with adult children who have lost parents?",
+        "What are your fees and do you take insurance?",
+        "Do you offer telehealth sessions?",
+        "How long do clients typically work with you?"
+      ],
+      "costRange": {
+        "low": 75,
+        "high": 250,
+        "unit": "per session",
+        "notes": "Many therapists offer sliding scale fees. Some insurance plans cover grief counseling. Community mental health centers may offer lower-cost options."
+      }
+    },
+    "estate_attorney": {
+      "title": "Estate & Probate Attorneys",
+      "icon": "scale",
+      "description": "Lawyers who specialize in probate, estate administration, and related legal matters.",
+      "whenToSeek": [
+        "The estate needs to go through probate",
+        "There's a will that needs to be validated",
+        "There are disputes among heirs or beneficiaries",
+        "The estate includes complex assets (businesses, multiple properties)",
+        "You're unsure about your legal responsibilities as executor",
+        "There are potential creditor claims or lawsuits"
+      ],
+      "whatToLookFor": [
+        {
+          "criteria": "Specialization in probate and estate administration",
+          "why": "Probate law is complex and varies by state. You want someone who does this regularly, not a general practitioner handling their first estate."
+        },
+        {
+          "criteria": "Experience in your state",
+          "why": "Probate laws vary significantly by state. An attorney licensed and experienced in your state will know local court procedures and requirements."
+        },
+        {
+          "criteria": "Clear fee structure",
+          "why": "Estate attorneys may charge hourly, flat fees, or a percentage of the estate. Understand the total cost before engaging."
+        },
+        {
+          "criteria": "Good communication",
+          "why": "You'll have many questions during this process. Choose someone who explains things clearly and responds promptly."
+        },
+        {
+          "criteria": "Appropriate firm size",
+          "why": "For simple estates, a solo practitioner may be fine. For complex estates, a larger firm may have more resources."
+        }
+      ],
+      "redFlags": [
+        "Unwilling to provide a fee estimate",
+        "Pressures you to make quick decisions",
+        "Doesn't explain your options clearly",
+        "Takes on work outside their expertise",
+        "Poor reviews regarding communication"
+      ],
+      "questionsToAsk": [
+        "What percentage of your practice is probate and estate work?",
+        "How do you charge for your services?",
+        "Can you give me an estimate of total costs for my situation?",
+        "How long does the probate process typically take in this county?",
+        "Who will be my main point of contact?",
+        "How quickly do you typically respond to questions?"
+      ],
+      "costRange": {
+        "low": 3000,
+        "high": 15000,
+        "unit": "total for simple estate",
+        "notes": "Costs vary widely based on estate complexity. Some attorneys charge 2-4% of the estate value. Simple estates with no disputes cost less."
+      }
+    },
+    "estate_cpa": {
+      "title": "CPAs & Tax Professionals",
+      "icon": "calculator",
+      "description": "Accountants who specialize in estate taxes, final tax returns, and estate accounting.",
+      "whenToSeek": [
+        "You need to file the deceased's final tax return",
+        "The estate may owe estate taxes (estates over $12.92M in 2023)",
+        "There are complex assets requiring valuation",
+        "You need to understand the tax implications of inheritance",
+        "The estate has ongoing income (rental properties, businesses)",
+        "You want to ensure proper estate accounting"
+      ],
+      "whatToLookFor": [
+        {
+          "criteria": "Experience with estate and trust taxation",
+          "why": "Estate tax rules are specialized. A CPA who primarily does personal or business taxes may miss important considerations."
+        },
+        {
+          "criteria": "CPA or EA credential",
+          "why": "Certified Public Accountants (CPAs) and Enrolled Agents (EAs) have demonstrated expertise and are authorized to represent you before the IRS."
+        },
+        {
+          "criteria": "Understanding of estate administration",
+          "why": "The best estate CPAs understand how taxes interact with probate, beneficiary designations, and estate distribution."
+        },
+        {
+          "criteria": "Proactive tax planning advice",
+          "why": "A good CPA will help you make decisions that minimize tax liability, not just file returns after the fact."
+        }
+      ],
+      "redFlags": [
+        "No experience with estate or fiduciary returns",
+        "Unable to explain tax concepts clearly",
+        "Doesn't ask questions about the full situation",
+        "Promises specific outcomes before reviewing details",
+        "No clear engagement letter or fee agreement"
+      ],
+      "questionsToAsk": [
+        "How many estate returns have you prepared?",
+        "Are you familiar with the estate tax rules in my state?",
+        "What information will you need from me?",
+        "What is your fee structure?",
+        "Can you help with the deceased's final personal tax return as well?",
+        "What's your timeline for completing the work?"
+      ],
+      "costRange": {
+        "low": 500,
+        "high": 5000,
+        "unit": "for estate tax services",
+        "notes": "Simple final returns cost less. Complex estates with estate tax returns cost more. Many estates don't owe federal estate tax due to the high exemption."
+      }
+    },
+    "estate_sale": {
+      "title": "Estate Sale Companies",
+      "icon": "tag",
+      "description": "Professionals who organize, price, and sell household contents, typically taking a percentage of sales.",
+      "whenToSeek": [
+        "There's significant household contents to sell",
+        "You don't have time to sell items individually",
+        "You're not sure what items are worth",
+        "The home needs to be cleared for sale or end of lease",
+        "There are antiques or collectibles requiring expertise"
+      ],
+      "whatToLookFor": [
+        {
+          "criteria": "Established reputation and references",
+          "why": "Estate sales involve trusting someone with your family's possessions. Look for companies with verifiable track records."
+        },
+        {
+          "criteria": "Fair commission structure",
+          "why": "Most estate sale companies take 25-50% of gross sales. Understand exactly what's included in their fee."
+        },
+        {
+          "criteria": "Professional appraisal capabilities",
+          "why": "Good companies can identify valuable items that might otherwise be underpriced. They should know antiques, collectibles, and current market values."
+        },
+        {
+          "criteria": "Clear contract terms",
+          "why": "Understand who's responsible for unsold items, cleanup, and any additional fees. Get everything in writing."
+        },
+        {
+          "criteria": "Appropriate insurance and bonding",
+          "why": "Reputable companies carry liability insurance and may be bonded to protect against theft or damage."
+        }
+      ],
+      "redFlags": [
+        "No written contract",
+        "Unwilling to provide references",
+        "Unusually high or low commission rates without explanation",
+        "Pressure to decide immediately",
+        "No clear plan for unsold items",
+        "No insurance or bonding"
+      ],
+      "questionsToAsk": [
+        "What is your commission rate and what does it include?",
+        "Can you provide references from recent sales?",
+        "How do you research and price items?",
+        "What happens to unsold items?",
+        "Do you carry insurance?",
+        "How long does the process take from start to finish?",
+        "Will you handle advertising and day-of staffing?"
+      ],
+      "costRange": {
+        "low": 25,
+        "high": 50,
+        "unit": "percent of gross sales",
+        "notes": "Commission varies based on location, estate size, and value of contents. Some companies charge minimum fees for smaller estates."
+      }
+    },
+    "donation_pickup": {
+      "title": "Donation Pickup Services",
+      "icon": "gift",
+      "description": "Organizations that collect usable items from your home and donate them to those in need.",
+      "whenToSeek": [
+        "You have usable items that didn't sell or aren't worth selling",
+        "You want items to benefit others rather than go to waste",
+        "You need help with heavy items or large quantities",
+        "You want tax deductions for donated items"
+      ],
+      "whatToLookFor": [
+        {
+          "criteria": "501(c)(3) tax-exempt status",
+          "why": "Only donations to qualified nonprofits are tax-deductible. Ask for documentation of their tax-exempt status."
+        },
+        {
+          "criteria": "Clear pickup policies",
+          "why": "Understand what items they accept, how far in advance to schedule, and whether they'll take everything or cherry-pick."
+        },
+        {
+          "criteria": "Donation receipt",
+          "why": "For tax purposes, you'll need documentation of your donation. Reputable organizations provide itemized receipts."
+        },
+        {
+          "criteria": "Mission alignment",
+          "why": "Different organizations serve different populations. Choose one whose mission resonates with you or would have mattered to your parent."
+        }
+      ],
+      "redFlags": [
+        "Won't provide proof of nonprofit status",
+        "No donation receipts",
+        "Charges significant fees (legitimate services are usually free)",
+        "Vague about where items go",
+        "Pressure tactics or pushy scheduling"
+      ],
+      "questionsToAsk": [
+        "Are you a 501(c)(3) organization?",
+        "What items do you accept and not accept?",
+        "Will you take everything or just select items?",
+        "How far in advance do I need to schedule?",
+        "Will you provide a donation receipt?",
+        "Where do the donated items go?"
+      ],
+      "costRange": {
+        "low": 0,
+        "high": 0,
+        "unit": "typically free",
+        "notes": "Most legitimate donation services are free. Some may charge for large furniture removal. You may get a tax deduction for fair market value of donated items."
+      }
+    },
+    "junk_removal": {
+      "title": "Junk Removal Services",
+      "icon": "truck",
+      "description": "Companies that haul away unwanted items, debris, and trash from a property.",
+      "whenToSeek": [
+        "There are items that can't be donated or sold",
+        "The property needs complete cleanout",
+        "There's debris or damaged items to remove",
+        "You don't have the physical ability to haul items yourself",
+        "You need the job done quickly"
+      ],
+      "whatToLookFor": [
+        {
+          "criteria": "Upfront pricing",
+          "why": "Reputable companies provide quotes before starting. Avoid those who won't give you a price until after loading."
+        },
+        {
+          "criteria": "Proper licensing and insurance",
+          "why": "Companies hauling waste need proper permits. Insurance protects you if workers are injured on your property."
+        },
+        {
+          "criteria": "Environmentally responsible disposal",
+          "why": "Good companies recycle and donate what they can, rather than dumping everything in a landfill."
+        },
+        {
+          "criteria": "Clear scheduling and reliability",
+          "why": "You're coordinating a lot. You need companies that show up when they say they will."
+        }
+      ],
+      "redFlags": [
+        "Won't give a written estimate",
+        "Significantly lower prices than competitors (may add fees later)",
+        "No physical address or business license",
+        "Poor reviews about hidden fees or no-shows",
+        "Unmarked vehicles or unprofessional appearance"
+      ],
+      "questionsToAsk": [
+        "Can you give me a firm quote in writing?",
+        "Are you licensed and insured?",
+        "What happens to the items you remove?",
+        "Do you recycle or donate usable items?",
+        "How quickly can you schedule the job?",
+        "Is there anything you won't take?"
+      ],
+      "costRange": {
+        "low": 150,
+        "high": 800,
+        "unit": "per load",
+        "notes": "Pricing is usually based on volume (how much of their truck you fill). Full home cleanouts may require multiple loads or flat-rate pricing."
+      }
+    }
+  },
+  "nationalResources": [
+    {
+      "id": "988-lifeline",
+      "name": "988 Suicide & Crisis Lifeline",
+      "category": "crisis",
+      "description": "Free, confidential support for people in distress, 24/7",
+      "phone": "988",
+      "website": "https://988lifeline.org",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Call or text 988. Also available via chat at 988lifeline.org"
+    },
+    {
+      "id": "griefshare",
+      "name": "GriefShare",
+      "category": "grief_counselor",
+      "description": "Grief support groups in communities nationwide, faith-based",
+      "website": "https://www.griefshare.org",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Free weekly support groups at churches across the country. Search their site for local groups."
+    },
+    {
+      "id": "open-to-hope",
+      "name": "Open to Hope",
+      "category": "grief_counselor",
+      "description": "Online grief support community with articles, podcasts, and resources",
+      "website": "https://www.opentohope.com",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Free online resources including articles, podcasts, and videos from grief experts"
+    },
+    {
+      "id": "whats-your-grief",
+      "name": "What's Your Grief",
+      "category": "grief_counselor",
+      "description": "Evidence-based grief education and community support",
+      "website": "https://whatsyourgrief.com",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Free articles and resources, plus paid courses and community"
+    },
+    {
+      "id": "psychology-today",
+      "name": "Psychology Today Therapist Finder",
+      "category": "grief_counselor",
+      "description": "Searchable directory of therapists with filters for specialization, insurance, and location",
+      "website": "https://www.psychologytoday.com/us/therapists",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Filter by 'grief' specialization and your insurance to find local therapists"
+    },
+    {
+      "id": "betterhelp",
+      "name": "BetterHelp",
+      "category": "grief_counselor",
+      "description": "Online therapy platform with licensed counselors",
+      "website": "https://www.betterhelp.com",
+      "isNational": true,
+      "isFree": false,
+      "notes": "Subscription-based online therapy. Financial aid available for those who qualify."
+    },
+    {
+      "id": "avvo",
+      "name": "Avvo",
+      "category": "estate_attorney",
+      "description": "Lawyer directory with ratings, reviews, and free Q&A",
+      "website": "https://www.avvo.com",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Search for probate attorneys, read reviews, and ask free legal questions"
+    },
+    {
+      "id": "state-bar",
+      "name": "State Bar Lawyer Referral",
+      "category": "estate_attorney",
+      "description": "Official state bar associations offer lawyer referral services",
+      "website": "https://www.americanbar.org/groups/lawyer_referral/",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Contact your state bar association for vetted attorney referrals"
+    },
+    {
+      "id": "aicpa-find-cpa",
+      "name": "AICPA Find a CPA",
+      "category": "estate_cpa",
+      "description": "Directory of CPAs searchable by location and specialization",
+      "website": "https://www.aicpa.org/forthepublic/findacpa",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Search for CPAs with estate and trust specializations"
+    },
+    {
+      "id": "estatesales-net",
+      "name": "EstateSales.NET",
+      "category": "estate_sale",
+      "description": "Directory of estate sale companies and upcoming sales",
+      "website": "https://www.estatesales.net",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Find estate sale companies in your area and read reviews"
+    },
+    {
+      "id": "habitat-restore",
+      "name": "Habitat for Humanity ReStore",
+      "category": "donation_pickup",
+      "description": "Accepts furniture, appliances, and building materials; proceeds build homes",
+      "website": "https://www.habitat.org/restores",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Many locations offer free pickup. Donations are tax-deductible."
+    },
+    {
+      "id": "salvation-army",
+      "name": "Salvation Army",
+      "category": "donation_pickup",
+      "description": "Accepts clothing, furniture, and household items with free pickup",
+      "website": "https://www.salvationarmyusa.org/usn/ways-to-give/",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Free pickup in most areas. Donations are tax-deductible."
+    },
+    {
+      "id": "goodwill",
+      "name": "Goodwill",
+      "category": "donation_pickup",
+      "description": "Accepts clothing, household items, and more; proceeds fund job training",
+      "website": "https://www.goodwill.org",
+      "isNational": true,
+      "isFree": true,
+      "notes": "Drop-off at local stores. Some locations offer pickup. Tax-deductible."
+    },
+    {
+      "id": "1800gotjunk",
+      "name": "1-800-GOT-JUNK",
+      "category": "junk_removal",
+      "description": "Full-service junk removal with upfront pricing",
+      "phone": "1-800-468-5865",
+      "website": "https://www.1800gotjunk.com",
+      "isNational": true,
+      "isFree": false,
+      "notes": "Free on-site estimates. They donate and recycle what they can."
+    },
+    {
+      "id": "college-hunks",
+      "name": "College Hunks Hauling Junk",
+      "category": "junk_removal",
+      "description": "Junk removal and moving services with donation partnerships",
+      "phone": "1-800-586-5872",
+      "website": "https://www.collegehunkshaulingjunk.com",
+      "isNational": true,
+      "isFree": false,
+      "notes": "Partners with charities to donate usable items"
+    }
+  ]
+}
