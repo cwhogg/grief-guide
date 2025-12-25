@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/useUser";
 import type { OnboardingData, UserRole, CheckInFrequency } from "@/lib/supabase/types";
 
 const US_STATES = [
@@ -84,6 +85,7 @@ const initialData: OnboardingData = {
 
 export function OnboardingWizard() {
   const router = useRouter();
+  const { updateProfile } = useUser();
   const [step, setStep] = useState(1);
   const [data, setData] = useState<OnboardingData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -112,16 +114,21 @@ export function OnboardingWizard() {
     setError(null);
 
     try {
-      const response = await fetch("/api/onboarding", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+      // Save to local state (demo mode)
+      await updateProfile({
+        user_role: data.userRole,
+        state: data.state,
+        deceased_name: data.deceasedName,
+        deceased_had_spouse: data.deceasedHadSpouse,
+        deceased_had_will: data.deceasedHadWill,
+        deceased_had_trust: data.deceasedHadTrust,
+        deceased_owned_property: data.deceasedOwnedProperty,
+        deceased_had_retirement_accounts: data.deceasedHadRetirementAccounts,
+        has_surviving_parent: data.hasSurvivingParent,
+        number_of_siblings: data.numberOfSiblings,
+        check_in_frequency: data.checkInFrequency,
+        onboarding_completed: true,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to save onboarding data");
-      }
 
       router.push("/dashboard");
     } catch (err) {

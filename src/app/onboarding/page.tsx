@@ -7,20 +7,17 @@ import { useUser } from "@/hooks/useUser";
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user, profile, isLoading, initialize } = useUser();
+  const { profile, isLoading, initialize } = useUser();
 
   useEffect(() => {
     initialize();
   }, [initialize]);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login");
-    }
     if (!isLoading && profile?.onboarding_completed) {
       router.push("/dashboard");
     }
-  }, [isLoading, user, profile, router]);
+  }, [isLoading, profile, router]);
 
   if (isLoading) {
     return (
@@ -28,10 +25,6 @@ export default function OnboardingPage() {
         <div className="text-stone-600">Loading...</div>
       </div>
     );
-  }
-
-  if (!user) {
-    return null;
   }
 
   return (

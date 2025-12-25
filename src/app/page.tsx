@@ -49,16 +49,10 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/login"
+              href="/onboarding"
               className="px-8 py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors"
             >
               Get Started
-            </Link>
-            <Link
-              href="/login"
-              className="px-8 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-100 transition-colors"
-            >
-              Sign In
             </Link>
           </div>
         </div>

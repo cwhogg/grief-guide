@@ -1,10 +1,12 @@
 import { create } from "zustand";
-import { createClient } from "@/lib/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import { persist } from "zustand/middleware";
 import type { Profile } from "@/lib/supabase/types";
 
+// Demo mode - no auth required
+const DEMO_MODE = true;
+
 interface UserState {
-  user: User | null;
+  user: { id: string; email: string } | null;
   profile: Profile | null;
   isLoading: boolean;
   error: string | null;
@@ -17,111 +19,114 @@ interface UserState {
   clearError: () => void;
 }
 
-export const useUser = create<UserState>((set, get) => ({
-  user: null,
-  profile: null,
-  isLoading: true,
-  error: null,
+const DEMO_USER = {
+  id: "demo-user-123",
+  email: "demo@griefguide.app",
+};
 
-  initialize: async () => {
-    const supabase = createClient();
+export const useUser = create<UserState>()(
+  persist(
+    (set, get) => ({
+      user: DEMO_MODE ? DEMO_USER : null,
+      profile: null,
+      isLoading: false,
+      error: null,
 
-    try {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-
-      if (error) throw error;
-
-      set({ user, isLoading: false });
-
-      if (user) {
-        await get().fetchProfile();
-      }
-
-      // Listen for auth state changes
-      supabase.auth.onAuthStateChange(async (event, session) => {
-        const currentUser = session?.user ?? null;
-        set({ user: currentUser });
-
-        if (currentUser) {
+      initialize: async () => {
+        if (DEMO_MODE) {
+          set({ user: DEMO_USER, isLoading: false });
           await get().fetchProfile();
-        } else {
-          set({ profile: null });
+          return;
         }
-      });
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "Failed to initialize",
-        isLoading: false,
-      });
+
+        // Original auth code would go here
+        set({ isLoading: false });
+      },
+
+      fetchProfile: async () => {
+        const { user, profile: existingProfile } = get();
+        if (!user) return;
+
+        if (DEMO_MODE) {
+          // Use existing profile from localStorage or create default
+          if (!existingProfile) {
+            set({
+              profile: {
+                id: DEMO_USER.id,
+                email: DEMO_USER.email,
+                full_name: null,
+                avatar_url: null,
+                onboarding_completed: false,
+                user_role: null,
+                state: null,
+                deceased_name: null,
+                deceased_had_spouse: null,
+                deceased_had_will: null,
+                deceased_had_trust: null,
+                deceased_owned_property: null,
+                deceased_had_retirement_accounts: null,
+                has_surviving_parent: null,
+                number_of_siblings: null,
+                check_in_frequency: null,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              },
+            });
+          }
+          return;
+        }
+      },
+
+      updateProfile: async (updates) => {
+        const { profile } = get();
+        if (!profile) return;
+
+        if (DEMO_MODE) {
+          // Just update local state
+          set({
+            profile: {
+              ...profile,
+              ...updates,
+              updated_at: new Date().toISOString(),
+            },
+          });
+          return;
+        }
+      },
+
+      signOut: async () => {
+        if (DEMO_MODE) {
+          set({
+            profile: {
+              id: DEMO_USER.id,
+              email: DEMO_USER.email,
+              full_name: null,
+              avatar_url: null,
+              onboarding_completed: false,
+              user_role: null,
+              state: null,
+              deceased_name: null,
+              deceased_had_spouse: null,
+              deceased_had_will: null,
+              deceased_had_trust: null,
+              deceased_owned_property: null,
+              deceased_had_retirement_accounts: null,
+              has_surviving_parent: null,
+              number_of_siblings: null,
+              check_in_frequency: null,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            },
+          });
+          return;
+        }
+      },
+
+      clearError: () => set({ error: null }),
+    }),
+    {
+      name: "grief-guide-user",
+      partialize: (state) => ({ profile: state.profile }),
     }
-  },
-
-  fetchProfile: async () => {
-    const { user } = get();
-    if (!user) return;
-
-    const supabase = createClient();
-
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (error) throw error;
-
-      set({ profile: data });
-    } catch (error) {
-      set({
-        error:
-          error instanceof Error ? error.message : "Failed to fetch profile",
-      });
-    }
-  },
-
-  updateProfile: async (updates) => {
-    const { user, profile } = get();
-    if (!user || !profile) return;
-
-    const supabase = createClient();
-
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq("id", user.id)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      set({ profile: data });
-    } catch (error) {
-      set({
-        error:
-          error instanceof Error ? error.message : "Failed to update profile",
-      });
-    }
-  },
-
-  signOut: async () => {
-    const supabase = createClient();
-
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
-      set({ user: null, profile: null });
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "Failed to sign out",
-      });
-    }
-  },
-
-  clearError: () => set({ error: null }),
-}));
+  )
+);

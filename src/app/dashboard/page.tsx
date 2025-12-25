@@ -111,13 +111,10 @@ export default function DashboardPage() {
   }, [initialize]);
 
   useEffect(() => {
-    if (!userLoading && !user) {
-      router.push("/login");
-    }
     if (!userLoading && profile && !profile.onboarding_completed) {
       router.push("/onboarding");
     }
-  }, [userLoading, user, profile, router]);
+  }, [userLoading, profile, router]);
 
   const fetchDashboardData = useCallback(async () => {
     if (!user) return;
@@ -207,7 +204,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (!user || !profile?.onboarding_completed) {
+  if (!profile?.onboarding_completed) {
     return null;
   }
 
