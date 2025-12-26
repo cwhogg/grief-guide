@@ -437,7 +437,7 @@ export default function ChatPage() {
                 </a>
                 <div className="border-t border-stone-100 my-2" />
                 <Link
-                  href="/onboarding"
+                  href="/settings"
                   className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-stone-500"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

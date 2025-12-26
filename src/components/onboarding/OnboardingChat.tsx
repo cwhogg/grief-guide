@@ -36,6 +36,25 @@ type ConversationStep =
   | "knowledge"
   | "complete";
 
+// Test account data for Terry
+const TEST_ACCOUNT_DATA = {
+  full_name: "Terry",
+  grief_stage: "immediate" as const,
+  user_role: "executor" as const,
+  state: "California",
+  deceased_name: "Margaret",
+  deceased_had_spouse: false,
+  knows_will_status: "unknown" as const,
+  knows_trust_status: "unknown" as const,
+  knows_property_status: "yes" as const,
+  knows_accounts_status: "unknown" as const,
+  knows_insurance_status: "unknown" as const,
+  has_surviving_parent: false,
+  number_of_siblings: 1,
+  check_in_frequency: "weekly" as const,
+  onboarding_completed: true,
+};
+
 export function OnboardingChat() {
   const router = useRouter();
   const { updateProfile } = useUser();
@@ -45,6 +64,18 @@ export function OnboardingChat() {
   const [textInput, setTextInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Handle test account login
+  const handleTestAccount = async () => {
+    setIsSubmitting(true);
+    try {
+      await updateProfile(TEST_ACCOUNT_DATA);
+      router.push("/chat");
+    } catch (err) {
+      console.error("Test account error:", err);
+      setIsSubmitting(false);
+    }
+  };
 
   const [data, setData] = useState<OnboardingData>({
     griefStage: "immediate",
@@ -74,7 +105,10 @@ export function OnboardingChat() {
       addAssistantMessage({
         content: "Hey. Whether you're preparing for what's ahead or already in the thick of it, I'm here to help you figure out what needs to happen—and to be someone you can talk to when it gets heavy.\n\nCan I ask you a few quick questions?",
         inputType: "button",
-        options: [{ value: "yes", label: "Yeah, let's do this" }],
+        options: [
+          { value: "yes", label: "Yeah, let's do this" },
+          { value: "test", label: "Use test account (Terry)" },
+        ],
         field: "welcome",
       });
     }
@@ -99,6 +133,12 @@ export function OnboardingChat() {
   };
 
   const handleButtonClick = async (value: string, label: string) => {
+    // Handle test account specially - don't add as user message
+    if (value === "test") {
+      handleTestAccount();
+      return;
+    }
+
     addUserMessage(label);
 
     // Process based on current step
