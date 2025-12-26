@@ -41,10 +41,10 @@ export default function Home() {
             Grief Guide
           </h1>
           <p className="text-xl text-stone-600 mb-4 max-w-2xl mx-auto">
-            A gentle companion for navigating life after losing a parent.
+            A friend who knows what comes next.
           </p>
           <p className="text-lg text-stone-500 mb-10 max-w-xl mx-auto">
-            We help you manage the practical tasks while honoring your need to grieve.
+            When a parent dies, there's so much to figure out. I'm here to help.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -65,9 +65,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
             </div>
-            <h3 className="font-semibold text-stone-900 mb-2">Guided Task Lists</h3>
+            <h3 className="font-semibold text-stone-900 mb-2">Know what to do next</h3>
             <p className="text-stone-600 text-sm">
-              Know what to do and when, from immediate needs to long-term tasks, personalized to your situation.
+              Death certificates, notifying people, dealing with banks—I'll walk you through all of it, one step at a time.
             </p>
           </div>
 
@@ -77,9 +77,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-stone-900 mb-2">Supportive Guidance</h3>
+            <h3 className="font-semibold text-stone-900 mb-2">Someone to talk to</h3>
             <p className="text-stone-600 text-sm">
-              Get answers to your questions and emotional support whenever you need it, day or night.
+              Sometimes you just need to talk. I'm here whenever, no judgment, no agenda.
             </p>
           </div>
 
@@ -89,9 +89,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-stone-900 mb-2">Find Help</h3>
+            <h3 className="font-semibold text-stone-900 mb-2">Find the right people</h3>
             <p className="text-stone-600 text-sm">
-              Connect with grief counselors, attorneys, CPAs, and other professionals when you need them.
+              When you need a lawyer, accountant, or counselor, I'll help you find someone good.
             </p>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function Home() {
         {/* Reassurance */}
         <div className="mt-16 text-center">
           <p className="text-stone-500 text-sm">
-            You don't have to figure this out alone. We're here to help.
+            You don't have to figure this out alone.
           </p>
         </div>
       </div>

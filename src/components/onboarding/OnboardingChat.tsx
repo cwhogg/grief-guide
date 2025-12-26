@@ -72,9 +72,9 @@ export function OnboardingChat() {
   useEffect(() => {
     if (messages.length === 0) {
       addAssistantMessage({
-        content: "I'm really sorry you're going through this. Whether you're preparing for what's ahead or already in the thick of it, I'm here to help you figure out what needs to happen—and to be someone you can talk to when it gets heavy.\n\nCan I ask you a few questions so I can actually be useful?",
+        content: "Hey. Whether you're preparing for what's ahead or already in the thick of it, I'm here to help you figure out what needs to happen—and to be someone you can talk to when it gets heavy.\n\nCan I ask you a few quick questions?",
         inputType: "button",
-        options: [{ value: "yes", label: "Yes, let's do this" }],
+        options: [{ value: "yes", label: "Yeah, let's do this" }],
         field: "welcome",
       });
     }
@@ -124,7 +124,7 @@ export function OnboardingChat() {
         setCurrentStep("name");
         setTimeout(() => {
           addAssistantMessage({
-            content: "What's your parent's name? Just their first name is fine—it helps me talk about them like a person, not a checklist.",
+            content: "What's your parent's first name?",
             inputType: "text",
             field: "name",
           });
@@ -172,7 +172,7 @@ export function OnboardingChat() {
       setCurrentStep("state");
       setTimeout(() => {
         addAssistantMessage({
-          content: "What state are you in? Estate laws vary quite a bit, so this helps me give you accurate info.",
+          content: "And what state are you in? Laws are different everywhere.",
           inputType: "dropdown",
           options: US_STATES.map((s) => ({ value: s, label: s })),
           field: "state",
@@ -237,18 +237,15 @@ export function OnboardingChat() {
       let closingMessage = "";
 
       if (updatedData.griefStage === "anticipating") {
-        closingMessage = `Thank you for sharing that. I know it takes courage to prepare for this while ${parentName} is still here. I'll help you figure out what conversations to have and what to gather—at your own pace.\n\nLet's get started.`;
+        closingMessage = `Got it. I'll help you figure out what conversations to have and what to gather while you still can—no pressure, at your own pace.`;
       } else if (updatedData.griefStage === "immediate") {
-        closingMessage = `Thank you for sharing that. There's a lot to handle right now, but you don't have to figure it all out today. I'll help you focus on what matters most.\n\nLet's get started.`;
+        closingMessage = `Got it. There's a lot happening right now. I'll help you focus on what actually matters this week.`;
       } else {
-        closingMessage = `Thank you for sharing that. Even when some time has passed, there's often still a lot to sort through. I'll help you work through what's left.\n\nLet's get started.`;
+        closingMessage = `Got it. Even when time has passed, there's often still stuff to sort through. I'll help you work through it.`;
       }
 
       if (level === "none" || level === "partial") {
-        closingMessage = closingMessage.replace(
-          "Let's get started.",
-          "And don't worry if you don't know much about the legal and financial stuff—that's completely normal. We'll help you figure out what to look for.\n\nLet's get started."
-        );
+        closingMessage += `\n\nAnd don't worry about not knowing the legal and financial stuff—most people don't. We'll figure it out together.`;
       }
 
       addAssistantMessage({

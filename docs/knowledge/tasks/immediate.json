@@ -4,8 +4,8 @@
   "tasks": [
     {
       "id": "obtain-death-certificates",
-      "title": "Obtain death certificates",
-      "description": "Order 10-15 certified copies of the death certificate from the funeral home or vital records office. These are required for nearly every official notification and claim.",
+      "title": "Get death certificates (you'll need more than you think)",
+      "description": "Order 10-15 certified copies from the funeral home. Banks, insurance companies, and government offices all require them.",
       "task_type": "paperwork",
       "priority": 1,
       "stages": ["immediate", "navigating"],
@@ -23,8 +23,8 @@
     },
     {
       "id": "notify-immediate-family",
-      "title": "Notify immediate family and close friends",
-      "description": "Contact close family members and friends who need to know. Consider delegating some calls to a trusted family member to share the load.",
+      "title": "Tell family and close friends",
+      "description": "Contact the people who need to know. It's okay to ask someone to help make calls—you don't have to do them all yourself.",
       "task_type": "notifications",
       "priority": 1,
       "stages": ["immediate"],
@@ -42,8 +42,8 @@
     },
     {
       "id": "contact-funeral-home",
-      "title": "Contact funeral home and make arrangements",
-      "description": "Choose a funeral home and begin making arrangements for burial or cremation. If your loved one had pre-planned arrangements, locate those documents.",
+      "title": "Contact a funeral home",
+      "description": "If they had pre-planned arrangements, find those first. Otherwise, choose a funeral home—you don't have to decide everything today.",
       "task_type": "logistics",
       "priority": 1,
       "stages": ["immediate"],
@@ -66,8 +66,8 @@
     },
     {
       "id": "secure-deceased-home",
-      "title": "Secure the deceased's home",
-      "description": "If your loved one lived alone, secure their home immediately. Change locks if keys are unaccounted for, check that all doors and windows are locked, and ensure valuables are safe.",
+      "title": "Secure their home",
+      "description": "If they lived alone, make sure the house is locked up and safe. Collect mail so it doesn't pile up.",
       "task_type": "logistics",
       "priority": 2,
       "stages": ["immediate", "navigating"],
@@ -86,8 +86,8 @@
     },
     {
       "id": "locate-will-documents",
-      "title": "Locate will and important documents",
-      "description": "Find the original will, trust documents, life insurance policies, and other critical paperwork. Check home safes, safe deposit boxes, filing cabinets, and with their attorney.",
+      "title": "Find the will and important papers",
+      "description": "Look for the will, life insurance policies, and other critical paperwork. Check their filing cabinet, home safe, safe deposit box, or with their attorney.",
       "task_type": "legal",
       "priority": 1,
       "stages": ["immediate", "navigating"],
@@ -105,8 +105,8 @@
     },
     {
       "id": "notify-employer",
-      "title": "Notify the deceased's employer",
-      "description": "If your loved one was employed, contact their HR department to notify them of the death. Ask about final paychecks, benefits, life insurance through work, and any personal belongings.",
+      "title": "Let their employer know",
+      "description": "If they were working, contact HR. Ask about final paychecks, life insurance through work, and their 401(k).",
       "task_type": "notifications",
       "priority": 2,
       "stages": ["immediate", "navigating"],
@@ -126,8 +126,8 @@
     },
     {
       "id": "arrange-pet-care",
-      "title": "Arrange care for pets",
-      "description": "If your loved one had pets, ensure they are being cared for. This may be temporary until permanent arrangements can be made.",
+      "title": "Take care of their pets",
+      "description": "If they had pets, make sure someone is caring for them. Permanent arrangements can wait.",
       "task_type": "logistics",
       "priority": 1,
       "stages": ["immediate"],
@@ -145,8 +145,8 @@
     },
     {
       "id": "notify-doctors",
-      "title": "Notify doctors and cancel medical appointments",
-      "description": "Contact the deceased's primary care physician and any specialists to inform them of the death and cancel upcoming appointments.",
+      "title": "Cancel medical appointments",
+      "description": "Let their doctors know and cancel upcoming appointments. Return any rented medical equipment.",
       "task_type": "notifications",
       "priority": 3,
       "stages": ["immediate", "navigating"],

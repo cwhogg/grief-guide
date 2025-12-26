@@ -11,9 +11,8 @@ import {
 import { useUser } from "@/hooks/useUser";
 
 const CONVERSATION_STARTERS = [
-  "I just need someone to listen",
+  "I just need to talk",
   "I'm having a hard day",
-  "I don't know how I'm supposed to feel",
   "I keep thinking about them",
 ];
 
@@ -43,9 +42,9 @@ export default function TherapistChatPage() {
     if (profile && !initialGreeting) {
       const name = profile.full_name?.split(" ")[0];
       const greetings = [
-        `Hi${name ? ` ${name}` : ""}. I'm here whenever you need someone to talk to. How are you doing today—really?`,
-        `Hello${name ? ` ${name}` : ""}. There's no agenda here, just space for whatever you're feeling. What's on your mind?`,
-        `Hi${name ? ` ${name}` : ""}. I know there's a lot going on. I'm here to listen. How are you holding up?`,
+        `Hi${name ? ` ${name}` : ""}. How are you doing today—really?`,
+        `Hi${name ? ` ${name}` : ""}. No agenda here. What's on your mind?`,
+        `Hi${name ? ` ${name}` : ""}. How are you holding up?`,
       ];
       const greeting = greetings[Math.floor(Math.random() * greetings.length)];
       setInitialGreeting(greeting);
@@ -171,8 +170,7 @@ export default function TherapistChatPage() {
             </svg>
           </div>
           <p className="text-sm text-violet-800">
-            This is a safe space. Whatever you're feeling is valid. Take your
-            time.
+            Sometimes you just need to talk.
           </p>
         </div>
       </div>
@@ -184,9 +182,9 @@ export default function TherapistChatPage() {
           initialGreeting={initialGreeting || undefined}
           onSendMessage={handleSendMessage}
           onMessagesChange={handleMessagesChange}
-          placeholder="Share what's on your mind..."
+          placeholder="What's on your mind..."
           agentName="Emotional Support"
-          agentDescription="A safe space to process what you're feeling"
+          agentDescription="Sometimes you just need to talk"
         />
 
         {/* Quick actions - only show when no messages yet or few messages */}

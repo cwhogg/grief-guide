@@ -68,21 +68,17 @@ const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
   { value: "skipped", label: "Not Applicable" },
 ];
 
-function getProgressMessage(completed: number, total: number): string {
-  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-
-  if (percentage === 0) {
-    return "Every journey begins with a single step. You&apos;ve got this.";
-  } else if (percentage < 25) {
-    return "You&apos;re making progress. Take it one task at a time.";
-  } else if (percentage < 50) {
-    return "You&apos;re doing great. Keep going at your own pace.";
-  } else if (percentage < 75) {
-    return "More than halfway there. You&apos;re handling this well.";
-  } else if (percentage < 100) {
-    return "Almost there. You&apos;ve accomplished so much.";
+function getProgressMessage(completed: number): string {
+  if (completed === 0) {
+    return "There's no rush. Start with whatever feels manageable.";
+  } else if (completed === 1) {
+    return "You've gotten one thing done. That counts.";
+  } else if (completed < 5) {
+    return "You're making progress.";
+  } else if (completed < 10) {
+    return "You've handled quite a bit already.";
   } else {
-    return "You&apos;ve completed everything. Take a moment to breathe.";
+    return "You've accomplished a lot.";
   }
 }
 
@@ -181,61 +177,44 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
     );
   }
 
-  const progressPercentage =
-    stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+  const remaining = stats.total - stats.completed;
 
   return (
     <div className="space-y-6">
       {/* Progress overview */}
       <div className="bg-white rounded-xl border border-stone-200 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-lg font-semibold text-stone-900">
-              Your Progress
-            </h2>
+        <div className="mb-3">
+          <h2 className="text-lg font-semibold text-stone-900">
+            {stats.completed > 0
+              ? `${stats.completed} thing${stats.completed === 1 ? "" : "s"} done`
+              : "Your tasks"}
+          </h2>
+          {remaining > 0 && (
             <p className="text-sm text-stone-500 mt-1">
-              {stats.completed} of {stats.total} tasks completed
+              {remaining} thing{remaining === 1 ? "" : "s"} left
             </p>
-          </div>
-          <div className="text-3xl font-bold text-amber-600">
-            {progressPercentage}%
-          </div>
+          )}
         </div>
 
-        {/* Progress bar */}
-        <div className="h-3 bg-stone-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-amber-500 to-amber-600 transition-all duration-500"
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-
-        {/* Encouraging message */}
-        <p className="text-sm text-stone-600 mt-4 italic">
-          {getProgressMessage(stats.completed, stats.total).replace(/&apos;/g, "'")}
+        <p className="text-sm text-stone-600 italic">
+          {getProgressMessage(stats.completed)}
         </p>
 
-        {/* Quick stats */}
-        <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-stone-100">
-          <div className="text-center">
-            <div className="text-2xl font-semibold text-blue-600">
-              {stats.inProgress}
-            </div>
-            <div className="text-xs text-stone-500">In Progress</div>
+        {/* Quick stats - only show if there's something notable */}
+        {(stats.inProgress > 0 || stats.blocked > 0) && (
+          <div className="flex gap-4 mt-4 pt-4 border-t border-stone-100">
+            {stats.inProgress > 0 && (
+              <div className="text-sm text-stone-600">
+                <span className="font-medium text-blue-600">{stats.inProgress}</span> in progress
+              </div>
+            )}
+            {stats.blocked > 0 && (
+              <div className="text-sm text-stone-600">
+                <span className="font-medium text-orange-600">{stats.blocked}</span> stuck
+              </div>
+            )}
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-semibold text-orange-600">
-              {stats.blocked}
-            </div>
-            <div className="text-xs text-stone-500">Blocked</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-semibold text-green-600">
-              {stats.completed}
-            </div>
-            <div className="text-xs text-stone-500">Completed</div>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Filters */}
@@ -329,31 +308,11 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
         const categoryTasks = groupedTasks[category.value];
         if (categoryTasks.length === 0) return null;
 
-        const categoryCompleted = categoryTasks.filter(
-          (t) => t.status === "completed" || t.status === "skipped"
-        ).length;
-        const categoryPercentage = Math.round(
-          (categoryCompleted / categoryTasks.length) * 100
-        );
-
         return (
           <div key={category.value} className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-stone-900">{category.label}</h3>
-                <p className="text-sm text-stone-500">{category.description}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-stone-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-green-500 transition-all"
-                    style={{ width: `${categoryPercentage}%` }}
-                  />
-                </div>
-                <span className="text-sm text-stone-500 min-w-[3rem] text-right">
-                  {categoryCompleted}/{categoryTasks.length}
-                </span>
-              </div>
+            <div>
+              <h3 className="font-semibold text-stone-900">{category.label}</h3>
+              <p className="text-sm text-stone-500">{category.description}</p>
             </div>
 
             <div className="space-y-2">

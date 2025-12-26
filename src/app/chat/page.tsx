@@ -17,13 +17,11 @@ type ChatMode = "guide" | "therapist";
 
 // Suggested prompts by mode and context
 const GUIDE_PROMPTS = [
-  "What should I focus on first?",
-  "I need to talk to someone",
-  "Help me find a professional",
+  "What matters most right now?",
+  "I just need to talk",
 ];
 
 const THERAPIST_PROMPTS = [
-  "I just need someone to listen",
   "I'm having a hard day",
   "Back to practical stuff",
 ];
@@ -62,12 +60,13 @@ export default function ChatPage() {
       const stage = profile.grief_stage;
 
       let greeting = "";
+      const parentName = profile.deceased_name;
       if (stage === "anticipating") {
-        greeting = `Hi${name ? ` ${name}` : ""}. I know this is a difficult time. I'm here to help you prepare and figure out what questions to ask while you still can. What would be most helpful to focus on?`;
+        greeting = `Hi${name ? ` ${name}` : ""}. I'm here to help you figure out what to ask and what to gather while you still can. What's on your mind?`;
       } else if (stage === "immediate") {
-        greeting = `Hi${name ? ` ${name}` : ""}. I'm so sorry for your loss. There's a lot to handle, but you don't have to figure it all out today. What's weighing on you most right now?`;
+        greeting = `Hi${name ? ` ${name}` : ""}. There's a lot to handle right now${parentName ? ` after ${parentName}'s death` : ""}, but you don't have to figure it all out today. What's weighing on you most?`;
       } else {
-        greeting = `Hi${name ? ` ${name}` : ""}. I'm here to help you work through everything that needs to be done. What would you like to focus on?`;
+        greeting = `Hi${name ? ` ${name}` : ""}. What can I help you with?`;
       }
 
       const greetingMessage: Message = {
@@ -148,8 +147,8 @@ export default function ChatPage() {
       id: crypto.randomUUID(),
       role: "assistant",
       content: newMode === "therapist"
-        ? "I hear you. Let's set aside the tasks for now. This is a safe space to talk about whatever you're feeling. How are you doing—really?"
-        : "Okay, let's focus on the practical side. What would be most helpful to work on?",
+        ? "I hear you. Let's set the tasks aside for now. How are you doing—really?"
+        : "Okay, back to the practical stuff. What would help to work on?",
       timestamp: new Date(),
     };
 
@@ -397,7 +396,7 @@ export default function ChatPage() {
       {mode === "therapist" && (
         <div className="bg-gradient-to-r from-violet-50 to-rose-50 border-b border-violet-100 px-4 py-2">
           <p className="text-sm text-violet-700 text-center">
-            A safe space. Whatever you're feeling is valid.
+            Sometimes you just need to talk.
           </p>
         </div>
       )}
