@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
+import { OnboardingChat } from "@/components/onboarding/OnboardingChat";
 import { useUser } from "@/hooks/useUser";
 
 export default function OnboardingPage() {
@@ -15,7 +15,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (!isLoading && profile?.onboarding_completed) {
-      router.push("/dashboard");
+      router.push("/chat");
     }
   }, [isLoading, profile, router]);
 
@@ -27,11 +27,5 @@ export default function OnboardingPage() {
     );
   }
 
-  return (
-    <main className="min-h-screen bg-stone-50">
-      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
-        <OnboardingWizard />
-      </div>
-    </main>
-  );
+  return <OnboardingChat />;
 }
