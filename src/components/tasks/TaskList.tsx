@@ -21,6 +21,16 @@ const TIMELINE_CATEGORIES: {
   description: string;
 }[] = [
   {
+    value: "discovery",
+    label: "Find Out First",
+    description: "Gather information you don't know",
+  },
+  {
+    value: "anticipating",
+    label: "While Preparing",
+    description: "Before the loss occurs",
+  },
+  {
     value: "immediate",
     label: "Immediate",
     description: "First 24-48 hours",
@@ -97,6 +107,8 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
     });
 
     const grouped: Record<TimelineCategory, Task[]> = {
+      discovery: [],
+      anticipating: [],
       immediate: [],
       first_week: [],
       first_month: [],

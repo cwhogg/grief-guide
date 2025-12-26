@@ -18,6 +18,10 @@ export type CheckInFrequency = "daily" | "weekly" | "as_needed";
 
 export type GriefStage = "anticipating" | "immediate" | "navigating";
 
+// Knowledge status for legal/financial information
+// 'unknown' is the expected default - most people don't know this stuff
+export type KnowledgeStatus = "yes" | "no" | "unknown";
+
 export type TaskType =
   | "paperwork"
   | "legal"
@@ -26,6 +30,8 @@ export type TaskType =
   | "logistics";
 
 export type TimelineCategory =
+  | "discovery"
+  | "anticipating"
   | "immediate"
   | "first_week"
   | "first_month"
@@ -45,10 +51,12 @@ export type Database = {
           state: string | null;
           deceased_name: string | null;
           deceased_had_spouse: boolean | null;
-          deceased_had_will: boolean | null;
-          deceased_had_trust: boolean | null;
-          deceased_owned_property: boolean | null;
-          deceased_had_retirement_accounts: boolean | null;
+          // Knowledge status fields - 'unknown' is expected default
+          knows_will_status: KnowledgeStatus;
+          knows_trust_status: KnowledgeStatus;
+          knows_property_status: KnowledgeStatus;
+          knows_accounts_status: KnowledgeStatus;
+          knows_insurance_status: KnowledgeStatus;
           has_surviving_parent: boolean | null;
           number_of_siblings: number | null;
           check_in_frequency: CheckInFrequency | null;
@@ -66,10 +74,11 @@ export type Database = {
           state?: string | null;
           deceased_name?: string | null;
           deceased_had_spouse?: boolean | null;
-          deceased_had_will?: boolean | null;
-          deceased_had_trust?: boolean | null;
-          deceased_owned_property?: boolean | null;
-          deceased_had_retirement_accounts?: boolean | null;
+          knows_will_status?: KnowledgeStatus;
+          knows_trust_status?: KnowledgeStatus;
+          knows_property_status?: KnowledgeStatus;
+          knows_accounts_status?: KnowledgeStatus;
+          knows_insurance_status?: KnowledgeStatus;
           has_surviving_parent?: boolean | null;
           number_of_siblings?: number | null;
           check_in_frequency?: CheckInFrequency | null;
@@ -87,10 +96,11 @@ export type Database = {
           state?: string | null;
           deceased_name?: string | null;
           deceased_had_spouse?: boolean | null;
-          deceased_had_will?: boolean | null;
-          deceased_had_trust?: boolean | null;
-          deceased_owned_property?: boolean | null;
-          deceased_had_retirement_accounts?: boolean | null;
+          knows_will_status?: KnowledgeStatus;
+          knows_trust_status?: KnowledgeStatus;
+          knows_property_status?: KnowledgeStatus;
+          knows_accounts_status?: KnowledgeStatus;
+          knows_insurance_status?: KnowledgeStatus;
           has_surviving_parent?: boolean | null;
           number_of_siblings?: number | null;
           check_in_frequency?: CheckInFrequency | null;
@@ -399,10 +409,13 @@ export interface OnboardingData {
   state: string;
   deceasedName: string;
   deceasedHadSpouse: boolean;
-  deceasedHadWill: boolean | null;
-  deceasedHadTrust: boolean | null;
-  deceasedOwnedProperty: boolean | null;
-  deceasedHadRetirementAccounts: boolean | null;
+  // Knowledge status - 'unknown' is the expected default
+  knowsLegalFinancialSituation: "full" | "partial" | "none";
+  knowsWillStatus: KnowledgeStatus;
+  knowsTrustStatus: KnowledgeStatus;
+  knowsPropertyStatus: KnowledgeStatus;
+  knowsAccountsStatus: KnowledgeStatus;
+  knowsInsuranceStatus: KnowledgeStatus;
   hasSurvivingParent: boolean;
   numberOfSiblings: number;
   checkInFrequency: CheckInFrequency;

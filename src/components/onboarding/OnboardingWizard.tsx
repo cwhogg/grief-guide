@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
-import type { OnboardingData, UserRole, CheckInFrequency, GriefStage } from "@/lib/supabase/types";
+import type { OnboardingData, UserRole, CheckInFrequency, GriefStage, KnowledgeStatus } from "@/lib/supabase/types";
 
 const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -93,10 +93,13 @@ const initialData: OnboardingData = {
   state: "",
   deceasedName: "",
   deceasedHadSpouse: false,
-  deceasedHadWill: null,
-  deceasedHadTrust: null,
-  deceasedOwnedProperty: null,
-  deceasedHadRetirementAccounts: null,
+  // Knowledge status - 'unknown' is expected default
+  knowsLegalFinancialSituation: "none",
+  knowsWillStatus: "unknown",
+  knowsTrustStatus: "unknown",
+  knowsPropertyStatus: "unknown",
+  knowsAccountsStatus: "unknown",
+  knowsInsuranceStatus: "unknown",
   hasSurvivingParent: false,
   numberOfSiblings: 0,
   checkInFrequency: "weekly",
@@ -140,10 +143,11 @@ export function OnboardingWizard() {
         state: data.state,
         deceased_name: data.deceasedName,
         deceased_had_spouse: data.deceasedHadSpouse,
-        deceased_had_will: data.deceasedHadWill,
-        deceased_had_trust: data.deceasedHadTrust,
-        deceased_owned_property: data.deceasedOwnedProperty,
-        deceased_had_retirement_accounts: data.deceasedHadRetirementAccounts,
+        knows_will_status: data.knowsWillStatus,
+        knows_trust_status: data.knowsTrustStatus,
+        knows_property_status: data.knowsPropertyStatus,
+        knows_accounts_status: data.knowsAccountsStatus,
+        knows_insurance_status: data.knowsInsuranceStatus,
         has_surviving_parent: data.hasSurvivingParent,
         number_of_siblings: data.numberOfSiblings,
         check_in_frequency: data.checkInFrequency,
@@ -412,19 +416,42 @@ function StepDeceased({
   updateData: (updates: Partial<OnboardingData>) => void;
 }) {
   const isAnticipating = data.griefStage === "anticipating";
+  const parentName = data.deceasedName || "your parent";
+
+  // When user selects "full" knowledge, set all to 'yes' initially
+  // When user selects "none", set all to 'unknown'
+  const handleKnowledgeChange = (level: "full" | "partial" | "none") => {
+    if (level === "full") {
+      updateData({
+        knowsLegalFinancialSituation: level,
+        knowsWillStatus: "yes",
+        knowsTrustStatus: "no",
+        knowsPropertyStatus: "yes",
+        knowsAccountsStatus: "yes",
+        knowsInsuranceStatus: "yes",
+      });
+    } else if (level === "none") {
+      updateData({
+        knowsLegalFinancialSituation: level,
+        knowsWillStatus: "unknown",
+        knowsTrustStatus: "unknown",
+        knowsPropertyStatus: "unknown",
+        knowsAccountsStatus: "unknown",
+        knowsInsuranceStatus: "unknown",
+      });
+    } else {
+      updateData({ knowsLegalFinancialSituation: level });
+    }
+  };
 
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-stone-900">
-        About your parent
+        About {parentName}
       </h2>
-      <p className="text-stone-600">
-        {isAnticipating
-          ? "This helps us suggest what to find out and prepare for. It's okay if you don't know some of these yet."
-          : "This information helps us determine which tasks apply to your situation."}
-      </p>
 
-      <div className="space-y-6 mt-6">
+      {/* Basic info */}
+      <div className="space-y-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-stone-700 mb-2">
             Their name
@@ -439,50 +466,185 @@ function StepDeceased({
           />
         </div>
 
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-stone-700">
-            {isAnticipating ? "What do you know so far?" : "Please check all that apply:"}
-          </p>
+        <CheckboxOption
+          checked={data.deceasedHadSpouse}
+          onChange={(checked) => updateData({ deceasedHadSpouse: checked })}
+          label={isAnticipating ? "Has a spouse or partner" : "Had a spouse or partner"}
+        />
+      </div>
 
-          <CheckboxOption
-            checked={data.deceasedHadSpouse}
-            onChange={(checked) => updateData({ deceasedHadSpouse: checked })}
-            label={isAnticipating ? "Has a spouse or partner" : "Had a spouse or partner"}
-          />
-          <TriStateOption
-            value={data.deceasedHadWill}
-            onChange={(value) => updateData({ deceasedHadWill: value })}
-            label={isAnticipating ? "Has a will" : "Had a will"}
-            showUnsure={isAnticipating}
-          />
-          <TriStateOption
-            value={data.deceasedHadTrust}
-            onChange={(value) => updateData({ deceasedHadTrust: value })}
-            label={isAnticipating ? "Has a trust" : "Had a trust"}
-            showUnsure={isAnticipating}
-          />
-          <TriStateOption
-            value={data.deceasedOwnedProperty}
-            onChange={(value) => updateData({ deceasedOwnedProperty: value })}
-            label={isAnticipating ? "Owns real estate or property" : "Owned real estate or property"}
-            showUnsure={isAnticipating}
-          />
-          <TriStateOption
-            value={data.deceasedHadRetirementAccounts}
-            onChange={(value) => updateData({ deceasedHadRetirementAccounts: value })}
-            label={isAnticipating ? "Has retirement accounts (401k, IRA, pension)" : "Had retirement accounts (401k, IRA, pension)"}
-            showUnsure={isAnticipating}
-          />
+      {/* Legal/financial knowledge question */}
+      <div className="mt-8 space-y-4">
+        <h3 className="text-lg font-medium text-stone-900">
+          Do you know much about {parentName}&apos;s legal and financial situation?
+        </h3>
+        <p className="text-sm text-stone-500">
+          Like whether they have a will, own property, or have retirement accounts.
+        </p>
+
+        <div className="space-y-3">
+          <label
+            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              data.knowsLegalFinancialSituation === "full"
+                ? "border-amber-600 bg-amber-50"
+                : "border-stone-200 hover:border-stone-300"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <input
+                type="radio"
+                name="knowledge"
+                checked={data.knowsLegalFinancialSituation === "full"}
+                onChange={() => handleKnowledgeChange("full")}
+                className="mt-1 text-amber-600 focus:ring-amber-600"
+              />
+              <div>
+                <div className="font-medium text-stone-900">Yes, I have a pretty good picture</div>
+                <div className="text-sm text-stone-500">I know the basics of what they have</div>
+              </div>
+            </div>
+          </label>
+
+          <label
+            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              data.knowsLegalFinancialSituation === "partial"
+                ? "border-amber-600 bg-amber-50"
+                : "border-stone-200 hover:border-stone-300"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <input
+                type="radio"
+                name="knowledge"
+                checked={data.knowsLegalFinancialSituation === "partial"}
+                onChange={() => handleKnowledgeChange("partial")}
+                className="mt-1 text-amber-600 focus:ring-amber-600"
+              />
+              <div>
+                <div className="font-medium text-stone-900">I know some things but not everything</div>
+                <div className="text-sm text-stone-500">There are gaps in what I know</div>
+              </div>
+            </div>
+          </label>
+
+          <label
+            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              data.knowsLegalFinancialSituation === "none"
+                ? "border-amber-600 bg-amber-50"
+                : "border-stone-200 hover:border-stone-300"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <input
+                type="radio"
+                name="knowledge"
+                checked={data.knowsLegalFinancialSituation === "none"}
+                onChange={() => handleKnowledgeChange("none")}
+                className="mt-1 text-amber-600 focus:ring-amber-600"
+              />
+              <div>
+                <div className="font-medium text-stone-900">Honestly, I have no idea</div>
+                <div className="text-sm text-stone-500">This stuff was never discussed</div>
+              </div>
+            </div>
+          </label>
         </div>
 
-        {isAnticipating && (
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-sm text-amber-800">
-              Don&apos;t worry if you&apos;re not sure about some of these. Part of what we&apos;ll
-              help you do is have those conversations and find out.
+        {/* Reassuring message for "none" */}
+        {data.knowsLegalFinancialSituation === "none" && (
+          <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
+            <p className="text-sm text-stone-700">
+              That&apos;s completely normal. A lot of people don&apos;t know this stuff—it&apos;s
+              not something families usually talk about. We&apos;ll help you figure out
+              what to look for and who to ask.
             </p>
           </div>
         )}
+
+        {/* Partial knowledge - show checkboxes */}
+        {data.knowsLegalFinancialSituation === "partial" && (
+          <div className="mt-4 space-y-3 p-4 bg-stone-50 rounded-lg">
+            <p className="text-sm font-medium text-stone-700 mb-3">
+              What do you know about? (Check what you&apos;re sure of)
+            </p>
+            <KnowledgeCheckbox
+              status={data.knowsWillStatus}
+              onChange={(status) => updateData({ knowsWillStatus: status })}
+              label={isAnticipating ? "Whether they have a will" : "Whether they had a will"}
+            />
+            <KnowledgeCheckbox
+              status={data.knowsTrustStatus}
+              onChange={(status) => updateData({ knowsTrustStatus: status })}
+              label={isAnticipating ? "Whether they have a trust" : "Whether they had a trust"}
+            />
+            <KnowledgeCheckbox
+              status={data.knowsPropertyStatus}
+              onChange={(status) => updateData({ knowsPropertyStatus: status })}
+              label={isAnticipating ? "Whether they own property" : "Whether they owned property"}
+            />
+            <KnowledgeCheckbox
+              status={data.knowsAccountsStatus}
+              onChange={(status) => updateData({ knowsAccountsStatus: status })}
+              label={isAnticipating ? "Whether they have retirement accounts" : "Whether they had retirement accounts"}
+            />
+            <KnowledgeCheckbox
+              status={data.knowsInsuranceStatus}
+              onChange={(status) => updateData({ knowsInsuranceStatus: status })}
+              label={isAnticipating ? "Whether they have life insurance" : "Whether they had life insurance"}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function KnowledgeCheckbox({
+  status,
+  onChange,
+  label,
+}: {
+  status: KnowledgeStatus;
+  onChange: (status: KnowledgeStatus) => void;
+  label: string;
+}) {
+  return (
+    <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-stone-200">
+      <span className="text-stone-700 text-sm">{label}</span>
+      <div className="flex gap-1">
+        <button
+          type="button"
+          onClick={() => onChange("yes")}
+          className={`px-2.5 py-1 text-xs rounded transition-colors ${
+            status === "yes"
+              ? "bg-green-600 text-white"
+              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+          }`}
+        >
+          Yes
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange("no")}
+          className={`px-2.5 py-1 text-xs rounded transition-colors ${
+            status === "no"
+              ? "bg-stone-600 text-white"
+              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+          }`}
+        >
+          No
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange("unknown")}
+          className={`px-2.5 py-1 text-xs rounded transition-colors ${
+            status === "unknown"
+              ? "bg-amber-600 text-white"
+              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+          }`}
+        >
+          ?
+        </button>
       </div>
     </div>
   );
@@ -610,70 +772,3 @@ function CheckboxOption({
   );
 }
 
-function TriStateOption({
-  value,
-  onChange,
-  label,
-  showUnsure = false,
-}: {
-  value: boolean | null;
-  onChange: (value: boolean | null) => void;
-  label: string;
-  showUnsure?: boolean;
-}) {
-  if (!showUnsure) {
-    // Render as simple checkbox when not showing unsure option
-    return (
-      <label className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-stone-300 cursor-pointer transition-colors">
-        <input
-          type="checkbox"
-          checked={value === true}
-          onChange={(e) => onChange(e.target.checked)}
-          className="w-5 h-5 text-amber-600 rounded focus:ring-amber-600"
-        />
-        <span className="text-stone-700">{label}</span>
-      </label>
-    );
-  }
-
-  return (
-    <div className="p-3 rounded-lg border border-stone-200">
-      <div className="text-stone-700 mb-2">{label}</div>
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => onChange(true)}
-          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-            value === true
-              ? "bg-amber-600 text-white"
-              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
-          }`}
-        >
-          Yes
-        </button>
-        <button
-          type="button"
-          onClick={() => onChange(false)}
-          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-            value === false
-              ? "bg-amber-600 text-white"
-              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
-          }`}
-        >
-          No
-        </button>
-        <button
-          type="button"
-          onClick={() => onChange(null)}
-          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-            value === null
-              ? "bg-amber-600 text-white"
-              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
-          }`}
-        >
-          I don&apos;t know
-        </button>
-      </div>
-    </div>
-  );
-}

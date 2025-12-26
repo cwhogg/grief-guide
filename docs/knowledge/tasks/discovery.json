@@ -1,0 +1,201 @@
+{
+  "category": "discovery",
+  "description": "Tasks for finding information you don't know about - assigned when user marks areas as 'unknown'",
+  "tasks": [
+    {
+      "id": "discover-will",
+      "title": "Find out if they have/had a will",
+      "description": "A will determines how assets are distributed and who handles the estate. Finding out if one exists is an important first step.",
+      "task_type": "legal",
+      "priority": 1,
+      "why_it_matters": "Without a will, state laws determine who inherits (called 'intestate succession'). If there is a will, finding it quickly helps you understand your responsibilities and timeline.",
+      "triggers_on_unknown": "will",
+      "who_to_ask": [
+        "The surviving spouse or partner",
+        "Other close family members who may have discussed this",
+        "Their attorney, if they had one",
+        "Their financial advisor or accountant",
+        "The bank where they have a safe deposit box"
+      ],
+      "what_to_ask": [
+        "Do you know if [parent] ever created a will?",
+        "Did they ever mention having legal documents prepared?",
+        "Do you know if they worked with an estate planning attorney?",
+        "Have you seen any documents about what should happen after they're gone?"
+      ],
+      "where_to_look": [
+        "Home office, filing cabinet, or desk drawers",
+        "Safe deposit box at their bank (may need death certificate to access)",
+        "With their attorney - check their address book or old checkbook for legal payments",
+        "County probate court - some people file wills there for safekeeping",
+        "Their email for correspondence with attorneys"
+      ],
+      "if_none": "If they didn't have a will, that's okay. The estate will be distributed according to your state's intestate succession laws. A probate attorney can explain what that means for your family.",
+      "documents_needed": [],
+      "tips": [
+        "Don't panic if you can't find one right away - it may take time",
+        "Check for multiple versions - only the most recent valid will matters",
+        "An attorney's office may have the original even if they retired",
+        "Some states have online will registries"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "stages": ["anticipating", "immediate", "navigating"]
+    },
+    {
+      "id": "discover-trust",
+      "title": "Find out if they have/had a trust",
+      "description": "A trust is a legal arrangement that can help assets pass outside of probate. Trusts are less common than wills, but important to know about.",
+      "task_type": "legal",
+      "priority": 2,
+      "why_it_matters": "If a trust exists, assets in it typically transfer faster and more privately than through probate. The trustee (who may be you) has specific responsibilities.",
+      "triggers_on_unknown": "trust",
+      "who_to_ask": [
+        "The surviving spouse or partner",
+        "Their estate planning attorney",
+        "Their financial advisor",
+        "Other family members who handled their parents' estates"
+      ],
+      "what_to_ask": [
+        "Did [parent] ever mention setting up a trust?",
+        "Do you know if they did any estate planning beyond a basic will?",
+        "Did they ever talk about avoiding probate?",
+        "Did an attorney ever mention a 'living trust' or 'revocable trust'?"
+      ],
+      "where_to_look": [
+        "Same places as a will - home office, safe deposit box",
+        "Their attorney's office",
+        "Financial institutions - trusts are sometimes set up through banks",
+        "Look for documents titled 'Trust Agreement' or 'Declaration of Trust'"
+      ],
+      "if_none": "Most people don't have trusts - they're more common for larger estates or specific planning needs. If there's no trust, the estate goes through normal probate (if needed).",
+      "documents_needed": [],
+      "tips": [
+        "A trust only matters if assets were transferred into it",
+        "There may be both a will and a trust - they serve different purposes",
+        "The person who set it up is the 'grantor' or 'settlor'"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "stages": ["anticipating", "immediate", "navigating"]
+    },
+    {
+      "id": "discover-property",
+      "title": "Find out what property they own/owned",
+      "description": "Real estate (homes, land, rental properties) is often a significant asset and has specific legal requirements for transfer.",
+      "task_type": "legal",
+      "priority": 1,
+      "why_it_matters": "Property in the deceased's name alone may need to go through probate. Property owned jointly often passes automatically to the other owner.",
+      "triggers_on_unknown": "property",
+      "who_to_ask": [
+        "The surviving spouse or partner",
+        "Other family members",
+        "Their accountant or tax preparer (property shows up on tax returns)",
+        "Their real estate agent if they bought or sold recently"
+      ],
+      "what_to_ask": [
+        "Do you know what properties [parent] owned?",
+        "Is the house in their name, jointly owned, or in a trust?",
+        "Do they own any rental properties, vacation homes, or land?",
+        "Did they ever mention owning property you haven't seen?"
+      ],
+      "where_to_look": [
+        "Property tax bills - these arrive annually and list property addresses",
+        "Their most recent tax return (Schedule E for rentals, mortgage interest deductions)",
+        "County recorder or assessor websites - search by name to find deeds",
+        "Mortgage statements",
+        "Homeowner's insurance policies"
+      ],
+      "if_none": "If they rented or didn't own property, that's one less thing to handle. Focus on other assets and accounts.",
+      "documents_needed": [],
+      "tips": [
+        "Check how title is held - 'joint tenancy' or 'tenants by entirety' usually means automatic transfer to survivor",
+        "Property in multiple states may require probate in each state",
+        "Time-share or vacation club memberships count as property interests"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "stages": ["anticipating", "immediate", "navigating"]
+    },
+    {
+      "id": "discover-accounts",
+      "title": "Find out about their financial accounts",
+      "description": "Understanding what bank accounts, investment accounts, and retirement accounts exist helps you manage the estate and find all assets.",
+      "task_type": "financial",
+      "priority": 1,
+      "why_it_matters": "Financial accounts may be the primary source of funds for the estate. Retirement accounts like 401(k)s and IRAs have designated beneficiaries and pass outside probate.",
+      "triggers_on_unknown": "accounts",
+      "who_to_ask": [
+        "The surviving spouse or partner",
+        "Their financial advisor or broker",
+        "Their accountant or tax preparer",
+        "Their employer's HR department (for current 401k)"
+      ],
+      "what_to_ask": [
+        "Do you know what bank they used?",
+        "Did they have a financial advisor or brokerage account?",
+        "Do you know about any retirement accounts from their job?",
+        "Did they ever mention having accounts you don't have access to?"
+      ],
+      "where_to_look": [
+        "Their mail - statements come monthly or quarterly",
+        "Their email for account notifications",
+        "Their most recent tax return (1099s list account sources, Schedule B for interest/dividends)",
+        "Checkbook or debit card - identifies their bank",
+        "Old pay stubs or benefits paperwork for retirement accounts",
+        "National Registry of Unclaimed Retirement Benefits (for old 401ks)"
+      ],
+      "if_none": "If you can't find accounts, there may still be unclaimed funds. Use your state's unclaimed property database and the National Registry of Unclaimed Retirement Benefits.",
+      "documents_needed": [],
+      "tips": [
+        "Retirement accounts (401k, IRA, pension) pass by beneficiary designation, not will",
+        "Joint accounts typically pass to the surviving owner automatically",
+        "Check for automatic payments - they reveal active accounts"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "stages": ["anticipating", "immediate", "navigating"]
+    },
+    {
+      "id": "discover-insurance",
+      "title": "Find out about life insurance policies",
+      "description": "Life insurance can provide immediate funds for expenses and goes directly to beneficiaries without waiting for probate.",
+      "task_type": "financial",
+      "priority": 1,
+      "why_it_matters": "Life insurance payouts are usually quick (2-4 weeks) and can help cover immediate expenses like funeral costs. The money goes to named beneficiaries, not the estate.",
+      "triggers_on_unknown": "insurance",
+      "who_to_ask": [
+        "The surviving spouse or partner",
+        "Their employer's HR department (many jobs include life insurance)",
+        "Their insurance agent",
+        "Their financial advisor",
+        "Veterans Affairs if they served in the military"
+      ],
+      "what_to_ask": [
+        "Do you know if [parent] had life insurance through work or personally?",
+        "Did they ever mention having a policy?",
+        "Who is their insurance agent or company?",
+        "Did they serve in the military? (VA offers life insurance)"
+      ],
+      "where_to_look": [
+        "Their mail and email for premium notices or policy statements",
+        "Their bank statements for automatic premium payments",
+        "Their employer's benefits paperwork",
+        "Old tax returns - some policies generate 1099s",
+        "NAIC Life Insurance Policy Locator (free service)",
+        "MIB Group (maintains records of life insurance applications)"
+      ],
+      "if_none": "If there's no life insurance, that's common - not everyone has it. Other assets will need to cover final expenses.",
+      "documents_needed": [],
+      "tips": [
+        "Workplace policies often end when employment ends - check if they were retired",
+        "Some policies have a 'paid-up' status where no more premiums are due",
+        "Credit cards and mortgages sometimes include life insurance",
+        "The claim process is usually straightforward once you find the policy"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null,
+      "stages": ["anticipating", "immediate", "navigating"]
+    }
+  ]
+}

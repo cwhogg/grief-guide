@@ -17,7 +17,9 @@ interface TaskWithMeta extends Task {
   urgencyScore?: number;
 }
 
-const TIMELINE_LABELS: Record<TimelineCategory, string> = {
+const TIMELINE_LABELS: Record<string, string> = {
+  discovery: "Find Out First",
+  anticipating: "While Preparing",
   immediate: "Immediate",
   first_week: "First Week",
   first_month: "First Month",
@@ -121,9 +123,17 @@ export default function DashboardPage() {
 
     setIsLoading(true);
     try {
-      // Pass grief stage to filter tasks appropriately
+      // Pass grief stage and knowledge status to filter tasks appropriately
       const griefStage = profile.grief_stage || "immediate";
-      const response = await fetch(`/api/tasks?stage=${griefStage}`);
+      const params = new URLSearchParams({
+        stage: griefStage,
+        knows_will: profile.knows_will_status || "unknown",
+        knows_trust: profile.knows_trust_status || "unknown",
+        knows_property: profile.knows_property_status || "unknown",
+        knows_accounts: profile.knows_accounts_status || "unknown",
+        knows_insurance: profile.knows_insurance_status || "unknown",
+      });
+      const response = await fetch(`/api/tasks?${params}`);
       if (!response.ok) throw new Error("Failed to fetch tasks");
 
       const data = await response.json();
@@ -510,17 +520,24 @@ export default function DashboardPage() {
 }
 
 // Helper function to calculate task urgency
-function calculateUrgencyScore(task: Task): number {
+function calculateUrgencyScore(task: Task & { is_discovery_task?: boolean }): number {
   let score = 0;
 
+  // Discovery tasks get highest priority - users need to find info first
+  if (task.is_discovery_task || task.timeline_category === "discovery") {
+    score += 150;
+  }
+
   // Timeline urgency
-  const timelineScores: Record<TimelineCategory, number> = {
+  const timelineScores: Record<string, number> = {
+    discovery: 150,
+    anticipating: 110,
     immediate: 100,
     first_week: 75,
     first_month: 50,
     ongoing: 25,
   };
-  score += timelineScores[task.timeline_category];
+  score += timelineScores[task.timeline_category] || 0;
 
   // Priority (lower number = higher priority)
   score += (10 - Math.min(task.priority, 10)) * 5;

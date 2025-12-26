@@ -1,4 +1,4 @@
-import type { Profile, Task, GriefStage } from "@/lib/supabase/types";
+import type { Profile, Task, GriefStage, KnowledgeStatus } from "@/lib/supabase/types";
 
 export interface GuideAgentContext {
   profile: Profile;
@@ -202,6 +202,15 @@ function getStageRoleDescription(stage: GriefStage): string {
   }
 }
 
+function formatKnowledgeStatus(status: KnowledgeStatus, yesText: string, noText: string, unknownText: string): string | null {
+  switch (status) {
+    case "yes": return yesText;
+    case "no": return noText;
+    case "unknown": return unknownText;
+    default: return null;
+  }
+}
+
 function buildSituationContext(profile: Profile): string {
   const parts: string[] = [];
   const isAnticipating = profile.grief_stage === "anticipating";
@@ -239,20 +248,82 @@ function buildSituationContext(profile: Profile): string {
     parts.push(`**State:** ${profile.state} (estate laws vary by state)`);
   }
 
-  // Parent info (wording changes based on stage)
+  // Parent info using new knowledge status fields
   const parentInfo: string[] = [];
   if (profile.deceased_had_spouse) parentInfo.push(isAnticipating ? "has a spouse" : "had a spouse");
-  if (profile.deceased_had_will === true) parentInfo.push(isAnticipating ? "has a will" : "had a will");
-  if (profile.deceased_had_will === null && isAnticipating) parentInfo.push("will status unknown");
-  if (profile.deceased_had_trust === true) parentInfo.push(isAnticipating ? "has a trust" : "had a trust");
-  if (profile.deceased_had_trust === null && isAnticipating) parentInfo.push("trust status unknown");
-  if (profile.deceased_owned_property === true) parentInfo.push(isAnticipating ? "owns property" : "owned property");
-  if (profile.deceased_owned_property === null && isAnticipating) parentInfo.push("property ownership unknown");
-  if (profile.deceased_had_retirement_accounts === true) parentInfo.push(isAnticipating ? "has retirement accounts" : "had retirement accounts");
-  if (profile.deceased_had_retirement_accounts === null && isAnticipating) parentInfo.push("retirement accounts unknown");
 
-  if (parentInfo.length > 0) {
-    parts.push(`**About ${isAnticipating ? "the parent" : "the deceased"}:** ${parentInfo.join(", ")}`);
+  // Knowledge status items - what they know vs don't know
+  const knownInfo: string[] = [];
+  const unknownInfo: string[] = [];
+
+  const willStatus = formatKnowledgeStatus(
+    profile.knows_will_status,
+    isAnticipating ? "has a will" : "had a will",
+    isAnticipating ? "does NOT have a will" : "did NOT have a will",
+    "will status unknown"
+  );
+  if (willStatus) {
+    if (profile.knows_will_status === "unknown") unknownInfo.push("will");
+    else knownInfo.push(willStatus);
+  }
+
+  const trustStatus = formatKnowledgeStatus(
+    profile.knows_trust_status,
+    isAnticipating ? "has a trust" : "had a trust",
+    isAnticipating ? "does NOT have a trust" : "did NOT have a trust",
+    "trust status unknown"
+  );
+  if (trustStatus) {
+    if (profile.knows_trust_status === "unknown") unknownInfo.push("trust");
+    else knownInfo.push(trustStatus);
+  }
+
+  const propertyStatus = formatKnowledgeStatus(
+    profile.knows_property_status,
+    isAnticipating ? "owns property" : "owned property",
+    isAnticipating ? "does NOT own property" : "did NOT own property",
+    "property status unknown"
+  );
+  if (propertyStatus) {
+    if (profile.knows_property_status === "unknown") unknownInfo.push("property");
+    else knownInfo.push(propertyStatus);
+  }
+
+  const accountsStatus = formatKnowledgeStatus(
+    profile.knows_accounts_status,
+    isAnticipating ? "has retirement accounts" : "had retirement accounts",
+    isAnticipating ? "does NOT have retirement accounts" : "did NOT have retirement accounts",
+    "retirement accounts unknown"
+  );
+  if (accountsStatus) {
+    if (profile.knows_accounts_status === "unknown") unknownInfo.push("retirement accounts");
+    else knownInfo.push(accountsStatus);
+  }
+
+  const insuranceStatus = formatKnowledgeStatus(
+    profile.knows_insurance_status,
+    isAnticipating ? "has life insurance" : "had life insurance",
+    isAnticipating ? "does NOT have life insurance" : "did NOT have life insurance",
+    "life insurance unknown"
+  );
+  if (insuranceStatus) {
+    if (profile.knows_insurance_status === "unknown") unknownInfo.push("life insurance");
+    else knownInfo.push(insuranceStatus);
+  }
+
+  if (parentInfo.length > 0 || knownInfo.length > 0) {
+    parts.push(`**About ${isAnticipating ? "the parent" : "the deceased"}:** ${[...parentInfo, ...knownInfo].join(", ")}`);
+  }
+
+  // Highlight what they DON'T know - this is important context
+  if (unknownInfo.length > 0) {
+    parts.push(`**IMPORTANT - User doesn't know about:** ${unknownInfo.join(", ")}
+
+When they say "I don't know" about something, don't treat it as a blocker. Help them figure out how to find out:
+- Who might know (other family, attorney, financial advisor)
+- Where to look (mail, email, safe deposit box, filing cabinet)
+- What questions to ask
+- What to do if the answer turns out to be "no" (they didn't have one)`);
   }
 
   // Family structure
@@ -303,6 +374,9 @@ function getUrgentTasks(tasks: Task[], griefStage: GriefStage): Task[] {
   return tasks.filter((task) => {
     if (task.status === "completed" || task.status === "skipped") return false;
 
+    // Discovery tasks are always priority - users need to find info first
+    if (task.timeline_category === "discovery") return true;
+
     // For anticipating stage, priority 1 tasks are most important
     if (griefStage === "anticipating") {
       return task.priority === 1;
@@ -326,10 +400,11 @@ function getUrgentTasks(tasks: Task[], griefStage: GriefStage): Task[] {
 }
 
 function formatTaskSummary(tasks: Task[], griefStage: GriefStage): string {
-  // Different categories based on stage
+  // Different categories based on stage - always include discovery
   const categories: Record<string, Task[]> = griefStage === "anticipating"
-    ? { anticipating: [] }
+    ? { discovery: [], anticipating: [] }
     : {
+        discovery: [],
         immediate: [],
         first_week: [],
         first_month: [],
@@ -343,6 +418,7 @@ function formatTaskSummary(tasks: Task[], griefStage: GriefStage): string {
   });
 
   const categoryLabels: Record<string, string> = {
+    discovery: "Find Out First (Discovery Tasks)",
     anticipating: "Preparation Tasks",
     immediate: "Immediate (First 24-48 hours)",
     first_week: "First Week",

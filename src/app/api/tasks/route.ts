@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { GriefStage } from "@/lib/supabase/types";
+import type { GriefStage, KnowledgeStatus } from "@/lib/supabase/types";
 
 // Import task templates
 import anticipatingData from "../../../../docs/knowledge/tasks/anticipating.json";
@@ -7,6 +7,7 @@ import immediateData from "../../../../docs/knowledge/tasks/immediate.json";
 import firstWeekData from "../../../../docs/knowledge/tasks/first-week.json";
 import firstMonthData from "../../../../docs/knowledge/tasks/first-month.json";
 import ongoingData from "../../../../docs/knowledge/tasks/ongoing.json";
+import discoveryData from "../../../../docs/knowledge/tasks/discovery.json";
 
 // Demo mode - generate tasks from templates
 const DEMO_MODE = true;
@@ -23,6 +24,14 @@ interface TaskTemplate {
   tips: string[];
   is_paperwork_task: boolean;
   paperwork_wizard_id: string | null;
+}
+
+interface DiscoveryTaskTemplate extends TaskTemplate {
+  triggers_on_unknown: string;
+  who_to_ask: string[];
+  what_to_ask: string[];
+  where_to_look: string[];
+  if_none: string;
 }
 
 interface DemoTask {
@@ -43,14 +52,40 @@ interface DemoTask {
   tips: string[] | null;
   is_paperwork_task: boolean;
   paperwork_wizard_id: string | null;
+  is_discovery_task?: boolean;
+  who_to_ask?: string[] | null;
+  what_to_ask?: string[] | null;
+  where_to_look?: string[] | null;
+  if_none?: string | null;
   created_at: string;
   updated_at: string;
+}
+
+// Knowledge status for each area
+interface KnowledgeStatusMap {
+  will: KnowledgeStatus;
+  trust: KnowledgeStatus;
+  property: KnowledgeStatus;
+  accounts: KnowledgeStatus;
+  insurance: KnowledgeStatus;
 }
 
 // In-memory store for demo mode task state changes
 const taskStateStore = new Map<string, Partial<DemoTask>>();
 
-function generateTasksFromTemplates(griefStage: GriefStage = "immediate"): DemoTask[] {
+// Default knowledge status - 'unknown' for everything
+const defaultKnowledgeStatus: KnowledgeStatusMap = {
+  will: "unknown",
+  trust: "unknown",
+  property: "unknown",
+  accounts: "unknown",
+  insurance: "unknown",
+};
+
+function generateTasksFromTemplates(
+  griefStage: GriefStage = "immediate",
+  knowledgeStatus: KnowledgeStatusMap = defaultKnowledgeStatus
+): DemoTask[] {
   const allTemplates: (TaskTemplate & { timeline_category: string })[] = [
     ...anticipatingData.tasks.map((t) => ({ ...t, timeline_category: "anticipating" } as TaskTemplate & { timeline_category: string })),
     ...immediateData.tasks.map((t) => ({ ...t, timeline_category: "immediate" } as TaskTemplate & { timeline_category: string })),
@@ -64,7 +99,7 @@ function generateTasksFromTemplates(griefStage: GriefStage = "immediate"): DemoT
     t.stages && t.stages.includes(griefStage)
   );
 
-  return filteredTemplates.map((template) => {
+  const regularTasks: DemoTask[] = filteredTemplates.map((template) => {
     const storedState = taskStateStore.get(template.id) || {};
     return {
       id: template.id,
@@ -88,17 +123,70 @@ function generateTasksFromTemplates(griefStage: GriefStage = "immediate"): DemoT
       updated_at: storedState.updated_at || new Date().toISOString(),
     };
   });
+
+  // Add discovery tasks for areas where user has 'unknown' status
+  const discoveryTasks: DemoTask[] = [];
+  const discoveryTemplates = discoveryData.tasks as DiscoveryTaskTemplate[];
+
+  for (const template of discoveryTemplates) {
+    // Check if this discovery task should be triggered
+    const triggerArea = template.triggers_on_unknown as keyof KnowledgeStatusMap;
+    if (knowledgeStatus[triggerArea] === "unknown") {
+      // Also check if it applies to this grief stage
+      if (template.stages && template.stages.includes(griefStage)) {
+        const storedState = taskStateStore.get(template.id) || {};
+        discoveryTasks.push({
+          id: template.id,
+          user_id: "demo-user-123",
+          template_id: template.id,
+          title: template.title,
+          description: template.description,
+          timeline_category: "discovery",
+          task_type: template.task_type,
+          status: storedState.status || "pending",
+          priority: 0, // High priority - discovery tasks come first
+          due_date: null,
+          completed_at: storedState.completed_at || null,
+          notes: storedState.notes || null,
+          why_it_matters: template.why_it_matters,
+          documents_needed: template.documents_needed,
+          tips: template.tips,
+          is_paperwork_task: template.is_paperwork_task,
+          paperwork_wizard_id: template.paperwork_wizard_id,
+          is_discovery_task: true,
+          who_to_ask: template.who_to_ask,
+          what_to_ask: template.what_to_ask,
+          where_to_look: template.where_to_look,
+          if_none: template.if_none,
+          created_at: new Date().toISOString(),
+          updated_at: storedState.updated_at || new Date().toISOString(),
+        });
+      }
+    }
+  }
+
+  // Discovery tasks first, then regular tasks
+  return [...discoveryTasks, ...regularTasks];
 }
 
 // GET - Fetch all tasks
 export async function GET(request: Request) {
   try {
     if (DEMO_MODE) {
-      // Get grief stage from query params
+      // Get grief stage and knowledge status from query params
       const { searchParams } = new URL(request.url);
       const griefStage = (searchParams.get("stage") as GriefStage) || "immediate";
 
-      const tasks = generateTasksFromTemplates(griefStage);
+      // Parse knowledge status from query params (default to 'unknown')
+      const knowledgeStatus: KnowledgeStatusMap = {
+        will: (searchParams.get("knows_will") as KnowledgeStatus) || "unknown",
+        trust: (searchParams.get("knows_trust") as KnowledgeStatus) || "unknown",
+        property: (searchParams.get("knows_property") as KnowledgeStatus) || "unknown",
+        accounts: (searchParams.get("knows_accounts") as KnowledgeStatus) || "unknown",
+        insurance: (searchParams.get("knows_insurance") as KnowledgeStatus) || "unknown",
+      };
+
+      const tasks = generateTasksFromTemplates(griefStage, knowledgeStatus);
       return NextResponse.json({ tasks });
     }
 

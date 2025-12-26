@@ -35,14 +35,16 @@ export async function POST(request: Request) {
       .from("profiles")
       .update({
         onboarding_completed: true,
+        grief_stage: data.griefStage,
         user_role: data.userRole,
         state: data.state,
         deceased_name: data.deceasedName.trim(),
         deceased_had_spouse: data.deceasedHadSpouse,
-        deceased_had_will: data.deceasedHadWill,
-        deceased_had_trust: data.deceasedHadTrust,
-        deceased_owned_property: data.deceasedOwnedProperty,
-        deceased_had_retirement_accounts: data.deceasedHadRetirementAccounts,
+        knows_will_status: data.knowsWillStatus,
+        knows_trust_status: data.knowsTrustStatus,
+        knows_property_status: data.knowsPropertyStatus,
+        knows_accounts_status: data.knowsAccountsStatus,
+        knows_insurance_status: data.knowsInsuranceStatus,
         has_surviving_parent: data.hasSurvivingParent,
         number_of_siblings: data.numberOfSiblings,
         check_in_frequency: data.checkInFrequency,
@@ -69,13 +71,14 @@ export async function POST(request: Request) {
     }
 
     // Filter templates based on user's situation
+    // When status is 'unknown', we include the template (user will discover later)
     const isExecutor = data.userRole === "executor" || data.userRole === "co_executor";
     const matchingTemplates = (templates || []).filter((template: TaskTemplate) => {
-      // Check each condition - if the template requires something, user must have it
-      if (template.requires_will && !data.deceasedHadWill) return false;
-      if (template.requires_trust && !data.deceasedHadTrust) return false;
-      if (template.requires_property && !data.deceasedOwnedProperty) return false;
-      if (template.requires_retirement_accounts && !data.deceasedHadRetirementAccounts) return false;
+      // Check each condition - if the template requires something, user must have it (or be unknown)
+      if (template.requires_will && data.knowsWillStatus === "no") return false;
+      if (template.requires_trust && data.knowsTrustStatus === "no") return false;
+      if (template.requires_property && data.knowsPropertyStatus === "no") return false;
+      if (template.requires_retirement_accounts && data.knowsAccountsStatus === "no") return false;
       if (template.requires_surviving_spouse && !data.deceasedHadSpouse) return false;
       if (template.requires_executor_role && !isExecutor) return false;
       return true;
