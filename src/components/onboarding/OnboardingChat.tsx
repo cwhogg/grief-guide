@@ -36,24 +36,63 @@ type ConversationStep =
   | "knowledge"
   | "complete";
 
-// Test account data for Terry
-const TEST_ACCOUNT_DATA = {
-  full_name: "Terry",
-  grief_stage: "immediate" as const,
-  user_role: "executor" as const,
+// Test account: Chris lost parent Terry, surviving parent is Gloria
+const TEST_ACCOUNT_BASE = {
+  full_name: "Chris",
+  user_role: "family_helper" as const, // child helping, not executor
   state: "California",
-  deceased_name: "Margaret",
-  deceased_had_spouse: false,
-  knows_will_status: "unknown" as const,
-  knows_trust_status: "unknown" as const,
-  knows_property_status: "yes" as const,
-  knows_accounts_status: "unknown" as const,
-  knows_insurance_status: "unknown" as const,
-  has_surviving_parent: false,
+  deceased_name: "Terry",
+  deceased_had_spouse: true, // Gloria is the surviving spouse
+  has_surviving_parent: true, // Gloria is still alive
   number_of_siblings: 1,
   check_in_frequency: "weekly" as const,
   onboarding_completed: true,
 };
+
+// Grief stage presets
+const GRIEF_STAGES = {
+  immediate: "immediate" as const,
+  anticipating: "anticipating" as const,
+  navigating: "navigating" as const,
+};
+
+// Knowledge state presets
+const KNOWLEDGE_PRESETS = {
+  nothing: {
+    knows_will_status: "unknown" as const,
+    knows_trust_status: "unknown" as const,
+    knows_property_status: "unknown" as const,
+    knows_accounts_status: "unknown" as const,
+    knows_insurance_status: "unknown" as const,
+  },
+  some: {
+    knows_will_status: "yes" as const,
+    knows_trust_status: "unknown" as const,
+    knows_property_status: "yes" as const,
+    knows_accounts_status: "unknown" as const,
+    knows_insurance_status: "unknown" as const,
+  },
+  all: {
+    knows_will_status: "yes" as const,
+    knows_trust_status: "yes" as const,
+    knows_property_status: "yes" as const,
+    knows_accounts_status: "yes" as const,
+    knows_insurance_status: "yes" as const,
+  },
+};
+
+// Test scenarios combining grief stage and knowledge
+const TEST_SCENARIOS = [
+  { value: "immediate_nothing", label: "Immediate + Nothing", stage: "immediate", knowledge: "nothing" },
+  { value: "immediate_some", label: "Immediate + Some", stage: "immediate", knowledge: "some" },
+  { value: "immediate_all", label: "Immediate + All", stage: "immediate", knowledge: "all" },
+  { value: "anticipating_nothing", label: "Anticipating + Nothing", stage: "anticipating", knowledge: "nothing" },
+  { value: "anticipating_some", label: "Anticipating + Some", stage: "anticipating", knowledge: "some" },
+  { value: "anticipating_all", label: "Anticipating + All", stage: "anticipating", knowledge: "all" },
+  { value: "navigating_nothing", label: "Navigating + Nothing", stage: "navigating", knowledge: "nothing" },
+  { value: "navigating_some", label: "Navigating + Some", stage: "navigating", knowledge: "some" },
+  { value: "navigating_all", label: "Navigating + All", stage: "navigating", knowledge: "all" },
+] as const;
 
 export function OnboardingChat() {
   const router = useRouter();
@@ -65,11 +104,19 @@ export function OnboardingChat() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Handle test account login
-  const handleTestAccount = async () => {
+  // Handle test account login with scenario
+  const handleTestAccount = async (scenarioValue: string) => {
     setIsSubmitting(true);
     try {
-      await updateProfile(TEST_ACCOUNT_DATA);
+      const scenario = TEST_SCENARIOS.find(s => s.value === scenarioValue);
+      if (!scenario) throw new Error("Unknown test scenario");
+
+      const testData = {
+        ...TEST_ACCOUNT_BASE,
+        grief_stage: GRIEF_STAGES[scenario.stage as keyof typeof GRIEF_STAGES],
+        ...KNOWLEDGE_PRESETS[scenario.knowledge as keyof typeof KNOWLEDGE_PRESETS],
+      };
+      await updateProfile(testData);
       router.push("/chat");
     } catch (err) {
       console.error("Test account error:", err);
@@ -107,7 +154,7 @@ export function OnboardingChat() {
         inputType: "button",
         options: [
           { value: "yes", label: "Yeah, let's do this" },
-          { value: "test", label: "Use test account (Terry)" },
+          ...TEST_SCENARIOS.map(s => ({ value: `test_${s.value}`, label: s.label })),
         ],
         field: "welcome",
       });
@@ -134,8 +181,9 @@ export function OnboardingChat() {
 
   const handleButtonClick = async (value: string, label: string) => {
     // Handle test account specially - don't add as user message
-    if (value === "test") {
-      handleTestAccount();
+    if (value.startsWith("test_")) {
+      const scenarioValue = value.replace("test_", "");
+      handleTestAccount(scenarioValue);
       return;
     }
 
