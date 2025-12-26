@@ -117,7 +117,7 @@ export default function TherapistChatPage() {
       <nav className="bg-white border-b border-stone-200 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/dashboard"
+            href="/chat"
             className="text-stone-600 hover:text-stone-900 transition-colors"
           >
             <svg

@@ -154,7 +154,7 @@ export function OnboardingWizard() {
         onboarding_completed: true,
       });
 
-      router.push("/dashboard");
+      router.push("/chat");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setIsSubmitting(false);

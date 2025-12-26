@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     if (!isLoading && user) {
       if (profile?.onboarding_completed) {
-        router.push("/dashboard");
+        router.push("/chat");
       } else {
         router.push("/onboarding");
       }
