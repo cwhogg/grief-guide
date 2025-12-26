@@ -2,8 +2,23 @@ import OpenAI from "openai";
 
 // Server-side OpenAI client
 // Only use this in API routes or server components
-export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+// Lazy initialization to avoid build-time errors when API key isn't set
+let _openai: OpenAI | null = null;
+
+export const openai = new Proxy({} as OpenAI, {
+  get(_target, prop) {
+    if (!_openai) {
+      if (!process.env.OPENAI_API_KEY) {
+        throw new Error(
+          "OPENAI_API_KEY is not set. Please set it in your environment variables."
+        );
+      }
+      _openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+      });
+    }
+    return _openai[prop as keyof OpenAI];
+  },
 });
 
 // Agent system prompts for different support contexts

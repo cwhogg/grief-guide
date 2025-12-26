@@ -1,0 +1,380 @@
+{
+  "frameworks": {
+    "kubler_ross_stages": {
+      "name": "Kübler-Ross Model (Five Stages of Grief)",
+      "description": "Originally developed for those facing terminal illness, widely applied to grief. Important: stages are NOT linear or universal - people may skip stages, revisit them, or experience multiple simultaneously.",
+      "stages": [
+        {
+          "name": "Denial",
+          "description": "A defense mechanism that buffers the immediate shock. Not about denying the death happened, but struggling to accept the new reality.",
+          "manifestations": [
+            "Feeling numb or in shock",
+            "Difficulty believing it's real",
+            "Going through motions mechanically",
+            "Expecting them to walk through the door"
+          ],
+          "supportive_responses": [
+            "It can take time for reality to sink in. That's normal.",
+            "The mind protects us by absorbing loss slowly.",
+            "There's no rush to 'accept' anything right now."
+          ]
+        },
+        {
+          "name": "Anger",
+          "description": "As denial fades, pain emerges. Anger is the emotional outlet - at the situation, medical system, the deceased, God, oneself, or the world.",
+          "manifestations": [
+            "Irritability and frustration",
+            "Blaming others or oneself",
+            "Asking 'why me?' or 'why them?'",
+            "Resentment toward those who haven't experienced loss"
+          ],
+          "supportive_responses": [
+            "Anger is a completely valid part of grief.",
+            "It's okay to be angry - at them, at the world, at yourself.",
+            "Anger often comes from love and from the unfairness of loss."
+          ]
+        },
+        {
+          "name": "Bargaining",
+          "description": "Dwelling on 'what if' and 'if only' statements. Attempting to negotiate, often with a higher power, to reverse or lessen the loss.",
+          "manifestations": [
+            "'What if I had called that day?'",
+            "'If only they had gone to the doctor sooner'",
+            "Replaying scenarios where the outcome changes",
+            "Guilt about things said or unsaid"
+          ],
+          "supportive_responses": [
+            "It's natural to search for ways this could have been different.",
+            "The 'what ifs' are the mind trying to find control in an uncontrollable situation.",
+            "Going over these scenarios doesn't mean you failed them."
+          ]
+        },
+        {
+          "name": "Depression",
+          "description": "Deep sadness as the full weight of loss settles in. Not clinical depression, but appropriate sadness for a significant loss.",
+          "manifestations": [
+            "Profound sadness and emptiness",
+            "Withdrawing from life and others",
+            "Loss of interest in activities",
+            "Difficulty seeing a future"
+          ],
+          "supportive_responses": [
+            "This sadness is not a sign of weakness - it's the measure of your love.",
+            "It's okay to not be okay right now.",
+            "Grief takes energy. Being exhausted makes sense."
+          ]
+        },
+        {
+          "name": "Acceptance",
+          "description": "Not being 'okay' with the loss, but acknowledging the reality and learning to live with it. Finding new meaning while honoring the relationship.",
+          "manifestations": [
+            "Acknowledging the permanence of the loss",
+            "Finding moments of peace",
+            "Beginning to plan and look forward",
+            "Integrating the loss into one's life story"
+          ],
+          "supportive_responses": [
+            "Acceptance doesn't mean forgetting or 'moving on.'",
+            "Finding peace doesn't mean you love them less.",
+            "You're not leaving them behind - you're carrying them with you differently."
+          ]
+        }
+      ],
+      "important_notes": [
+        "Not everyone experiences all stages",
+        "Stages don't follow a linear progression",
+        "People can be in multiple stages simultaneously",
+        "There is no 'correct' timeline for grief",
+        "Revisiting earlier stages is normal and healthy"
+      ]
+    },
+    "wordens_tasks": {
+      "name": "Worden's Four Tasks of Mourning",
+      "description": "An active framework that views grief as work to be done, giving mourners agency in their healing process.",
+      "tasks": [
+        {
+          "task": "Accept the reality of the loss",
+          "description": "Coming to terms with the fact that the person is dead and will not return. Both intellectual and emotional acceptance.",
+          "what_helps": [
+            "Viewing the body or attending the funeral",
+            "Talking about the death and the person",
+            "Using past tense when referring to them",
+            "Visiting the grave or memorial"
+          ]
+        },
+        {
+          "task": "Process the pain of grief",
+          "description": "Allowing oneself to feel the full range of emotions without numbing or avoiding them.",
+          "what_helps": [
+            "Expressing feelings through talking, writing, or art",
+            "Allowing tears without judgment",
+            "Not using substances to numb",
+            "Acknowledging that pain is proportional to love"
+          ]
+        },
+        {
+          "task": "Adjust to a world without the deceased",
+          "description": "Adapting to life in which the deceased is missing - practically, emotionally, and spiritually.",
+          "what_helps": [
+            "Learning new skills they used to handle",
+            "Developing new routines",
+            "Finding new sources of support",
+            "Redefining one's sense of self"
+          ]
+        },
+        {
+          "task": "Find an enduring connection while embarking on new life",
+          "description": "Finding a way to maintain a bond with the deceased while reinvesting in living.",
+          "what_helps": [
+            "Creating rituals to honor their memory",
+            "Carrying forward their values or traditions",
+            "Telling stories about them",
+            "Finding meaning in the relationship that continues"
+          ]
+        }
+      ]
+    },
+    "dual_process_model": {
+      "name": "Dual Process Model of Coping with Bereavement",
+      "description": "Developed by Stroebe and Schut. Healthy grieving involves oscillation between loss-oriented and restoration-oriented coping.",
+      "orientations": {
+        "loss_oriented": {
+          "description": "Focus on the loss itself and emotional processing",
+          "activities": [
+            "Thinking about the deceased",
+            "Crying and emotional expression",
+            "Looking at photos and remembering",
+            "Yearning and longing",
+            "Processing the death itself"
+          ]
+        },
+        "restoration_oriented": {
+          "description": "Focus on secondary changes and life adjustments",
+          "activities": [
+            "Learning new skills",
+            "Building new identity",
+            "Taking on new roles",
+            "Engaging with the world",
+            "Taking breaks from grief"
+          ]
+        }
+      },
+      "key_insight": "Both are necessary. People naturally oscillate between them. Too much of either is problematic. Some days are for feeling; some are for doing. Both serve healing."
+    },
+    "continuing_bonds": {
+      "name": "Continuing Bonds Theory",
+      "description": "Developed by Klass, Silverman, and Nickman. Challenges the idea that grief's goal is 'letting go.' Instead, the relationship transforms but continues.",
+      "principles": [
+        "The bond with the deceased doesn't end with death",
+        "Maintaining connection is healthy and normal",
+        "The relationship evolves over time",
+        "Bonds are maintained through memory, linking objects, rituals, and legacy"
+      ],
+      "healthy_continuing_bonds": [
+        "Talking to the deceased",
+        "Keeping meaningful possessions",
+        "Celebrating their birthday or death anniversary",
+        "Carrying on their traditions",
+        "Feeling their presence in certain moments",
+        "Seeking their guidance or imagining their advice",
+        "Sharing stories with others"
+      ]
+    }
+  },
+  "coping_strategies": {
+    "grounding_techniques": {
+      "5_4_3_2_1_method": {
+        "name": "5-4-3-2-1 Grounding",
+        "when_to_use": "During overwhelming emotions, panic, dissociation, or feeling untethered",
+        "instructions": [
+          "Name 5 things you can SEE around you",
+          "Name 4 things you can TOUCH or feel",
+          "Name 3 things you can HEAR",
+          "Name 2 things you can SMELL",
+          "Name 1 thing you can TASTE"
+        ],
+        "why_it_works": "Engages the senses to anchor you in the present moment, interrupting the spiral of overwhelming emotion"
+      },
+      "box_breathing": {
+        "name": "Box Breathing (4-4-4-4)",
+        "when_to_use": "Anxiety, racing thoughts, difficulty calming down",
+        "instructions": [
+          "Breathe IN for 4 counts",
+          "HOLD for 4 counts",
+          "Breathe OUT for 4 counts",
+          "HOLD for 4 counts",
+          "Repeat 4 times"
+        ],
+        "why_it_works": "Activates the parasympathetic nervous system, signaling safety to the body"
+      },
+      "feet_on_floor": {
+        "name": "Feet on Floor",
+        "when_to_use": "Feeling unreal, floating, disconnected",
+        "instructions": [
+          "Press your feet firmly into the floor",
+          "Notice the sensation of the ground beneath you",
+          "Feel the support of the earth holding you up",
+          "You are here. You are real. You are safe."
+        ]
+      },
+      "cold_water": {
+        "name": "Cold Water Reset",
+        "when_to_use": "Intense emotional flooding, panic",
+        "instructions": [
+          "Run cold water over your wrists",
+          "Hold ice cubes in your hands",
+          "Splash cold water on your face",
+          "Feel the physical sensation as an anchor"
+        ]
+      }
+    },
+    "journaling_prompts": {
+      "for_sadness": [
+        "What do I miss most about them today?",
+        "If I could tell them one thing, what would it be?",
+        "What memory brings me comfort right now?",
+        "What would they want me to know in this moment?"
+      ],
+      "for_anger": [
+        "What am I really angry about?",
+        "What feels unfair about this situation?",
+        "If I could yell into a void, what would I say?",
+        "What need isn't being met right now?"
+      ],
+      "for_guilt": [
+        "What 'should haves' am I carrying?",
+        "What would I say to a friend feeling this same guilt?",
+        "What did I do right in my relationship with them?",
+        "What would they say to me about this guilt?"
+      ],
+      "for_anxiety": [
+        "What am I afraid of right now?",
+        "What's the worst case scenario, and could I survive it?",
+        "What's one small thing I can control today?",
+        "What would help me feel even a little safer?"
+      ],
+      "for_memory_keeping": [
+        "Describe their laugh, voice, or the way they walked.",
+        "What did they smell like?",
+        "What was their favorite thing to do?",
+        "What did they teach me that I still carry?",
+        "Describe a perfectly ordinary day with them."
+      ],
+      "for_moving_forward": [
+        "What would they want for my life?",
+        "How do I want to honor their memory?",
+        "What parts of them do I see in myself?",
+        "What can I do today that they would be proud of?"
+      ]
+    },
+    "self_care_during_grief": {
+      "basics": [
+        "Drink water - grief is dehydrating",
+        "Eat something - even if you're not hungry",
+        "Sleep when you can - grief is exhausting",
+        "Move your body gently - even a short walk",
+        "Go outside briefly - sunlight and fresh air help"
+      ],
+      "permission_slips": [
+        "You can say no to things",
+        "You can cry in public",
+        "You can ask for help",
+        "You can take a break from grief",
+        "You can laugh and still be grieving",
+        "You can grieve in your own way and timeline"
+      ]
+    }
+  },
+  "red_flags": {
+    "crisis_indicators": {
+      "description": "Immediate safety concerns requiring crisis resources",
+      "indicators": [
+        "Suicidal ideation or plans",
+        "Self-harm thoughts or behaviors",
+        "Wanting to join the deceased",
+        "Feeling like a burden to others",
+        "Giving away possessions",
+        "Saying goodbye to people",
+        "Stockpiling medications",
+        "Researching methods of self-harm"
+      ],
+      "response": "Provide 988 Suicide and Crisis Lifeline immediately"
+    },
+    "complicated_grief_signs": {
+      "description": "Signs that grief may benefit from professional support",
+      "indicators": [
+        "Inability to accept the death after extended time",
+        "Persistent and intrusive longing that doesn't ease",
+        "Feeling that life is meaningless without them",
+        "Avoiding anything associated with the deceased OR obsessive focus",
+        "Intense bitterness or anger that doesn't diminish",
+        "Difficulty trusting others since the death",
+        "Feeling emotionally numb for extended periods",
+        "Inability to function in daily life after several months"
+      ],
+      "response": "Gently suggest grief counseling when appropriate"
+    },
+    "depression_vs_grief": {
+      "description": "While sadness is normal in grief, watch for signs of clinical depression",
+      "grief_typical": [
+        "Sadness comes in waves, often triggered by reminders",
+        "Can still experience moments of joy",
+        "Self-esteem generally preserved",
+        "Yearning is for the specific person lost"
+      ],
+      "depression_signs": [
+        "Persistent depressed mood without relief",
+        "Pervasive feelings of worthlessness",
+        "Guilt not related to the deceased",
+        "Suicidal thoughts (not just passive wishing to join them)",
+        "Complete inability to function after extended time"
+      ]
+    },
+    "substance_abuse_concerns": {
+      "indicators": [
+        "Using alcohol or drugs to numb pain daily",
+        "Increasing tolerance - needing more to cope",
+        "Unable to face grief sober",
+        "Others expressing concern about substance use",
+        "Substances interfering with daily functioning"
+      ],
+      "response": "Acknowledge this is common but concerning; suggest professional support"
+    }
+  },
+  "common_grief_experiences": {
+    "physical_symptoms": [
+      "Fatigue and exhaustion",
+      "Difficulty sleeping or sleeping too much",
+      "Changes in appetite",
+      "Physical aches and heaviness",
+      "Weakened immune system",
+      "Chest tightness or difficulty breathing",
+      "Stomach upset"
+    ],
+    "cognitive_changes": [
+      "Difficulty concentrating",
+      "Forgetfulness",
+      "Confusion and disorganization",
+      "Intrusive thoughts about the death",
+      "Dreams about the deceased",
+      "Sensing their presence"
+    ],
+    "emotional_range": [
+      "Sadness and longing",
+      "Anger and irritability",
+      "Guilt and regret",
+      "Anxiety and fear",
+      "Loneliness",
+      "Relief (and guilt about relief)",
+      "Numbness",
+      "Moments of peace or even joy"
+    ],
+    "social_changes": [
+      "Wanting to withdraw from others",
+      "Feeling misunderstood",
+      "Difficulty relating to those who haven't experienced loss",
+      "Changes in relationships",
+      "Needing support but not knowing how to ask"
+    ]
+  }
+}

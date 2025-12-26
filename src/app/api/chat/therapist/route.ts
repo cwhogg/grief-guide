@@ -45,10 +45,10 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check for crisis language
+    // Check for crisis language with severity levels
     const crisisCheck = detectCrisisLanguage(message);
     if (crisisCheck.isCrisis) {
-      console.warn("Crisis language detected:", crisisCheck.indicators);
+      console.warn(`Crisis language detected (severity: ${crisisCheck.severity}):`, crisisCheck.indicators);
     }
 
     // Analyze sentiment from conversation history
@@ -64,33 +64,58 @@ export async function POST(request: Request) {
     // Build system prompt
     let systemPrompt = buildTherapistSystemPrompt(context);
 
-    // Add crisis handling instructions if crisis detected
-    if (crisisCheck.isCrisis) {
+    // Add crisis handling instructions based on severity
+    if (crisisCheck.severity === "high") {
       systemPrompt += `
 
-## IMPORTANT: Crisis Detected in This Message
+## URGENT: HIGH SEVERITY CRISIS DETECTED
 
-The user's message contains concerning language that may indicate suicidal thoughts or self-harm. This is your highest priority.
+The user's message contains language indicating immediate risk of self-harm or suicide. This is your ONLY priority right now.
 
-Respond with:
-1. Express genuine care and concern
-2. Thank them for sharing something so difficult
-3. Provide the 988 Suicide and Crisis Lifeline (call or text 988)
-4. Encourage them to reach out to the lifeline or a trusted person
-5. Let them know they matter and deserve support
-6. Stay present and don't change the subject
+IMMEDIATE RESPONSE REQUIRED:
+1. Express genuine care: "I'm really glad you told me this—that took a lot of courage."
+2. Acknowledge the pain: "It sounds like you're in tremendous pain right now."
+3. Prioritize safety: "I want to make sure you're safe."
+4. Provide resources: "Please reach out to the 988 Suicide and Crisis Lifeline right now—you can call or text 988, 24/7."
+5. Stay present: "I'm here with you. Can we talk about getting you connected to someone who can help?"
+6. Don't minimize: Take everything they say seriously.
+7. Don't change the subject: Stay with this until they're connected to help.
 
-Do NOT:
-- Panic or be alarmist
-- Ignore the crisis indicators
-- Jump to logistics or other topics
-- Provide generic platitudes`;
+DO NOT:
+- Panic or be alarmist in your tone (be calm but serious)
+- Ignore or downplay what they said
+- Jump to other topics
+- Offer platitudes like "things will get better"
+- Try to "fix" their problems
+- Leave them alone in this moment`;
+    } else if (crisisCheck.severity === "medium") {
+      systemPrompt += `
+
+## IMPORTANT: CONCERNING LANGUAGE DETECTED
+
+The user's message contains language that may indicate passive suicidal ideation or significant distress. This needs careful attention.
+
+RESPONSE GUIDANCE:
+1. Gently explore: "When you say you want to [their words], can you tell me more about that?"
+2. Assess directly but compassionately: "Are you having thoughts of hurting yourself?"
+3. Validate the pain behind the words: "It sounds like you're carrying something really heavy."
+4. Have 988 ready: If they confirm suicidal thoughts, provide the 988 Suicide and Crisis Lifeline.
+5. Don't assume—ask: Sometimes these phrases are expressions of exhaustion, not suicidality.
+
+Be present, be gentle, but don't ignore what they said.`;
     } else if (crisisCheck.needsProfessionalHelp) {
       systemPrompt += `
 
-## Note: Signs of Needed Professional Support
+## NOTE: Signs of Needed Professional Support
 
-The user's message suggests they may benefit from professional grief counseling. At an appropriate moment (not immediately), gently explore whether they've considered talking to a grief counselor. Don't push, but plant the seed.`;
+The user's message suggests they may be struggling significantly and could benefit from professional grief counseling. Multiple concerning indicators detected.
+
+GUIDANCE:
+- Don't bring this up immediately—let the conversation flow naturally first
+- At an appropriate moment, gently explore: "It sounds like you've been carrying this for a while..."
+- If they're open, suggest: "Have you thought about talking to a grief counselor? There's no shame in getting extra support."
+- Plant the seed without pushing
+- Continue providing support regardless of their answer`;
     }
 
     // Format messages for OpenAI
