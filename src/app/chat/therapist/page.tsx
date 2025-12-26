@@ -33,13 +33,10 @@ export default function TherapistChatPage() {
   }, [initialize]);
 
   useEffect(() => {
-    if (!userLoading && !user) {
-      router.push("/login");
-    }
     if (!userLoading && profile && !profile.onboarding_completed) {
       router.push("/onboarding");
     }
-  }, [userLoading, user, profile, router]);
+  }, [userLoading, profile, router]);
 
   // Generate initial greeting
   useEffect(() => {
@@ -110,7 +107,7 @@ export default function TherapistChatPage() {
     );
   }
 
-  if (!user || !profile?.onboarding_completed) {
+  if (!profile?.onboarding_completed) {
     return null;
   }
 

@@ -1,4 +1,3 @@
-import { createClient } from "@/lib/supabase/server";
 import { openai } from "@/lib/openai/client";
 import {
   buildGuideSystemPrompt,
@@ -9,26 +8,61 @@ import type { Task, Profile } from "@/lib/supabase/types";
 
 export const runtime = "nodejs";
 
+// Demo mode profile
+const DEMO_PROFILE: Profile = {
+  id: "demo-user-123",
+  email: "demo@griefguide.app",
+  full_name: "Demo User",
+  avatar_url: null,
+  onboarding_completed: true,
+  user_role: "executor",
+  state: "California",
+  deceased_name: "Mom",
+  deceased_had_spouse: false,
+  deceased_had_will: true,
+  deceased_had_trust: false,
+  deceased_owned_property: true,
+  deceased_had_retirement_accounts: true,
+  has_surviving_parent: false,
+  number_of_siblings: 1,
+  check_in_frequency: "weekly",
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+};
+
+// Demo tasks (subset for context)
+const DEMO_TASKS: Partial<Task>[] = [
+  {
+    id: "1",
+    title: "Obtain death certificates",
+    status: "pending",
+    timeline_category: "immediate",
+    task_type: "paperwork",
+    priority: 1,
+  },
+  {
+    id: "2",
+    title: "Notify Social Security",
+    status: "pending",
+    timeline_category: "first_week",
+    task_type: "paperwork",
+    priority: 1,
+  },
+  {
+    id: "3",
+    title: "Contact estate attorney",
+    status: "pending",
+    timeline_category: "first_week",
+    task_type: "legal",
+    priority: 2,
+  },
+];
+
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-
-    // Authenticate user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
     // Parse request body
     const body = await request.json();
-    const { message, conversationId, history = [] } = body;
+    const { message, history = [] } = body;
 
     if (!message?.trim()) {
       return new Response(JSON.stringify({ error: "Message is required" }), {
@@ -37,35 +71,10 @@ export async function POST(request: Request) {
       });
     }
 
-    // Fetch user profile
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    if (profileError || !profile) {
-      return new Response(JSON.stringify({ error: "Profile not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Fetch user's tasks
-    const { data: tasks, error: tasksError } = await supabase
-      .from("tasks")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("priority", { ascending: true });
-
-    if (tasksError) {
-      console.error("Tasks fetch error:", tasksError);
-    }
-
-    // Build context for the agent
+    // Build context for the agent (using demo data)
     const context: GuideAgentContext = {
-      profile: profile as Profile,
-      tasks: (tasks || []) as Task[],
+      profile: DEMO_PROFILE,
+      tasks: DEMO_TASKS as Task[],
       conversationHistory: history,
     };
 
@@ -89,28 +98,15 @@ export async function POST(request: Request) {
     const readable = new ReadableStream({
       async start(controller) {
         try {
-          let fullContent = "";
-
           for await (const chunk of stream) {
             const content = chunk.choices[0]?.delta?.content || "";
             if (content) {
-              fullContent += content;
-              // Send SSE format
               const data = JSON.stringify({
                 choices: [{ delta: { content } }],
               });
               controller.enqueue(encoder.encode(`data: ${data}\n\n`));
             }
           }
-
-          // Save conversation to database
-          await saveConversation(
-            supabase,
-            user.id,
-            conversationId,
-            message,
-            fullContent
-          );
 
           controller.enqueue(encoder.encode("data: [DONE]\n\n"));
           controller.close();
@@ -137,124 +133,9 @@ export async function POST(request: Request) {
   }
 }
 
-async function saveConversation(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  userId: string,
-  conversationId: string | null,
-  userMessage: string,
-  assistantMessage: string
-) {
-  try {
-    let convId = conversationId;
-
-    // Create new conversation if needed
-    if (!convId) {
-      const { data: newConv, error: convError } = await supabase
-        .from("conversations")
-        .insert({
-          user_id: userId,
-          agent_type: "general",
-          title: userMessage.slice(0, 100),
-        })
-        .select()
-        .single();
-
-      if (convError) {
-        console.error("Error creating conversation:", convError);
-        return;
-      }
-
-      convId = newConv.id;
-    }
-
-    // Save messages
-    const { error: messagesError } = await supabase.from("messages").insert([
-      {
-        conversation_id: convId,
-        role: "user",
-        content: userMessage,
-      },
-      {
-        conversation_id: convId,
-        role: "assistant",
-        content: assistantMessage,
-      },
-    ]);
-
-    if (messagesError) {
-      console.error("Error saving messages:", messagesError);
-    }
-  } catch (error) {
-    console.error("Error in saveConversation:", error);
-  }
-}
-
-// GET - Load conversation history
-export async function GET(request: Request) {
-  try {
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const { searchParams } = new URL(request.url);
-    const conversationId = searchParams.get("conversationId");
-
-    if (conversationId) {
-      // Fetch specific conversation
-      const { data: messages, error } = await supabase
-        .from("messages")
-        .select("*")
-        .eq("conversation_id", conversationId)
-        .order("created_at", { ascending: true });
-
-      if (error) {
-        console.error("Messages fetch error:", error);
-        return new Response(JSON.stringify({ error: "Failed to fetch messages" }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
-
-      return new Response(JSON.stringify({ messages }), {
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Fetch recent conversations
-    const { data: conversations, error } = await supabase
-      .from("conversations")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("agent_type", "general")
-      .order("updated_at", { ascending: false })
-      .limit(10);
-
-    if (error) {
-      console.error("Conversations fetch error:", error);
-      return new Response(JSON.stringify({ error: "Failed to fetch conversations" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    return new Response(JSON.stringify({ conversations }), {
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("Chat GET error:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+// GET - Not needed in demo mode
+export async function GET() {
+  return new Response(JSON.stringify({ conversations: [] }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }

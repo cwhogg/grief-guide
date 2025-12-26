@@ -27,13 +27,10 @@ export default function GuideChatPage() {
   }, [initialize]);
 
   useEffect(() => {
-    if (!userLoading && !user) {
-      router.push("/login");
-    }
     if (!userLoading && profile && !profile.onboarding_completed) {
       router.push("/onboarding");
     }
-  }, [userLoading, user, profile, router]);
+  }, [userLoading, profile, router]);
 
   // Generate initial greeting based on user context
   useEffect(() => {
@@ -104,7 +101,7 @@ export default function GuideChatPage() {
     );
   }
 
-  if (!user || !profile?.onboarding_completed) {
+  if (!profile?.onboarding_completed) {
     return null;
   }
 
