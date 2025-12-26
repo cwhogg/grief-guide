@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUser";
+import { ChatTaskCard, parseTaskReferences } from "@/components/chat/ChatTaskCard";
+import type { Task, TaskStatus } from "@/lib/supabase/types";
 
 // Types
 interface Message {
@@ -36,11 +38,14 @@ export default function ChatPage() {
   const [mode, setMode] = useState<ChatMode>("guide");
   const [menuOpen, setMenuOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskMap, setTaskMap] = useState<Map<string, Task>>(new Map());
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<Array<{ role: "user" | "assistant"; content: string }>>([]);
   const hasGreeted = useRef(false);
+  const tasksFetched = useRef(false);
 
   useEffect(() => {
     initialize();
@@ -51,6 +56,61 @@ export default function ChatPage() {
       router.push("/onboarding");
     }
   }, [userLoading, profile, router]);
+
+  // Fetch tasks
+  useEffect(() => {
+    if (profile && !tasksFetched.current) {
+      tasksFetched.current = true;
+      fetchTasks();
+    }
+  }, [profile]);
+
+  const fetchTasks = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (profile?.grief_stage) params.append("grief_stage", profile.grief_stage);
+      if (profile?.user_role) params.append("user_role", profile.user_role);
+      if (profile?.state) params.append("state", profile.state);
+      if (profile?.knows_will_status) params.append("knows_will", profile.knows_will_status);
+      if (profile?.knows_trust_status) params.append("knows_trust", profile.knows_trust_status);
+      if (profile?.knows_property_status) params.append("knows_property", profile.knows_property_status);
+      if (profile?.knows_accounts_status) params.append("knows_accounts", profile.knows_accounts_status);
+      if (profile?.knows_insurance_status) params.append("knows_insurance", profile.knows_insurance_status);
+
+      const response = await fetch(`/api/tasks?${params}`);
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data.tasks || []);
+        const map = new Map<string, Task>();
+        (data.tasks || []).forEach((task: Task) => map.set(task.id, task));
+        setTaskMap(map);
+      }
+    } catch (error) {
+      console.error("Failed to fetch tasks:", error);
+    }
+  };
+
+  const handleTaskStatusChange = async (taskId: string, status: TaskStatus) => {
+    // Optimistically update local state
+    setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status } : t));
+    setTaskMap(prev => {
+      const newMap = new Map(prev);
+      const task = newMap.get(taskId);
+      if (task) {
+        newMap.set(taskId, { ...task, status });
+      }
+      return newMap;
+    });
+
+    // TODO: Persist to database when auth is set up
+    // For now, just update local state
+  };
+
+  const handleTellMeMore = (task: Task) => {
+    // Send a message asking for more details about this task
+    const message = `Tell me more about "${task.title}"`;
+    handleSendMessage(message);
+  };
 
   // Generate initial greeting based on user context and stage
   useEffect(() => {
@@ -404,7 +464,14 @@ export default function ChatPage() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} mode={mode} />
+          <MessageBubble
+            key={message.id}
+            message={message}
+            mode={mode}
+            taskMap={taskMap}
+            onTaskStatusChange={handleTaskStatusChange}
+            onTellMeMore={handleTellMeMore}
+          />
         ))}
 
         {/* Streaming message */}
@@ -417,6 +484,9 @@ export default function ChatPage() {
               timestamp: new Date(),
             }}
             mode={mode}
+            taskMap={taskMap}
+            onTaskStatusChange={handleTaskStatusChange}
+            onTellMeMore={handleTellMeMore}
             isStreaming
           />
         )}
@@ -499,28 +569,50 @@ export default function ChatPage() {
 function MessageBubble({
   message,
   mode,
+  taskMap,
+  onTaskStatusChange,
+  onTellMeMore,
   isStreaming = false,
 }: {
   message: Message;
   mode: ChatMode;
+  taskMap: Map<string, Task>;
+  onTaskStatusChange: (taskId: string, status: TaskStatus) => Promise<void>;
+  onTellMeMore: (task: Task) => void;
   isStreaming?: boolean;
 }) {
   const isUser = message.role === "user";
-  const accentColor = mode === "therapist" ? "violet" : "amber";
 
-  return (
-    <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}>
-      {/* Avatar */}
-      <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-          isUser ? "bg-stone-200" : mode === "therapist" ? "bg-violet-100" : "bg-amber-100"
-        }`}
-      >
-        {isUser ? (
+  // For user messages, just render plain text
+  if (isUser) {
+    return (
+      <div className="flex gap-3 flex-row-reverse">
+        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-stone-200">
           <svg className="w-4 h-4 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
-        ) : mode === "therapist" ? (
+        </div>
+        <div className={`max-w-[85%] rounded-2xl px-4 py-3 rounded-tr-sm ${
+          mode === "therapist" ? "bg-violet-600 text-white" : "bg-amber-600 text-white"
+        }`}>
+          <div className="whitespace-pre-wrap break-words text-white">
+            {message.content}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // For assistant messages, parse and render task references
+  const { segments } = parseTaskReferences(message.content);
+
+  return (
+    <div className="flex gap-3">
+      {/* Avatar */}
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+        mode === "therapist" ? "bg-violet-100" : "bg-amber-100"
+      }`}>
+        {mode === "therapist" ? (
           <svg className="w-4 h-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
@@ -531,22 +623,45 @@ function MessageBubble({
         )}
       </div>
 
-      {/* Message bubble */}
-      <div
-        className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-          isUser
-            ? mode === "therapist"
-              ? "bg-violet-600 text-white rounded-tr-sm"
-              : "bg-amber-600 text-white rounded-tr-sm"
-            : "bg-white shadow-sm border border-stone-200 rounded-tl-sm"
-        }`}
-      >
-        <div className={`whitespace-pre-wrap break-words ${isUser ? "text-white" : "text-stone-700"}`}>
-          {message.content}
-          {isStreaming && (
-            <span className={`inline-block w-1.5 h-4 ml-0.5 ${mode === "therapist" ? "bg-violet-600" : "bg-amber-600"} animate-pulse`} />
-          )}
-        </div>
+      {/* Message content with embedded task cards */}
+      <div className="max-w-[85%] space-y-2">
+        {segments.map((segment, index) => {
+          if (segment.type === "text") {
+            return (
+              <div
+                key={index}
+                className="bg-white shadow-sm border border-stone-200 rounded-2xl rounded-tl-sm px-4 py-3"
+              >
+                <div className="whitespace-pre-wrap break-words text-stone-700">
+                  {segment.content}
+                  {isStreaming && index === segments.length - 1 && (
+                    <span className={`inline-block w-1.5 h-4 ml-0.5 ${mode === "therapist" ? "bg-violet-600" : "bg-amber-600"} animate-pulse`} />
+                  )}
+                </div>
+              </div>
+            );
+          } else if (segment.type === "task" && segment.taskId) {
+            const task = taskMap.get(segment.taskId);
+            if (task) {
+              return (
+                <ChatTaskCard
+                  key={index}
+                  task={task}
+                  onStatusChange={onTaskStatusChange}
+                  onTellMeMore={onTellMeMore}
+                />
+              );
+            } else {
+              // Task not found - show placeholder
+              return (
+                <div key={index} className="my-2 px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-500 italic">
+                  Task not found: {segment.taskId}
+                </div>
+              );
+            }
+          }
+          return null;
+        })}
       </div>
     </div>
   );

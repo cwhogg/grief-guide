@@ -47,6 +47,32 @@ Be honest when things are hard or complicated. Don't sugarcoat. But also don't d
 
 When they're upset, don't try to fix it. Just acknowledge it briefly and warmly, then ask what would help right now. If they need to talk it through more deeply, mention they can switch to the emotional support chat.
 
+## Suggesting Tasks
+
+When you recommend a task from their list, reference it using this exact format: [task:task_id]
+
+For example: "Right now, the most important thing is getting death certificates. [task:obtain-death-certificates] Want me to walk you through it?"
+
+This will show them an interactive card they can act on directly. Only embed 1-2 task cards per message—don't overwhelm them. The task cards let them mark things done or ask for more details without leaving the chat.
+
+## When They Ask "Tell Me More"
+
+When someone asks for more details about a task, give them genuinely useful guidance in natural prose (not bullet points). Include:
+
+For regular tasks:
+- Why this matters and what happens if they skip it
+- Practical tips for getting it done
+- What documents or information they'll need
+- Common pitfalls to avoid
+
+For discovery tasks (tasks about finding information they don't know):
+- Who they could ask (spouse, family members, attorneys, accountants)
+- What specific questions to ask
+- Where to look for documents (filing cabinets, safe deposit boxes, email, tax returns)
+- What to do if they can't find anything
+
+Keep it conversational. Don't just list things—explain them like a friend would.
+
 ## About This User
 
 ${situationContext}
@@ -433,7 +459,14 @@ function formatTaskSummary(tasks: Task[], griefStage: GriefStage): string {
 
     const taskLines = categoryTasks
       .sort((a, b) => a.priority - b.priority)
-      .map((t) => `  ${statusEmoji[t.status]} ${t.title}`)
+      .map((t) => {
+        let line = `  ${statusEmoji[t.status]} ${t.title} (id: ${t.id})`;
+        // Include extra context for discovery tasks or when they have tips
+        if (t.why_it_matters) {
+          line += `\n      Why: ${t.why_it_matters.slice(0, 150)}${t.why_it_matters.length > 150 ? "..." : ""}`;
+        }
+        return line;
+      })
       .join("\n");
 
     sections.push(`**${categoryLabels[category]}**\n${taskLines}`);
@@ -459,9 +492,9 @@ export function getInitialGreeting(context: GuideAgentContext): string {
     if (stats.total === 0) {
       return greeting + "I'm here to help you figure out what you can do now to make things easier later. What's on your mind?";
     } else if (inProgress.length > 0) {
-      return greeting + `Last time you were working on "${inProgress[0].title}." How did that go?`;
+      return greeting + `Last time you were working on "${inProgress[0].title}." [task:${inProgress[0].id}] How did that go?`;
     } else if (urgent.length > 0) {
-      return greeting + `One thing that might help to focus on: "${urgent[0].title}." Want me to walk you through it?`;
+      return greeting + `One thing that might help to focus on:\n\n[task:${urgent[0].id}]\n\nWant me to walk you through it?`;
     } else {
       return greeting + "What would be helpful to focus on today?";
     }
@@ -469,11 +502,11 @@ export function getInitialGreeting(context: GuideAgentContext): string {
     if (stats.total === 0) {
       return greeting + `There's a lot to figure out${parentName ? ` after ${parentName}'s death` : ""}. Where would you like to start?`;
     } else if (blocked.length > 0) {
-      return greeting + `You mentioned being stuck on "${blocked[0].title}." Want to work through that?`;
+      return greeting + `You mentioned being stuck on this:\n\n[task:${blocked[0].id}]\n\nWant to work through it?`;
     } else if (inProgress.length > 0) {
-      return greeting + `How's "${inProgress[0].title}" going? Anything I can help with?`;
+      return greeting + `How's this going?\n\n[task:${inProgress[0].id}]\n\nAnything I can help with?`;
     } else if (urgent.length > 0) {
-      return greeting + `The most important thing right now is probably "${urgent[0].title}." Ready to tackle it?`;
+      return greeting + `The most important thing right now is probably this:\n\n[task:${urgent[0].id}]\n\nReady to tackle it?`;
     } else if (stats.completed > 0) {
       return greeting + `You've gotten ${stats.completed} thing${stats.completed === 1 ? "" : "s"} handled. What's next?`;
     } else {
