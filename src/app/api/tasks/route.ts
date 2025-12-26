@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import type { GriefStage } from "@/lib/supabase/types";
 
 // Import task templates
+import anticipatingData from "../../../../docs/knowledge/tasks/anticipating.json";
 import immediateData from "../../../../docs/knowledge/tasks/immediate.json";
 import firstWeekData from "../../../../docs/knowledge/tasks/first-week.json";
 import firstMonthData from "../../../../docs/knowledge/tasks/first-month.json";
@@ -8,6 +10,20 @@ import ongoingData from "../../../../docs/knowledge/tasks/ongoing.json";
 
 // Demo mode - generate tasks from templates
 const DEMO_MODE = true;
+
+interface TaskTemplate {
+  id: string;
+  title: string;
+  description: string;
+  task_type: string;
+  priority: number;
+  stages: string[];
+  why_it_matters: string;
+  documents_needed: string[];
+  tips: string[];
+  is_paperwork_task: boolean;
+  paperwork_wizard_id: string | null;
+}
 
 interface DemoTask {
   id: string;
@@ -34,15 +50,21 @@ interface DemoTask {
 // In-memory store for demo mode task state changes
 const taskStateStore = new Map<string, Partial<DemoTask>>();
 
-function generateTasksFromTemplates(): DemoTask[] {
-  const allTemplates = [
-    ...immediateData.tasks.map((t) => ({ ...t, timeline_category: "immediate" })),
-    ...firstWeekData.tasks.map((t) => ({ ...t, timeline_category: "first_week" })),
-    ...firstMonthData.tasks.map((t) => ({ ...t, timeline_category: "first_month" })),
-    ...ongoingData.tasks.map((t) => ({ ...t, timeline_category: "ongoing" })),
+function generateTasksFromTemplates(griefStage: GriefStage = "immediate"): DemoTask[] {
+  const allTemplates: (TaskTemplate & { timeline_category: string })[] = [
+    ...anticipatingData.tasks.map((t) => ({ ...t, timeline_category: "anticipating" } as TaskTemplate & { timeline_category: string })),
+    ...immediateData.tasks.map((t) => ({ ...t, timeline_category: "immediate" } as TaskTemplate & { timeline_category: string })),
+    ...firstWeekData.tasks.map((t) => ({ ...t, timeline_category: "first_week" } as TaskTemplate & { timeline_category: string })),
+    ...firstMonthData.tasks.map((t) => ({ ...t, timeline_category: "first_month" } as TaskTemplate & { timeline_category: string })),
+    ...ongoingData.tasks.map((t) => ({ ...t, timeline_category: "ongoing" } as TaskTemplate & { timeline_category: string })),
   ];
 
-  return allTemplates.map((template) => {
+  // Filter templates by grief stage
+  const filteredTemplates = allTemplates.filter((t) =>
+    t.stages && t.stages.includes(griefStage)
+  );
+
+  return filteredTemplates.map((template) => {
     const storedState = taskStateStore.get(template.id) || {};
     return {
       id: template.id,
@@ -69,10 +91,14 @@ function generateTasksFromTemplates(): DemoTask[] {
 }
 
 // GET - Fetch all tasks
-export async function GET() {
+export async function GET(request: Request) {
   try {
     if (DEMO_MODE) {
-      const tasks = generateTasksFromTemplates();
+      // Get grief stage from query params
+      const { searchParams } = new URL(request.url);
+      const griefStage = (searchParams.get("stage") as GriefStage) || "immediate";
+
+      const tasks = generateTasksFromTemplates(griefStage);
       return NextResponse.json({ tasks });
     }
 

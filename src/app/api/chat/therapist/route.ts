@@ -17,6 +17,7 @@ const DEMO_PROFILE: Profile = {
   full_name: "Demo User",
   avatar_url: null,
   onboarding_completed: true,
+  grief_stage: "immediate",
   user_role: "executor",
   state: "California",
   deceased_name: "Mom",

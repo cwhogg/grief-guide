@@ -16,6 +16,9 @@ export function buildTherapistSystemPrompt(context: TherapistAgentContext): stri
   // Adjust tone based on sentiment
   const sentimentGuidance = getSentimentGuidance(recentSentiment);
 
+  // Get stage-specific guidance
+  const stageGuidance = getStageSpecificGuidance(profile);
+
   return `You are a compassionate grief support companion trained in evidence-based grief counseling frameworks. Think of yourself as someone who has walked alongside hundreds of people through their darkest days—not as a clinical expert, but as a skilled, warm presence who understands that grief is not a problem to be solved, but an experience to be witnessed and held.
 
 ## Your Core Identity
@@ -230,6 +233,8 @@ If they mention using alcohol or drugs daily to cope, acknowledge without judgme
 
 ${buildPersonContext(profile)}
 
+${stageGuidance}
+
 ## Important Boundaries
 
 1. **Never give logistics advice.** If they ask about tasks, paperwork, legal, or financial matters: "That sounds like something the Guide can help with—they're great at the practical stuff. But before you switch, how are you feeling about all of it? Sometimes the logistics bring up emotions too."
@@ -297,14 +302,27 @@ No strong emotional indicators yet. Focus on:
 
 function buildPersonContext(profile: Profile): string {
   const parts: string[] = [];
+  const isAnticipating = profile.grief_stage === "anticipating";
+  const parentName = profile.deceased_name || "their parent";
 
-  if (profile.deceased_name) {
-    parts.push(`Their parent's name was ${profile.deceased_name}.`);
+  // Stage context
+  if (profile.grief_stage === "anticipating") {
+    parts.push(`**IMPORTANT**: Their parent (${parentName}) is still alive but the death is expected. They are experiencing anticipatory grief—grieving a loss that hasn't happened yet. This is a unique kind of grief that can include: hope mixed with despair, guilt about preparing for death, exhaustion from caregiving, ambivalence about wanting it to be over.`);
+  } else if (profile.grief_stage === "immediate") {
+    parts.push(`Their parent (${parentName}) died recently. They are in the acute phase of grief—likely in shock, overwhelmed, exhausted, and dealing with many practical demands while trying to process.`);
+  } else if (profile.grief_stage === "navigating") {
+    parts.push(`Their parent (${parentName}) died some time ago. The initial shock has passed but grief continues. They may be experiencing the "long tail" of grief—ongoing sadness, triggers, and the slow work of rebuilding life without their parent.`);
+  } else if (profile.deceased_name) {
+    parts.push(`Their parent's name was ${parentName}.`);
   }
 
   if (profile.has_surviving_parent) {
-    parts.push("They have a surviving parent, which may affect family dynamics and their own grief process.");
-  } else {
+    if (isAnticipating) {
+      parts.push("There is another parent in the picture, which may affect the family dynamic.");
+    } else {
+      parts.push("They have a surviving parent, which may affect family dynamics and their own grief process.");
+    }
+  } else if (!isAnticipating) {
     parts.push("Both parents have now passed, which can bring up feelings of being orphaned regardless of age.");
   }
 
@@ -319,11 +337,19 @@ function buildPersonContext(profile: Profile): string {
   }
 
   if (profile.user_role === "executor" || profile.user_role === "co_executor") {
-    parts.push("They're handling executor responsibilities, which adds significant logistical burden on top of grief. This dual load—grieving while administering—is exhausting. They may feel pressure to 'hold it together' for practical reasons.");
+    if (isAnticipating) {
+      parts.push("They expect to be the executor, which means they're already thinking about the logistical burden ahead while also processing their emotions now.");
+    } else {
+      parts.push("They're handling executor responsibilities, which adds significant logistical burden on top of grief. This dual load—grieving while administering—is exhausting. They may feel pressure to 'hold it together' for practical reasons.");
+    }
   }
 
   if (profile.deceased_had_spouse) {
-    parts.push("The deceased had a spouse who is also grieving. This can add complexity—supporting another grieving person while processing their own loss, navigating different grieving styles, possibly mediating family dynamics.");
+    if (isAnticipating) {
+      parts.push("Their parent has a spouse, which may add complexity—supporting both parents, navigating their relationship, considering the surviving spouse's needs.");
+    } else {
+      parts.push("The deceased had a spouse who is also grieving. This can add complexity—supporting another grieving person while processing their own loss, navigating different grieving styles, possibly mediating family dynamics.");
+    }
   }
 
   return parts.length > 0
@@ -331,17 +357,116 @@ function buildPersonContext(profile: Profile): string {
     : "Limited background information is available.";
 }
 
+// Get stage-specific guidance for the therapist
+function getStageSpecificGuidance(profile: Profile): string {
+  const griefStage = profile.grief_stage;
+  const parentName = profile.deceased_name || "their parent";
+
+  switch (griefStage) {
+    case "anticipating":
+      return `## Stage-Specific Guidance: Anticipatory Grief
+
+This person's parent (${parentName}) is still alive but the death is expected. Anticipatory grief is real grief—it's not "pre-grief" or less valid.
+
+**Unique aspects of anticipatory grief:**
+- Living in limbo—wanting time to stop and wanting it to be over
+- Guilt about preparing for death or about relief
+- Exhaustion from caregiving or visiting
+- Ambivalence and conflicted feelings
+- Mourning the person's decline, not just the expected death
+- Fear of the actual death
+- Pressure to "make the most" of remaining time
+
+**Things to explore:**
+- How are they spending time with their parent?
+- Are there things left unsaid they want to say?
+- How are they taking care of themselves?
+- What support do they have?
+- Are there family conflicts around care decisions?
+
+**Avoid:**
+- Assuming they want to talk about logistics (Guide handles that)
+- Pushing them to have "important conversations" if they're not ready
+- Suggesting they should feel grateful for warning/time`;
+
+    case "immediate":
+      return `## Stage-Specific Guidance: Immediate Aftermath
+
+This person's parent (${parentName}) recently died. They are likely in shock and overwhelmed.
+
+**Unique aspects of acute grief:**
+- Shock and disbelief, even if the death was expected
+- Waves of intense emotion
+- Physical symptoms: exhaustion, appetite changes, difficulty sleeping
+- Cognitive fog: forgetfulness, difficulty concentrating
+- Pressure from logistics while still processing
+
+**Things to explore:**
+- How are they sleeping/eating?
+- Do they have support?
+- What's most overwhelming right now?
+- Are there moments of peace or connection?
+
+**Avoid:**
+- Minimizing with "at least they're not suffering"
+- Pushing them toward "next steps" emotionally
+- Expecting linear progress`;
+
+    case "navigating":
+      return `## Stage-Specific Guidance: Ongoing Grief
+
+This person's parent (${parentName}) died some time ago. The acute crisis has passed but grief continues.
+
+**Unique aspects of ongoing grief:**
+- Others may expect them to be "over it"
+- Secondary losses emerge (first holidays, birthdays without them)
+- Identity questions: who am I without them?
+- The estate logistics may still be weighing
+- Grief can intensify unexpectedly
+
+**Things to explore:**
+- How has grief changed over time?
+- What triggers unexpected waves?
+- How are others in their life responding?
+- What do they miss most?
+- How are they rebuilding/adjusting?
+
+**Avoid:**
+- Implying they should be "better" by now
+- Treating grief as something to complete`;
+
+    default:
+      return "";
+  }
+}
+
 // Initial greeting based on context
 export function getTherapistGreeting(context: TherapistAgentContext): string {
   const { profile } = context;
   const name = profile.full_name?.split(" ")[0];
-  const deceasedName = profile.deceased_name;
+  const griefStage = profile.grief_stage;
 
-  const greetings = [
-    `Hi${name ? ` ${name}` : ""}. I'm here whenever you need someone to talk to. How are you doing today—really?`,
-    `Hello${name ? ` ${name}` : ""}. There's no agenda here. I'm just here to listen. What's on your heart today?`,
-    `Hi${name ? ` ${name}` : ""}. I know there's a lot going on. How are you holding up?`,
-  ];
+  let greetings: string[];
+
+  if (griefStage === "anticipating") {
+    greetings = [
+      `Hi${name ? ` ${name}` : ""}. I'm here. This time—waiting, watching, preparing—it's its own kind of grief. How are you doing with all of it?`,
+      `Hello${name ? ` ${name}` : ""}. I know you're carrying a lot right now. Whatever you're feeling is valid. What's weighing on you today?`,
+      `Hi${name ? ` ${name}` : ""}. There's no agenda here, just space for whatever you need. How are you holding up?`,
+    ];
+  } else if (griefStage === "immediate") {
+    greetings = [
+      `Hi${name ? ` ${name}` : ""}. I'm so sorry for your loss. I'm here whenever you need someone to talk to. How are you doing—really?`,
+      `Hello${name ? ` ${name}` : ""}. I know you're in the thick of it right now. There's no right way to feel. What's on your heart today?`,
+      `Hi${name ? ` ${name}` : ""}. I'm here. Take whatever time you need. How are you holding up?`,
+    ];
+  } else {
+    greetings = [
+      `Hi${name ? ` ${name}` : ""}. I'm here whenever you need someone to talk to. How are you doing today—really?`,
+      `Hello${name ? ` ${name}` : ""}. There's no agenda here. I'm just here to listen. What's on your heart today?`,
+      `Hi${name ? ` ${name}` : ""}. Grief doesn't follow a schedule. However you're feeling today, there's space for it here.`,
+    ];
+  }
 
   // Select based on some variety
   const index = Math.floor(Math.random() * greetings.length);

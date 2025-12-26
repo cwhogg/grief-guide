@@ -16,6 +16,8 @@ export type UserRole =
 
 export type CheckInFrequency = "daily" | "weekly" | "as_needed";
 
+export type GriefStage = "anticipating" | "immediate" | "navigating";
+
 export type TaskType =
   | "paperwork"
   | "legal"
@@ -50,6 +52,7 @@ export type Database = {
           has_surviving_parent: boolean | null;
           number_of_siblings: number | null;
           check_in_frequency: CheckInFrequency | null;
+          grief_stage: GriefStage | null;
           created_at: string;
           updated_at: string;
         };
@@ -70,6 +73,7 @@ export type Database = {
           has_surviving_parent?: boolean | null;
           number_of_siblings?: number | null;
           check_in_frequency?: CheckInFrequency | null;
+          grief_stage?: GriefStage | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -90,6 +94,7 @@ export type Database = {
           has_surviving_parent?: boolean | null;
           number_of_siblings?: number | null;
           check_in_frequency?: CheckInFrequency | null;
+          grief_stage?: GriefStage | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -389,14 +394,15 @@ export type ResourceCategory = Resource["category"];
 
 // Onboarding form data type
 export interface OnboardingData {
+  griefStage: GriefStage;
   userRole: UserRole;
   state: string;
   deceasedName: string;
   deceasedHadSpouse: boolean;
-  deceasedHadWill: boolean;
-  deceasedHadTrust: boolean;
-  deceasedOwnedProperty: boolean;
-  deceasedHadRetirementAccounts: boolean;
+  deceasedHadWill: boolean | null;
+  deceasedHadTrust: boolean | null;
+  deceasedOwnedProperty: boolean | null;
+  deceasedHadRetirementAccounts: boolean | null;
   hasSurvivingParent: boolean;
   numberOfSiblings: number;
   checkInFrequency: CheckInFrequency;

@@ -8,7 +8,7 @@
       "description": "Order 10-15 certified copies of the death certificate from the funeral home or vital records office. These are required for nearly every official notification and claim.",
       "task_type": "paperwork",
       "priority": 1,
-      "days_after_death": 1,
+      "stages": ["immediate", "navigating"],
       "why_it_matters": "Banks, insurance companies, government agencies, and financial institutions all require certified copies. Getting enough upfront saves time and additional trips to vital records.",
       "documents_needed": [],
       "tips": [
@@ -18,15 +18,8 @@
         "Some institutions accept photocopies, but most require certified originals",
         "Keep track of which institutions keep the certificate vs. return it"
       ],
-      "estimated_time": "30 minutes to order, 1-2 weeks to receive",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     },
     {
       "id": "notify-immediate-family",
@@ -34,7 +27,7 @@
       "description": "Contact close family members and friends who need to know. Consider delegating some calls to a trusted family member to share the load.",
       "task_type": "notifications",
       "priority": 1,
-      "days_after_death": 0,
+      "stages": ["immediate"],
       "why_it_matters": "Close family and friends deserve to hear the news directly, not through social media or other channels. They may also want to help with arrangements.",
       "documents_needed": [],
       "tips": [
@@ -44,15 +37,8 @@
         "Consider creating a phone tree where each person calls 2-3 others",
         "You don't need to have all the details—it's okay to say 'I don't know yet'"
       ],
-      "estimated_time": "2-4 hours",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     },
     {
       "id": "contact-funeral-home",
@@ -60,7 +46,7 @@
       "description": "Choose a funeral home and begin making arrangements for burial or cremation. If your loved one had pre-planned arrangements, locate those documents.",
       "task_type": "logistics",
       "priority": 1,
-      "days_after_death": 0,
+      "stages": ["immediate"],
       "why_it_matters": "Funeral arrangements need to happen quickly, especially if there will be a viewing. Pre-planned arrangements may already be paid for.",
       "documents_needed": [
         "Pre-planned funeral arrangements (if any)",
@@ -75,15 +61,8 @@
         "Consider having a trusted friend or family member accompany you",
         "It's okay to take a day before making decisions if you need time"
       ],
-      "estimated_time": "2-4 hours for initial meeting",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     },
     {
       "id": "secure-deceased-home",
@@ -91,7 +70,7 @@
       "description": "If your loved one lived alone, secure their home immediately. Change locks if keys are unaccounted for, check that all doors and windows are locked, and ensure valuables are safe.",
       "task_type": "logistics",
       "priority": 2,
-      "days_after_death": 0,
+      "stages": ["immediate", "navigating"],
       "why_it_matters": "Unfortunately, home break-ins after a death (especially after obituaries are published) do happen. Securing the property protects belongings and the estate.",
       "documents_needed": [],
       "tips": [
@@ -101,15 +80,9 @@
         "Don't announce funeral times in obituaries—this tells burglars when the home will be empty",
         "Consider removing obvious valuables temporarily"
       ],
-      "estimated_time": "1-2 hours",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": true,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "requires_property": true
     },
     {
       "id": "locate-will-documents",
@@ -117,7 +90,7 @@
       "description": "Find the original will, trust documents, life insurance policies, and other critical paperwork. Check home safes, safe deposit boxes, filing cabinets, and with their attorney.",
       "task_type": "legal",
       "priority": 1,
-      "days_after_death": 1,
+      "stages": ["immediate", "navigating"],
       "why_it_matters": "The will names the executor and contains burial wishes. Life insurance policies may have time limits for filing. These documents guide all future decisions.",
       "documents_needed": [],
       "tips": [
@@ -127,15 +100,8 @@
         "Check for a fireproof safe at their home",
         "Some people store important documents with a trusted family member"
       ],
-      "estimated_time": "1-4 hours depending on organization",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     },
     {
       "id": "notify-employer",
@@ -143,7 +109,7 @@
       "description": "If your loved one was employed, contact their HR department to notify them of the death. Ask about final paychecks, benefits, life insurance through work, and any personal belongings.",
       "task_type": "notifications",
       "priority": 2,
-      "days_after_death": 1,
+      "stages": ["immediate", "navigating"],
       "why_it_matters": "The employer may owe final wages, vacation pay, or death benefits. Many employers offer life insurance as a benefit that families don't know about.",
       "documents_needed": [
         "Death certificate (may be needed later)"
@@ -155,15 +121,8 @@
         "Request any personal items from their workspace",
         "Ask about any unpaid wages, bonuses, or commissions owed"
       ],
-      "estimated_time": "30 minutes to 1 hour",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     },
     {
       "id": "arrange-pet-care",
@@ -171,7 +130,7 @@
       "description": "If your loved one had pets, ensure they are being cared for. This may be temporary until permanent arrangements can be made.",
       "task_type": "logistics",
       "priority": 1,
-      "days_after_death": 0,
+      "stages": ["immediate"],
       "why_it_matters": "Pets need immediate care and can be a source of comfort during grief. Making permanent arrangements can wait, but immediate needs cannot.",
       "documents_needed": [],
       "tips": [
@@ -181,15 +140,8 @@
         "Gather pet supplies from the deceased's home",
         "Consider if keeping the pet might be comforting for a surviving spouse"
       ],
-      "estimated_time": "1-2 hours",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     },
     {
       "id": "notify-doctors",
@@ -197,7 +149,7 @@
       "description": "Contact the deceased's primary care physician and any specialists to inform them of the death and cancel upcoming appointments.",
       "task_type": "notifications",
       "priority": 3,
-      "days_after_death": 2,
+      "stages": ["immediate", "navigating"],
       "why_it_matters": "This prevents appointment reminders and ensures medical records are updated. If hospice was involved, they can help with this process.",
       "documents_needed": [],
       "tips": [
@@ -206,15 +158,8 @@
         "Return any rented medical equipment (hospital beds, oxygen, etc.)",
         "Ask about any outstanding medical bills"
       ],
-      "estimated_time": "30 minutes to 1 hour",
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "paperwork_wizard_id": null
     }
   ]
 }

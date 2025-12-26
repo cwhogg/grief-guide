@@ -117,11 +117,13 @@ export default function DashboardPage() {
   }, [userLoading, profile, router]);
 
   const fetchDashboardData = useCallback(async () => {
-    if (!user) return;
+    if (!user || !profile) return;
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/tasks");
+      // Pass grief stage to filter tasks appropriately
+      const griefStage = profile.grief_stage || "immediate";
+      const response = await fetch(`/api/tasks?stage=${griefStage}`);
       if (!response.ok) throw new Error("Failed to fetch tasks");
 
       const data = await response.json();

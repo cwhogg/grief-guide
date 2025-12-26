@@ -8,7 +8,6 @@
       "description": "File a final income tax return (Form 1040) for the deceased covering January 1 through the date of death. This is due by the normal April deadline.",
       "task_type": "financial",
       "priority": 1,
-      "days_after_death": 60,
       "why_it_matters": "The final tax return is a legal requirement. It may result in a refund to the estate or identify taxes owed. The estate cannot be fully settled until taxes are resolved.",
       "documents_needed": [
         "W-2s and 1099s for the year of death",
@@ -24,15 +23,12 @@
         "File for an extension if you need more time (Form 4868)",
         "Keep records—the IRS can audit estate returns for 3 years"
       ],
-      "estimated_time": "2-4 hours, or hire professional",
       "is_paperwork_task": true,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "probate-process",
@@ -40,7 +36,6 @@
       "description": "If required, work through the probate court process to validate the will, settle debts, and legally transfer assets to beneficiaries.",
       "task_type": "legal",
       "priority": 1,
-      "days_after_death": 30,
       "why_it_matters": "Probate gives the executor legal authority to act on behalf of the estate. It ensures debts are properly paid and assets legally transferred.",
       "documents_needed": [
         "Original will",
@@ -56,15 +51,12 @@
         "Keep detailed records of all transactions and decisions",
         "Probate typically takes 6-12 months, sometimes longer"
       ],
-      "estimated_time": "Varies greatly—6 months to 2+ years",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": true,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "distribute-assets",
@@ -72,7 +64,6 @@
       "description": "Once debts are paid and probate permits, distribute remaining assets to beneficiaries according to the will or trust, or by state law if there's no will.",
       "task_type": "legal",
       "priority": 2,
-      "days_after_death": 180,
       "why_it_matters": "This is the ultimate purpose of estate administration—ensuring your loved one's wishes are honored and beneficiaries receive their inheritance.",
       "documents_needed": [
         "Will or trust document",
@@ -87,15 +78,12 @@
         "If beneficiaries disagree, a mediator may help",
         "Keep reserves for any final taxes or unexpected expenses"
       ],
-      "estimated_time": "Varies based on estate complexity",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": true,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "sell-property",
@@ -103,7 +91,6 @@
       "description": "If the estate includes real property that will be sold, work with a real estate agent to list and sell the property. Ensure title is clear and proceeds go to the estate.",
       "task_type": "logistics",
       "priority": 2,
-      "days_after_death": 90,
       "why_it_matters": "Real estate is often the largest estate asset. A proper sale ensures maximum value and legal transfer. Proceeds are typically needed to settle the estate.",
       "documents_needed": [
         "Property deed",
@@ -119,15 +106,12 @@
         "The estate may be responsible for maintenance until sold",
         "Capital gains on inherited property are calculated from date-of-death value"
       ],
-      "estimated_time": "3-6 months typically",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": true,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "close-remaining-accounts",
@@ -135,7 +119,6 @@
       "description": "Close any remaining accounts in the deceased's name once the estate is settled. This includes bank accounts, investment accounts, and any remaining credit accounts.",
       "task_type": "financial",
       "priority": 3,
-      "days_after_death": 180,
       "why_it_matters": "Closing accounts completes the financial wind-down of the estate and prevents any ongoing fees or potential fraud.",
       "documents_needed": [
         "Death certificate",
@@ -150,15 +133,12 @@
         "Close investment accounts after distributing assets to beneficiaries",
         "Keep estate bank account open until all distributions are complete"
       ],
-      "estimated_time": "30 minutes per account",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "file-estate-tax-return",
@@ -166,7 +146,6 @@
       "description": "If the estate exceeds the federal exemption ($12.92M in 2023, adjusted for inflation), file IRS Form 706. Some states have lower thresholds.",
       "task_type": "financial",
       "priority": 2,
-      "days_after_death": 270,
       "why_it_matters": "Federal estate tax is 40% on amounts over the exemption. Missing the deadline can result in penalties and interest.",
       "documents_needed": [
         "Complete inventory of all assets at fair market value",
@@ -181,15 +160,12 @@
         "Form 706 is due 9 months after death (extension available)",
         "Portability allows surviving spouse to use unused exemption"
       ],
-      "estimated_time": "Hire a professional—this is complex",
       "is_paperwork_task": true,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "handle-digital-assets",
@@ -197,7 +173,6 @@
       "description": "Close or memorialize social media accounts, cancel online subscriptions, and address email accounts and digital photos.",
       "task_type": "logistics",
       "priority": 3,
-      "days_after_death": 30,
       "why_it_matters": "Digital accounts can be targets for hackers. Memorializing social media preserves the profile while preventing login. Digital photos may be precious memories.",
       "documents_needed": [
         "Death certificate",
@@ -211,15 +186,12 @@
         "Check for any cryptocurrency wallets (may have significant value)",
         "Some email providers will provide account contents to next of kin"
       ],
-      "estimated_time": "2-4 hours total",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": false
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     },
     {
       "id": "organize-estate-records",
@@ -227,7 +199,6 @@
       "description": "Compile all estate documents, receipts, and records into organized files. Store securely for at least 7 years in case of audits or questions.",
       "task_type": "logistics",
       "priority": 3,
-      "days_after_death": 365,
       "why_it_matters": "Good records protect the executor from liability and answer questions that may arise later. Tax authorities can audit for years after.",
       "documents_needed": [],
       "tips": [
@@ -237,15 +208,12 @@
         "Keep the final accounting submitted to the court",
         "Consider both physical and digital backups"
       ],
-      "estimated_time": "2-4 hours to organize",
       "is_paperwork_task": false,
       "paperwork_wizard_id": null,
-      "requires_will": false,
-      "requires_trust": false,
-      "requires_property": false,
-      "requires_retirement_accounts": false,
-      "requires_surviving_spouse": false,
-      "requires_executor_role": true
+      "stages": [
+        "immediate",
+        "navigating"
+      ]
     }
   ]
 }

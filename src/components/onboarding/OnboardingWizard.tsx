@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
-import type { OnboardingData, UserRole, CheckInFrequency } from "@/lib/supabase/types";
+import type { OnboardingData, UserRole, CheckInFrequency, GriefStage } from "@/lib/supabase/types";
 
 const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -69,15 +69,34 @@ const FREQUENCY_OPTIONS: { value: CheckInFrequency; label: string; description: 
   },
 ];
 
+const STAGE_OPTIONS: { value: GriefStage; label: string; description: string }[] = [
+  {
+    value: "anticipating",
+    label: "My parent is sick or in hospice",
+    description: "They're still alive, but you're preparing for what's ahead",
+  },
+  {
+    value: "immediate",
+    label: "My parent just passed",
+    description: "It happened recently and you're in the thick of it",
+  },
+  {
+    value: "navigating",
+    label: "My parent passed a while ago",
+    description: "You're still sorting through everything",
+  },
+];
+
 const initialData: OnboardingData = {
+  griefStage: "immediate",
   userRole: "executor",
   state: "",
   deceasedName: "",
   deceasedHadSpouse: false,
-  deceasedHadWill: false,
-  deceasedHadTrust: false,
-  deceasedOwnedProperty: false,
-  deceasedHadRetirementAccounts: false,
+  deceasedHadWill: null,
+  deceasedHadTrust: null,
+  deceasedOwnedProperty: null,
+  deceasedHadRetirementAccounts: null,
   hasSurvivingParent: false,
   numberOfSiblings: 0,
   checkInFrequency: "weekly",
@@ -91,7 +110,7 @@ export function OnboardingWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const totalSteps = 6;
+  const totalSteps = 7;
 
   const updateData = (updates: Partial<OnboardingData>) => {
     setData((prev) => ({ ...prev, ...updates }));
@@ -116,6 +135,7 @@ export function OnboardingWizard() {
     try {
       // Save to local state (demo mode)
       await updateProfile({
+        grief_stage: data.griefStage,
         user_role: data.userRole,
         state: data.state,
         deceased_name: data.deceasedName,
@@ -139,17 +159,19 @@ export function OnboardingWizard() {
 
   const canProceed = (): boolean => {
     switch (step) {
-      case 1:
+      case 1: // Welcome
         return true;
-      case 2:
+      case 2: // Stage
+        return !!data.griefStage;
+      case 3: // Role
         return !!data.userRole;
-      case 3:
+      case 4: // Location
         return !!data.state;
-      case 4:
+      case 5: // Deceased info
         return !!data.deceasedName.trim();
-      case 5:
+      case 6: // Family
         return true;
-      case 6:
+      case 7: // Preferences
         return !!data.checkInFrequency;
       default:
         return false;
@@ -175,11 +197,12 @@ export function OnboardingWizard() {
         {/* Step content */}
         <div className="min-h-[320px]">
           {step === 1 && <StepWelcome />}
-          {step === 2 && <StepRole data={data} updateData={updateData} />}
-          {step === 3 && <StepLocation data={data} updateData={updateData} />}
-          {step === 4 && <StepDeceased data={data} updateData={updateData} />}
-          {step === 5 && <StepFamily data={data} updateData={updateData} />}
-          {step === 6 && <StepPreferences data={data} updateData={updateData} />}
+          {step === 2 && <StepStage data={data} updateData={updateData} />}
+          {step === 3 && <StepRole data={data} updateData={updateData} />}
+          {step === 4 && <StepLocation data={data} updateData={updateData} />}
+          {step === 5 && <StepDeceased data={data} updateData={updateData} />}
+          {step === 6 && <StepFamily data={data} updateData={updateData} />}
+          {step === 7 && <StepPreferences data={data} updateData={updateData} />}
         </div>
 
         {/* Error message */}
@@ -230,19 +253,66 @@ function StepWelcome() {
       </h1>
       <div className="space-y-4 text-stone-600 leading-relaxed">
         <p>
-          Losing a parent is one of life&apos;s most difficult experiences. On top of
-          the grief, there&apos;s an overwhelming amount of logistics to manage—legal
-          documents, financial accounts, notifications, and countless decisions.
+          Whether you&apos;re preparing for a parent&apos;s passing, in the immediate
+          aftermath, or still navigating the logistics months later—there&apos;s
+          an overwhelming amount to manage on top of everything you&apos;re feeling.
         </p>
         <p>
           Grief Guide will help you navigate these practical matters step by step.
-          We&apos;ll create a personalized checklist based on your situation and be
-          here whenever you need guidance.
+          We&apos;ll create a personalized checklist based on where you are right now
+          and be here whenever you need guidance or just someone to talk to.
         </p>
         <p className="text-stone-900 font-medium">
           First, we need to understand your situation so we can help you
           effectively.
         </p>
+      </div>
+    </div>
+  );
+}
+
+function StepStage({
+  data,
+  updateData,
+}: {
+  data: OnboardingData;
+  updateData: (updates: Partial<OnboardingData>) => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <h2 className="text-2xl font-semibold text-stone-900">
+        Where are you in this right now?
+      </h2>
+      <p className="text-stone-600">
+        This helps us give you the right guidance for where you are.
+      </p>
+
+      <div className="space-y-3 mt-6">
+        {STAGE_OPTIONS.map((option) => (
+          <label
+            key={option.value}
+            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+              data.griefStage === option.value
+                ? "border-amber-600 bg-amber-50"
+                : "border-stone-200 hover:border-stone-300"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <input
+                type="radio"
+                name="stage"
+                value={option.value}
+                checked={data.griefStage === option.value}
+                onChange={() => updateData({ griefStage: option.value })}
+                className="mt-1 text-amber-600 focus:ring-amber-600"
+              />
+              <div>
+                <div className="font-medium text-stone-900">{option.label}</div>
+                <div className="text-sm text-stone-500">{option.description}</div>
+              </div>
+            </div>
+          </label>
+        ))}
       </div>
     </div>
   );
@@ -341,13 +411,17 @@ function StepDeceased({
   data: OnboardingData;
   updateData: (updates: Partial<OnboardingData>) => void;
 }) {
+  const isAnticipating = data.griefStage === "anticipating";
+
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-stone-900">
         About your parent
       </h2>
       <p className="text-stone-600">
-        This information helps us determine which tasks apply to your situation.
+        {isAnticipating
+          ? "This helps us suggest what to find out and prepare for. It's okay if you don't know some of these yet."
+          : "This information helps us determine which tasks apply to your situation."}
       </p>
 
       <div className="space-y-6 mt-6">
@@ -367,35 +441,48 @@ function StepDeceased({
 
         <div className="space-y-3">
           <p className="text-sm font-medium text-stone-700">
-            Please check all that apply:
+            {isAnticipating ? "What do you know so far?" : "Please check all that apply:"}
           </p>
 
           <CheckboxOption
             checked={data.deceasedHadSpouse}
             onChange={(checked) => updateData({ deceasedHadSpouse: checked })}
-            label="Had a spouse or partner"
+            label={isAnticipating ? "Has a spouse or partner" : "Had a spouse or partner"}
           />
-          <CheckboxOption
-            checked={data.deceasedHadWill}
-            onChange={(checked) => updateData({ deceasedHadWill: checked })}
-            label="Had a will"
+          <TriStateOption
+            value={data.deceasedHadWill}
+            onChange={(value) => updateData({ deceasedHadWill: value })}
+            label={isAnticipating ? "Has a will" : "Had a will"}
+            showUnsure={isAnticipating}
           />
-          <CheckboxOption
-            checked={data.deceasedHadTrust}
-            onChange={(checked) => updateData({ deceasedHadTrust: checked })}
-            label="Had a trust"
+          <TriStateOption
+            value={data.deceasedHadTrust}
+            onChange={(value) => updateData({ deceasedHadTrust: value })}
+            label={isAnticipating ? "Has a trust" : "Had a trust"}
+            showUnsure={isAnticipating}
           />
-          <CheckboxOption
-            checked={data.deceasedOwnedProperty}
-            onChange={(checked) => updateData({ deceasedOwnedProperty: checked })}
-            label="Owned real estate or property"
+          <TriStateOption
+            value={data.deceasedOwnedProperty}
+            onChange={(value) => updateData({ deceasedOwnedProperty: value })}
+            label={isAnticipating ? "Owns real estate or property" : "Owned real estate or property"}
+            showUnsure={isAnticipating}
           />
-          <CheckboxOption
-            checked={data.deceasedHadRetirementAccounts}
-            onChange={(checked) => updateData({ deceasedHadRetirementAccounts: checked })}
-            label="Had retirement accounts (401k, IRA, pension)"
+          <TriStateOption
+            value={data.deceasedHadRetirementAccounts}
+            onChange={(value) => updateData({ deceasedHadRetirementAccounts: value })}
+            label={isAnticipating ? "Has retirement accounts (401k, IRA, pension)" : "Had retirement accounts (401k, IRA, pension)"}
+            showUnsure={isAnticipating}
           />
         </div>
+
+        {isAnticipating && (
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-sm text-amber-800">
+              Don&apos;t worry if you&apos;re not sure about some of these. Part of what we&apos;ll
+              help you do is have those conversations and find out.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -520,5 +607,73 @@ function CheckboxOption({
       />
       <span className="text-stone-700">{label}</span>
     </label>
+  );
+}
+
+function TriStateOption({
+  value,
+  onChange,
+  label,
+  showUnsure = false,
+}: {
+  value: boolean | null;
+  onChange: (value: boolean | null) => void;
+  label: string;
+  showUnsure?: boolean;
+}) {
+  if (!showUnsure) {
+    // Render as simple checkbox when not showing unsure option
+    return (
+      <label className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-stone-300 cursor-pointer transition-colors">
+        <input
+          type="checkbox"
+          checked={value === true}
+          onChange={(e) => onChange(e.target.checked)}
+          className="w-5 h-5 text-amber-600 rounded focus:ring-amber-600"
+        />
+        <span className="text-stone-700">{label}</span>
+      </label>
+    );
+  }
+
+  return (
+    <div className="p-3 rounded-lg border border-stone-200">
+      <div className="text-stone-700 mb-2">{label}</div>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => onChange(true)}
+          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+            value === true
+              ? "bg-amber-600 text-white"
+              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+          }`}
+        >
+          Yes
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange(false)}
+          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+            value === false
+              ? "bg-amber-600 text-white"
+              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+          }`}
+        >
+          No
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange(null)}
+          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+            value === null
+              ? "bg-amber-600 text-white"
+              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+          }`}
+        >
+          I don&apos;t know
+        </button>
+      </div>
+    </div>
   );
 }
