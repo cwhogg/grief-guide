@@ -499,18 +499,35 @@ export default function ChatPage() {
     if (typeof window !== "undefined") {
       localStorage.removeItem(CHAT_STORAGE_KEY);
     }
-    // Reset state
-    setMessages([]);
+    // Reset state and create new greeting directly
     setMode("guide");
     setConversationContext("initial");
     historyRef.current = [];
-    hasGreeted.current = false;
-    // Trigger re-greeting
-    setIsReady(false);
-    setTimeout(() => {
-      hasGreeted.current = false;
-      setIsReady(false);
-    }, 0);
+
+    // Generate fresh greeting
+    const name = profile?.full_name?.split(" ")[0];
+    const stage = profile?.grief_stage;
+    const parentName = profile?.deceased_name;
+
+    let greeting = "";
+    if (stage === "anticipating") {
+      greeting = `Hi${name ? ` ${name}` : ""}. I'm here to help you figure out what to ask and what to gather while you still can. What's on your mind?`;
+    } else if (stage === "immediate") {
+      greeting = `Hi${name ? ` ${name}` : ""}. There's a lot to handle right now${parentName ? ` after ${parentName}'s death` : ""}, but you don't have to figure it all out today. What's weighing on you most?`;
+    } else {
+      greeting = `Hi${name ? ` ${name}` : ""}. What can I help you with?`;
+    }
+
+    const greetingMessage: Message = {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      content: greeting,
+      timestamp: new Date(),
+      suggestedPrompts: PROMPTS.initial,
+    };
+
+    setMessages([greetingMessage]);
+    historyRef.current = [{ role: "assistant", content: greeting }];
   };
 
   if (userLoading || !isReady) {
