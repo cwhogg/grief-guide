@@ -58,7 +58,7 @@ export function ChatTaskCard({
 
   if (justCompleted) {
     return (
-      <div className="my-2 px-4 py-3 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-xl">
+      <div className="my-2 px-4 py-3 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-[var(--radius-lg)]">
         <div className="flex items-center gap-2 text-[var(--primary-700)]">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
@@ -72,7 +72,7 @@ export function ChatTaskCard({
 
   return (
     <div
-      className={`my-2 bg-white border rounded-xl overflow-hidden transition-opacity ${
+      className={`my-2 bg-white border rounded-[var(--radius-lg)] overflow-hidden transition-opacity ${
         isCompleted ? "border-[var(--gray-200)] opacity-60" : "border-[var(--primary-200)] shadow-sm"
       }`}
     >
@@ -80,7 +80,7 @@ export function ChatTaskCard({
       <div className="px-4 py-3">
         <div className="flex items-start gap-3">
           {/* Task icon */}
-          <div className="w-8 h-8 rounded-lg bg-[var(--primary-100)] flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--primary-100)] flex items-center justify-center flex-shrink-0">
             <svg className="w-4 h-4 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
@@ -115,21 +115,21 @@ export function ChatTaskCard({
           <button
             onClick={() => onTellMeMore(task)}
             disabled={isUpdating}
-            className="flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium text-[var(--accent-600)] bg-[var(--accent-400)]/10 border border-[var(--accent-400)]/30 rounded-lg hover:bg-[var(--accent-400)]/20 disabled:opacity-50 transition-colors"
+            className="flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium text-[var(--accent-600)] bg-[var(--accent-400)]/10 border border-[var(--accent-400)]/30 rounded-[var(--radius-md)] hover:bg-[var(--accent-400)]/20 disabled:opacity-50 transition-colors"
           >
             Walk me through it
           </button>
           <button
             onClick={handleDone}
             disabled={isUpdating}
-            className="px-4 py-2.5 text-sm font-medium text-[var(--primary-700)] bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-lg hover:bg-[var(--primary-100)] disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 text-sm font-medium text-[var(--primary-700)] bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-[var(--radius-md)] hover:bg-[var(--primary-100)] disabled:opacity-50 transition-colors"
           >
             Done
           </button>
           <button
             onClick={handleSkip}
             disabled={isUpdating}
-            className="px-4 py-2.5 text-sm text-[var(--gray-500)] border border-[var(--gray-200)] rounded-lg hover:bg-[var(--gray-50)] disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 text-sm text-[var(--gray-500)] border border-[var(--gray-200)] rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] disabled:opacity-50 transition-colors"
           >
             Skip
           </button>
@@ -259,7 +259,7 @@ export function MessageActions({ actions, onSendMessage, onTaskAction }: Message
           <button
             key={i}
             onClick={handleClick}
-            className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
+            className={`px-4 py-2.5 text-sm font-medium rounded-[var(--radius-md)] transition-colors min-h-[44px] ${
               isPrimary
                 ? "bg-[var(--accent-500)] text-white hover:bg-[var(--accent-600)]"
                 : "border border-[var(--gray-200)] text-[var(--gray-700)] hover:bg-[var(--gray-50)]"

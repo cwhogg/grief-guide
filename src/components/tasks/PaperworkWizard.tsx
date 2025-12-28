@@ -86,20 +86,20 @@ export function PaperworkWizard({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-stone-200 p-6">
+      <div className="card">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-stone-900">
+            <h1 className="text-2xl font-semibold text-[var(--gray-900)]">
               {guide.title}
             </h1>
-            <p className="text-stone-500 mt-1">{guide.description}</p>
-            <p className="text-sm text-stone-400 mt-2">
+            <p className="text-[var(--gray-500)] mt-1">{guide.description}</p>
+            <p className="text-sm text-[var(--gray-400)] mt-2">
               Estimated time: {guide.estimatedTime}
             </p>
           </div>
           <button
             onClick={() => setShowFAQ(!showFAQ)}
-            className="text-amber-600 hover:text-amber-700 text-sm font-medium"
+            className="text-[var(--primary-600)] hover:text-[var(--primary-700)] text-sm font-medium"
           >
             {showFAQ ? "Hide FAQ" : "View FAQ"}
           </button>
@@ -107,15 +107,15 @@ export function PaperworkWizard({
 
         {/* Progress bar */}
         <div className="mt-6">
-          <div className="flex items-center justify-between text-sm text-stone-500 mb-2">
+          <div className="flex items-center justify-between text-sm text-[var(--gray-500)] mb-2">
             <span>
               Step {currentStep + 1} of {totalSteps}
             </span>
             <span>{progressPercentage}% complete</span>
           </div>
-          <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--gray-100)] rounded-full overflow-hidden">
             <div
-              className="h-full bg-amber-600 transition-all duration-300"
+              className="h-full bg-[var(--primary-600)] transition-all duration-300"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
@@ -129,10 +129,10 @@ export function PaperworkWizard({
               onClick={() => setCurrentStep(index)}
               className={`w-3 h-3 rounded-full transition-colors ${
                 index === currentStep
-                  ? "bg-amber-600"
+                  ? "bg-[var(--primary-600)]"
                   : index < currentStep || completedSteps.has(guide.steps[index - 1]?.id)
-                  ? "bg-green-500"
-                  : "bg-stone-200 hover:bg-stone-300"
+                  ? "bg-[var(--primary-500)]"
+                  : "bg-[var(--gray-200)] hover:bg-[var(--gray-300)]"
               }`}
               title={index === 0 ? "Before You Begin" : guide.steps[index - 1]?.title}
             />
@@ -142,7 +142,7 @@ export function PaperworkWizard({
 
       {/* FAQ Panel */}
       {showFAQ && (
-        <div className="bg-blue-50 rounded-xl border border-blue-200 p-6">
+        <div className="bg-blue-50 rounded-[var(--radius-lg)] border border-blue-200 p-6">
           <h2 className="text-lg font-semibold text-blue-900 mb-4">
             Frequently Asked Questions
           </h2>
@@ -159,7 +159,7 @@ export function PaperworkWizard({
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={1.5}
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
@@ -175,7 +175,7 @@ export function PaperworkWizard({
       )}
 
       {/* Main content */}
-      <div className="bg-white rounded-xl border border-stone-200 p-6">
+      <div className="card">
         {isIntroStep ? (
           <IntroStep guide={guide} checklistItems={checklistItems} toggleChecklistItem={toggleChecklistItem} />
         ) : (
@@ -194,7 +194,7 @@ export function PaperworkWizard({
         <button
           onClick={handleBack}
           disabled={currentStep === 0}
-          className="px-4 py-2 text-stone-600 hover:text-stone-900 disabled:opacity-0 disabled:cursor-default transition-opacity"
+          className="px-4 py-2 text-[var(--gray-600)] hover:text-[var(--gray-900)] disabled:opacity-0 disabled:cursor-default transition-opacity min-h-[44px]"
         >
           Back
         </button>
@@ -203,14 +203,14 @@ export function PaperworkWizard({
           <button
             onClick={handleComplete}
             disabled={isCompleting}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+            className="btn btn-primary disabled:opacity-50"
           >
             {isCompleting ? "Marking Complete..." : "Mark Task Complete"}
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+            className="btn btn-primary"
           >
             Continue
           </button>
@@ -233,19 +233,19 @@ function IntroStep({
     <div className="space-y-8">
       {/* Introduction */}
       <div>
-        <h2 className="text-xl font-semibold text-stone-900 mb-4">
+        <h2 className="text-xl font-semibold text-[var(--gray-900)] mb-4">
           Before You Begin
         </h2>
-        <div className="prose prose-stone max-w-none">
-          <p className="text-stone-600 leading-relaxed">
+        <div className="max-w-none">
+          <p className="text-[var(--gray-600)] leading-relaxed">
             {guide.introduction.overview}
           </p>
         </div>
-        <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
-          <p className="text-amber-800">{guide.introduction.reassurance}</p>
+        <div className="mt-4 p-4 bg-[var(--accent-50)] rounded-[var(--radius-md)] border border-[var(--accent-200)]">
+          <p className="text-[var(--accent-800)]">{guide.introduction.reassurance}</p>
         </div>
         {guide.introduction.deadline && (
-          <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="mt-4 p-4 bg-blue-50 rounded-[var(--radius-md)] border border-blue-200">
             <div className="flex items-start gap-2">
               <svg
                 className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"
@@ -256,7 +256,7 @@ function IntroStep({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={1.5}
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
@@ -268,7 +268,7 @@ function IntroStep({
 
       {/* Documents Required */}
       <div>
-        <h3 className="text-lg font-semibold text-stone-900 mb-3">
+        <h3 className="text-lg font-semibold text-[var(--gray-900)] mb-3">
           Documents You&apos;ll Need
         </h3>
         <div className="space-y-3">
@@ -277,33 +277,33 @@ function IntroStep({
             return (
               <label
                 key={index}
-                className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                className={`flex items-start gap-3 p-4 rounded-[var(--radius-md)] border cursor-pointer transition-colors ${
                   checklistItems[key]
-                    ? "bg-green-50 border-green-300"
-                    : "bg-white border-stone-200 hover:border-stone-300"
+                    ? "bg-[var(--primary-50)] border-[var(--primary-300)]"
+                    : "bg-white border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={checklistItems[key] || false}
                   onChange={() => toggleChecklistItem(key)}
-                  className="mt-1 w-5 h-5 text-green-600 rounded focus:ring-green-600"
+                  className="mt-1 w-5 h-5 text-[var(--primary-600)] rounded focus:ring-[var(--primary-600)]"
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-stone-900">{doc.item}</span>
+                    <span className="font-medium text-[var(--gray-900)]">{doc.item}</span>
                     {doc.required && (
-                      <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-[var(--accent-100)] text-[var(--accent-700)] px-2 py-0.5 rounded-full">
                         Required
                       </span>
                     )}
                     {doc.conditionalNote && (
-                      <span className="text-xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-[var(--gray-100)] text-[var(--gray-600)] px-2 py-0.5 rounded-full">
                         {doc.conditionalNote}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-stone-500 mt-1">{doc.details}</p>
+                  <p className="text-sm text-[var(--gray-500)] mt-1">{doc.details}</p>
                 </div>
               </label>
             );
@@ -313,14 +313,14 @@ function IntroStep({
 
       {/* Information Needed */}
       <div>
-        <h3 className="text-lg font-semibold text-stone-900 mb-3">
+        <h3 className="text-lg font-semibold text-[var(--gray-900)] mb-3">
           Information to Have Ready
         </h3>
         <ul className="space-y-2">
           {guide.beforeYouBegin.informationNeeded.map((info, index) => (
-            <li key={index} className="flex items-start gap-2 text-stone-600">
+            <li key={index} className="flex items-start gap-2 text-[var(--gray-600)]">
               <svg
-                className="w-5 h-5 text-stone-400 mt-0.5 flex-shrink-0"
+                className="w-5 h-5 text-[var(--gray-400)] mt-0.5 flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -328,7 +328,7 @@ function IntroStep({
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={1.5}
                   d="M9 5l7 7-7 7"
                 />
               </svg>
@@ -340,7 +340,7 @@ function IntroStep({
 
       {/* Tips */}
       {guide.beforeYouBegin.tips.length > 0 && (
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+        <div className="bg-blue-50 rounded-[var(--radius-md)] p-4 border border-blue-200">
           <h4 className="font-medium text-blue-900 mb-2">Tips</h4>
           <ul className="space-y-2">
             {guide.beforeYouBegin.tips.map((tip, index) => (
@@ -357,7 +357,7 @@ function IntroStep({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
@@ -384,12 +384,12 @@ function StepContent({
     <div className="space-y-6">
       {/* Step header */}
       <div>
-        <div className="text-sm text-amber-600 font-medium mb-1">
+        <div className="text-sm text-[var(--primary-600)] font-medium mb-1">
           Step {step.number}
         </div>
-        <h2 className="text-xl font-semibold text-stone-900">{step.title}</h2>
-        <p className="text-stone-600 mt-2">{step.description}</p>
-        <p className="text-sm text-stone-400 mt-1">
+        <h2 className="text-xl font-semibold text-[var(--gray-900)]">{step.title}</h2>
+        <p className="text-[var(--gray-600)] mt-2">{step.description}</p>
+        <p className="text-sm text-[var(--gray-400)] mt-1">
           Estimated time: {step.estimatedTime}
         </p>
       </div>
@@ -397,19 +397,19 @@ function StepContent({
       {/* Instructions */}
       {step.instructions && step.instructions.length > 0 && (
         <div>
-          <h3 className="font-medium text-stone-900 mb-3">Instructions</h3>
+          <h3 className="font-medium text-[var(--gray-900)] mb-3">Instructions</h3>
           <div className="space-y-4">
             {step.instructions.map((instruction, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-4 bg-stone-50 rounded-lg"
+                className="flex items-start gap-3 p-4 bg-[var(--gray-50)] rounded-[var(--radius-md)]"
               >
-                <div className="w-6 h-6 rounded-full bg-amber-600 text-white text-sm flex items-center justify-center flex-shrink-0">
+                <div className="w-6 h-6 rounded-full bg-[var(--primary-600)] text-white text-sm flex items-center justify-center flex-shrink-0">
                   {index + 1}
                 </div>
                 <div>
-                  <p className="font-medium text-stone-900">{instruction.text}</p>
-                  <p className="text-sm text-stone-500 mt-1">
+                  <p className="font-medium text-[var(--gray-900)]">{instruction.text}</p>
+                  <p className="text-sm text-[var(--gray-500)] mt-1">
                     {instruction.details}
                   </p>
                 </div>
@@ -422,37 +422,37 @@ function StepContent({
       {/* Options (for choosing how to apply) */}
       {step.options && step.options.length > 0 && (
         <div>
-          <h3 className="font-medium text-stone-900 mb-3">Your Options</h3>
+          <h3 className="font-medium text-[var(--gray-900)] mb-3">Your Options</h3>
           <div className="space-y-4">
             {step.options.map((option, index) => (
               <div
                 key={index}
-                className={`p-4 rounded-lg border-2 ${
+                className={`p-4 rounded-[var(--radius-md)] border-2 ${
                   option.recommended
-                    ? "border-amber-300 bg-amber-50"
-                    : "border-stone-200 bg-white"
+                    ? "border-[var(--primary-300)] bg-[var(--primary-50)]"
+                    : "border-[var(--gray-200)] bg-white"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <h4 className="font-medium text-stone-900">{option.method}</h4>
+                  <h4 className="font-medium text-[var(--gray-900)]">{option.method}</h4>
                   {option.recommended && (
-                    <span className="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-[var(--primary-200)] text-[var(--primary-800)] px-2 py-0.5 rounded-full">
                       Recommended
                     </span>
                   )}
                 </div>
-                <p className="text-stone-600 text-sm">{option.description}</p>
+                <p className="text-[var(--gray-600)] text-sm">{option.description}</p>
                 {option.hours && (
-                  <p className="text-stone-500 text-sm mt-1">{option.hours}</p>
+                  <p className="text-[var(--gray-500)] text-sm mt-1">{option.hours}</p>
                 )}
                 <div className="grid sm:grid-cols-2 gap-4 mt-3">
                   <div>
-                    <p className="text-xs font-medium text-green-700 mb-1">Pros</p>
+                    <p className="text-xs font-medium text-[var(--primary-700)] mb-1">Pros</p>
                     <ul className="space-y-1">
                       {option.pros.map((pro, i) => (
                         <li
                           key={i}
-                          className="text-sm text-green-600 flex items-start gap-1"
+                          className="text-sm text-[var(--primary-600)] flex items-start gap-1"
                         >
                           <span>+</span>
                           {pro}
@@ -461,12 +461,12 @@ function StepContent({
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-red-700 mb-1">Cons</p>
+                    <p className="text-xs font-medium text-[var(--accent-700)] mb-1">Cons</p>
                     <ul className="space-y-1">
                       {option.cons.map((con, i) => (
                         <li
                           key={i}
-                          className="text-sm text-red-600 flex items-start gap-1"
+                          className="text-sm text-[var(--accent-600)] flex items-start gap-1"
                         >
                           <span>-</span>
                           {con}
@@ -475,15 +475,15 @@ function StepContent({
                     </ul>
                   </div>
                 </div>
-                <p className="text-sm text-stone-500 mt-3 italic">
+                <p className="text-sm text-[var(--gray-500)] mt-3 italic">
                   Best for: {option.bestFor}
                 </p>
               </div>
             ))}
           </div>
           {step.recommendation && (
-            <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <p className="text-amber-800">{step.recommendation}</p>
+            <div className="mt-4 p-4 bg-[var(--accent-50)] rounded-[var(--radius-md)] border border-[var(--accent-200)]">
+              <p className="text-[var(--accent-800)]">{step.recommendation}</p>
             </div>
           )}
         </div>
@@ -492,24 +492,24 @@ function StepContent({
       {/* Form sections */}
       {step.sections && step.sections.length > 0 && (
         <div>
-          <h3 className="font-medium text-stone-900 mb-3">
+          <h3 className="font-medium text-[var(--gray-900)] mb-3">
             What You&apos;ll Be Asked
           </h3>
-          <p className="text-stone-500 text-sm mb-4">
+          <p className="text-[var(--gray-500)] text-sm mb-4">
             Here&apos;s what each section of the application covers. Don&apos;t
             worry—the representative will guide you through each part.
           </p>
           <div className="space-y-4">
             {step.sections.map((section, index) => (
-              <div key={index} className="border border-stone-200 rounded-lg overflow-hidden">
-                <div className="bg-stone-50 px-4 py-2 border-b border-stone-200">
-                  <h4 className="font-medium text-stone-900">{section.name}</h4>
+              <div key={index} className="border border-[var(--gray-200)] rounded-[var(--radius-md)] overflow-hidden">
+                <div className="bg-[var(--gray-50)] px-4 py-2 border-b border-[var(--gray-200)]">
+                  <h4 className="font-medium text-[var(--gray-900)]">{section.name}</h4>
                 </div>
                 <div className="p-4 space-y-3">
                   {section.fields.map((field, fieldIndex) => (
                     <div key={fieldIndex}>
-                      <p className="font-medium text-stone-800">{field.field}</p>
-                      <p className="text-sm text-stone-500 mt-1">
+                      <p className="font-medium text-[var(--gray-800)]">{field.field}</p>
+                      <p className="text-sm text-[var(--gray-500)] mt-1">
                         {field.explanation}
                       </p>
                     </div>
@@ -524,19 +524,19 @@ function StepContent({
       {/* Timeline */}
       {step.timeline && step.timeline.length > 0 && (
         <div>
-          <h3 className="font-medium text-stone-900 mb-3">What to Expect</h3>
+          <h3 className="font-medium text-[var(--gray-900)] mb-3">What to Expect</h3>
           <div className="space-y-4">
             {step.timeline.map((event, index) => (
               <div key={index} className="flex gap-4">
                 <div className="flex flex-col items-center">
-                  <div className="w-3 h-3 rounded-full bg-amber-600" />
+                  <div className="w-3 h-3 rounded-full bg-[var(--primary-600)]" />
                   {index < step.timeline!.length - 1 && (
-                    <div className="w-0.5 h-full bg-stone-200 mt-1" />
+                    <div className="w-0.5 h-full bg-[var(--gray-200)] mt-1" />
                   )}
                 </div>
                 <div className="pb-4">
-                  <p className="font-medium text-stone-900">{event.when}</p>
-                  <p className="text-stone-600 text-sm mt-1">{event.what}</p>
+                  <p className="font-medium text-[var(--gray-900)]">{event.when}</p>
+                  <p className="text-[var(--gray-600)] text-sm mt-1">{event.what}</p>
                 </div>
               </div>
             ))}
@@ -546,18 +546,18 @@ function StepContent({
 
       {/* What to save */}
       {step.whatToSaveForRecords && step.whatToSaveForRecords.length > 0 && (
-        <div className="bg-stone-50 rounded-lg p-4">
-          <h4 className="font-medium text-stone-900 mb-2">
+        <div className="bg-[var(--gray-50)] rounded-[var(--radius-md)] p-4">
+          <h4 className="font-medium text-[var(--gray-900)] mb-2">
             Save for Your Records
           </h4>
           <ul className="space-y-1">
             {step.whatToSaveForRecords.map((item, index) => (
               <li
                 key={index}
-                className="text-sm text-stone-600 flex items-start gap-2"
+                className="text-sm text-[var(--gray-600)] flex items-start gap-2"
               >
                 <svg
-                  className="w-4 h-4 text-stone-400 mt-0.5 flex-shrink-0"
+                  className="w-4 h-4 text-[var(--gray-400)] mt-0.5 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -565,7 +565,7 @@ function StepContent({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
@@ -578,16 +578,16 @@ function StepContent({
 
       {/* If denied */}
       {step.ifDenied && (
-        <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
-          <h4 className="font-medium text-orange-900 mb-2">
+        <div className="bg-[var(--accent-50)] rounded-[var(--radius-md)] p-4 border border-[var(--accent-200)]">
+          <h4 className="font-medium text-[var(--accent-900)] mb-2">
             If Your Application is Denied
           </h4>
-          <p className="text-orange-800 text-sm mb-3">{step.ifDenied.dontPanic}</p>
+          <p className="text-[var(--accent-800)] text-sm mb-3">{step.ifDenied.dontPanic}</p>
           <ul className="space-y-1">
             {step.ifDenied.steps.map((s, index) => (
               <li
                 key={index}
-                className="text-sm text-orange-700 flex items-start gap-2"
+                className="text-sm text-[var(--accent-700)] flex items-start gap-2"
               >
                 <span className="font-medium">{index + 1}.</span>
                 {s}
@@ -600,17 +600,17 @@ function StepContent({
       {/* Ongoing responsibilities */}
       {step.ongoingResponsibilities && step.ongoingResponsibilities.length > 0 && (
         <div>
-          <h4 className="font-medium text-stone-900 mb-2">
+          <h4 className="font-medium text-[var(--gray-900)] mb-2">
             Ongoing Responsibilities
           </h4>
           <ul className="space-y-2">
             {step.ongoingResponsibilities.map((item, index) => (
               <li
                 key={index}
-                className="text-stone-600 flex items-start gap-2"
+                className="text-[var(--gray-600)] flex items-start gap-2"
               >
                 <svg
-                  className="w-5 h-5 text-stone-400 mt-0.5 flex-shrink-0"
+                  className="w-5 h-5 text-[var(--gray-400)] mt-0.5 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -618,7 +618,7 @@ function StepContent({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
@@ -632,7 +632,7 @@ function StepContent({
       {/* Helpful resources */}
       {step.helpfulResources && step.helpfulResources.length > 0 && (
         <div>
-          <h4 className="font-medium text-stone-900 mb-2">Helpful Resources</h4>
+          <h4 className="font-medium text-[var(--gray-900)] mb-2">Helpful Resources</h4>
           <div className="space-y-2">
             {step.helpfulResources.map((resource, index) => (
               <a
@@ -640,7 +640,7 @@ function StepContent({
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                className="flex items-center gap-2 p-3 bg-blue-50 rounded-[var(--radius-md)] hover:bg-blue-100 transition-colors"
               >
                 <svg
                   className="w-5 h-5 text-blue-600 flex-shrink-0"
@@ -651,7 +651,7 @@ function StepContent({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                   />
                 </svg>
@@ -667,15 +667,15 @@ function StepContent({
 
       {/* Common mistakes */}
       {step.commonMistakes && step.commonMistakes.length > 0 && (
-        <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-          <h4 className="font-medium text-red-900 mb-3">
+        <div className="bg-[var(--accent-50)] rounded-[var(--radius-md)] p-4 border border-[var(--accent-200)]">
+          <h4 className="font-medium text-[var(--accent-900)] mb-3">
             Common Mistakes to Avoid
           </h4>
           <div className="space-y-3">
             {step.commonMistakes.map((mistake, index) => (
               <div key={index}>
-                <p className="font-medium text-red-800">{mistake.mistake}</p>
-                <p className="text-sm text-red-700 mt-1">{mistake.prevention}</p>
+                <p className="font-medium text-[var(--accent-800)]">{mistake.mistake}</p>
+                <p className="text-sm text-[var(--accent-700)] mt-1">{mistake.prevention}</p>
               </div>
             ))}
           </div>
@@ -685,26 +685,26 @@ function StepContent({
       {/* Checkpoints */}
       {step.checkpoints && step.checkpoints.length > 0 && (
         <div>
-          <h3 className="font-medium text-stone-900 mb-3">Checklist</h3>
+          <h3 className="font-medium text-[var(--gray-900)] mb-3">Checklist</h3>
           <div className="space-y-2">
             {step.checkpoints.map((checkpoint, index) => {
               const key = `step-${step.id}-checkpoint-${index}`;
               return (
                 <label
                   key={index}
-                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                  className={`flex items-center gap-3 p-3 rounded-[var(--radius-md)] border cursor-pointer transition-colors ${
                     checklistItems[key]
-                      ? "bg-green-50 border-green-300"
-                      : "bg-white border-stone-200 hover:border-stone-300"
+                      ? "bg-[var(--primary-50)] border-[var(--primary-300)]"
+                      : "bg-white border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={checklistItems[key] || false}
                     onChange={() => toggleChecklistItem(key)}
-                    className="w-5 h-5 text-green-600 rounded focus:ring-green-600"
+                    className="w-5 h-5 text-[var(--primary-600)] rounded focus:ring-[var(--primary-600)]"
                   />
-                  <span className="text-stone-700">{checkpoint}</span>
+                  <span className="text-[var(--gray-700)]">{checkpoint}</span>
                 </label>
               );
             })}
@@ -714,7 +714,7 @@ function StepContent({
 
       {/* Tips */}
       {step.tips && step.tips.length > 0 && (
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+        <div className="bg-blue-50 rounded-[var(--radius-md)] p-4 border border-blue-200">
           <h4 className="font-medium text-blue-900 mb-2">Tips</h4>
           <ul className="space-y-2">
             {step.tips.map((tip, index) => (
@@ -731,7 +731,7 @@ function StepContent({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>

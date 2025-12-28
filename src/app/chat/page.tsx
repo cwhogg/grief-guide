@@ -591,7 +591,7 @@ export default function ChatPage() {
                 e.stopPropagation();
                 setMenuOpen(!menuOpen);
               }}
-              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-[var(--gray-100)] active:bg-[var(--gray-200)] transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-[var(--radius-lg)] hover:bg-[var(--gray-100)] active:bg-[var(--gray-200)] transition-colors"
               aria-label="Menu"
             >
               <svg className="w-6 h-6 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -601,7 +601,7 @@ export default function ChatPage() {
 
             {/* Dropdown menu */}
             {menuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-lg border border-[var(--gray-200)] py-2 z-50 animate-fade-in">
+              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-[var(--radius-lg)] shadow-lg border border-[var(--gray-200)] py-2 z-50 animate-fade-in">
                 <button
                   onClick={handleHelpRequest}
                   className="menu-item w-full text-left"
@@ -787,14 +787,14 @@ export default function ChatPage() {
             <button
               type="submit"
               disabled={!input.trim() || isStreaming}
-              className={`w-12 h-12 flex items-center justify-center rounded-xl text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+              className={`w-12 h-12 flex items-center justify-center rounded-[var(--radius-lg)] text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
                 isTherapistMode
                   ? "bg-[var(--purple-main)] hover:bg-[var(--purple-main)]/90 active:bg-[var(--purple-main)]/80"
                   : "bg-[var(--accent-500)] hover:bg-[var(--accent-600)] active:bg-[var(--accent-600)]"
               }`}
               aria-label="Send message"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
               </svg>
             </button>

@@ -191,7 +191,7 @@ export function OnboardingChat() {
 
           {/* Step 1: Welcome */}
           {step === "welcome" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
+            <div className="bg-white rounded-[var(--radius-lg)] shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
                 <div className="w-16 h-16 bg-[var(--primary-100)] rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-8 h-8 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -211,7 +211,7 @@ export function OnboardingChat() {
 
               <button
                 onClick={() => setStep("stage")}
-                className="w-full py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] transition-colors min-h-[52px]"
+                className="w-full py-3 px-4 bg-[var(--accent-500)] text-white rounded-[var(--radius-lg)] font-medium hover:bg-[var(--accent-600)] transition-colors min-h-[52px]"
               >
                 Continue
               </button>
@@ -244,7 +244,7 @@ export function OnboardingChat() {
 
           {/* Step 2: Grief Stage */}
           {step === "stage" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
+            <div className="bg-white rounded-[var(--radius-lg)] shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
                 <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-2">
                   Where are you in this journey?
@@ -254,7 +254,7 @@ export function OnboardingChat() {
               <div className="space-y-3 mb-8">
                 <button
                   onClick={() => setGriefStage("anticipating")}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-4 rounded-[var(--radius-lg)] border-2 text-left transition-all ${
                     griefStage === "anticipating"
                       ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
                       : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
@@ -266,7 +266,7 @@ export function OnboardingChat() {
 
                 <button
                   onClick={() => setGriefStage("immediate")}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-4 rounded-[var(--radius-lg)] border-2 text-left transition-all ${
                     griefStage === "immediate"
                       ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
                       : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
@@ -278,7 +278,7 @@ export function OnboardingChat() {
 
                 <button
                   onClick={() => setGriefStage("navigating")}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-4 rounded-[var(--radius-lg)] border-2 text-left transition-all ${
                     griefStage === "navigating"
                       ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
                       : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
@@ -299,7 +299,7 @@ export function OnboardingChat() {
                 <button
                   onClick={() => setStep("parent")}
                   disabled={!griefStage}
-                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
+                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-[var(--radius-lg)] font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
                 >
                   Continue
                 </button>
@@ -309,7 +309,7 @@ export function OnboardingChat() {
 
           {/* Step 3: Parent Info */}
           {step === "parent" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
+            <div className="bg-white rounded-[var(--radius-lg)] shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
                 <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-2">
                   Tell us about your parent
@@ -358,7 +358,7 @@ export function OnboardingChat() {
                 <button
                   onClick={() => setStep("knowledge")}
                   disabled={!parentName.trim() || !state}
-                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
+                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-[var(--radius-lg)] font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
                 >
                   Continue
                 </button>
@@ -368,7 +368,7 @@ export function OnboardingChat() {
 
           {/* Step 4: Knowledge Level */}
           {step === "knowledge" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
+            <div className="bg-white rounded-[var(--radius-lg)] shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-6">
                 <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-2">
                   What do you know about their affairs?
@@ -381,7 +381,7 @@ export function OnboardingChat() {
               <div className="space-y-3 mb-8">
                 <button
                   onClick={() => setKnowledgeLevel("full")}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-4 rounded-[var(--radius-lg)] border-2 text-left transition-all ${
                     knowledgeLevel === "full"
                       ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
                       : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
@@ -393,7 +393,7 @@ export function OnboardingChat() {
 
                 <button
                   onClick={() => setKnowledgeLevel("partial")}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-4 rounded-[var(--radius-lg)] border-2 text-left transition-all ${
                     knowledgeLevel === "partial"
                       ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
                       : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
@@ -405,7 +405,7 @@ export function OnboardingChat() {
 
                 <button
                   onClick={() => setKnowledgeLevel("none")}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-4 rounded-[var(--radius-lg)] border-2 text-left transition-all ${
                     knowledgeLevel === "none"
                       ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
                       : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
@@ -426,7 +426,7 @@ export function OnboardingChat() {
                 <button
                   onClick={() => setStep("complete")}
                   disabled={!knowledgeLevel}
-                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
+                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-[var(--radius-lg)] font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
                 >
                   Continue
                 </button>
@@ -436,7 +436,7 @@ export function OnboardingChat() {
 
           {/* Step 5: Complete */}
           {step === "complete" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
+            <div className="bg-white rounded-[var(--radius-lg)] shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
                 <div className="w-16 h-16 bg-[var(--primary-100)] rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg className="w-8 h-8 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -459,7 +459,7 @@ export function OnboardingChat() {
               <button
                 onClick={handleComplete}
                 disabled={isSubmitting}
-                className="w-full py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 transition-colors min-h-[52px]"
+                className="w-full py-3 px-4 bg-[var(--accent-500)] text-white rounded-[var(--radius-lg)] font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 transition-colors min-h-[52px]"
               >
                 {isSubmitting ? "Getting started..." : "Get Started"}
               </button>

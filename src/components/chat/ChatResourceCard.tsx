@@ -42,7 +42,7 @@ export function ChatResourceCard({ resource, onMoreOptions }: ChatResourceCardPr
     : resource.description;
 
   return (
-    <div className={`my-2 bg-white border ${colors.border} rounded-xl overflow-hidden shadow-sm`}>
+    <div className={`my-2 bg-white border ${colors.border} rounded-[var(--radius-lg)] overflow-hidden shadow-sm`}>
       {/* Header */}
       <div className="px-4 py-3">
         <div className="flex items-start gap-3">
@@ -111,7 +111,7 @@ export function ChatResourceCard({ resource, onMoreOptions }: ChatResourceCardPr
             href={resource.website}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium ${colors.text} ${colors.bg} border ${colors.border} rounded-lg hover:opacity-80 transition-opacity text-center`}
+            className={`flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium ${colors.text} ${colors.bg} border ${colors.border} rounded-[var(--radius-md)] hover:opacity-80 transition-opacity text-center`}
           >
             Visit website
           </a>
@@ -119,7 +119,7 @@ export function ChatResourceCard({ resource, onMoreOptions }: ChatResourceCardPr
         {resource.phone && (
           <a
             href={`tel:${resource.phone}`}
-            className="px-4 py-2.5 text-sm font-medium text-[var(--gray-700)] bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-lg hover:bg-[var(--gray-100)] transition-colors"
+            className="px-4 py-2.5 text-sm font-medium text-[var(--gray-700)] bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-[var(--radius-md)] hover:bg-[var(--gray-100)] transition-colors"
           >
             Call {resource.phone}
           </a>
@@ -127,7 +127,7 @@ export function ChatResourceCard({ resource, onMoreOptions }: ChatResourceCardPr
         {onMoreOptions && (
           <button
             onClick={onMoreOptions}
-            className="px-4 py-2.5 text-sm text-[var(--gray-500)] border border-[var(--gray-200)] rounded-lg hover:bg-[var(--gray-50)] transition-colors"
+            className="px-4 py-2.5 text-sm text-[var(--gray-500)] border border-[var(--gray-200)] rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] transition-colors"
           >
             More options
           </button>
@@ -172,7 +172,7 @@ export function ResourceCategorySelector({ onSelect }: ResourceCategorySelectorP
   ];
 
   return (
-    <div className="my-2 bg-white border border-[var(--gray-200)] rounded-xl overflow-hidden shadow-sm">
+    <div className="my-2 bg-white border border-[var(--gray-200)] rounded-[var(--radius-lg)] overflow-hidden shadow-sm">
       <div className="px-4 py-3 border-b border-[var(--gray-100)]">
         <h4 className="font-medium text-[var(--gray-900)]">What kind of help are you looking for?</h4>
       </div>
@@ -183,7 +183,7 @@ export function ResourceCategorySelector({ onSelect }: ResourceCategorySelectorP
             <button
               key={cat.id}
               onClick={() => onSelect(cat.id)}
-              className="w-full p-3 text-left rounded-lg hover:bg-[var(--gray-50)] transition-colors flex items-center gap-3"
+              className="w-full p-3 text-left rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] transition-colors flex items-center gap-3"
             >
               <div className={`w-8 h-8 rounded-[var(--radius-md)] ${colors.bg} flex items-center justify-center flex-shrink-0`}>
                 <div className={`w-3 h-3 rounded-full ${colors.text.replace('text-', 'bg-')}`} />
