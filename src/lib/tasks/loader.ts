@@ -103,6 +103,9 @@ export function getTasksForUser(options: GetTasksOptions): Task[] {
     const triggerArea = template.triggers_on_unknown as keyof KnowledgeStatusMap;
     if (knowledgeStatus[triggerArea] === "unknown") {
       if (template.stages && template.stages.includes(griefStage)) {
+        // Discovery tasks use priority from template, offset by 2 to come after critical immediate tasks
+        // (notify family = 1, funeral home = 2, then discovery = 3+)
+        const discoveryPriority = (template.priority || 1) + 2;
         discoveryTasks.push({
           id: template.id,
           user_id: "demo-user-123",
@@ -112,7 +115,7 @@ export function getTasksForUser(options: GetTasksOptions): Task[] {
           timeline_category: "discovery" as TimelineCategory,
           task_type: template.task_type as TaskType,
           status: "pending" as const,
-          priority: 0,
+          priority: discoveryPriority,
           due_date: null,
           completed_at: null,
           notes: null,

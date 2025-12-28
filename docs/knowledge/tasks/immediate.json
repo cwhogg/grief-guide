@@ -3,25 +3,6 @@
   "description": "Critical tasks for the first 48-72 hours after a death",
   "tasks": [
     {
-      "id": "obtain-death-certificates",
-      "title": "Get death certificates (you'll need more than you think)",
-      "description": "Order 10-15 certified copies from the funeral home. Banks, insurance companies, and government offices all require them.",
-      "task_type": "paperwork",
-      "priority": 1,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "Banks, insurance companies, government agencies, and financial institutions all require certified copies. Getting enough upfront saves time and additional trips to vital records.",
-      "documents_needed": [],
-      "tips": [
-        "Order more copies than you think you need—10-15 is typical",
-        "Certified copies cost $10-25 each depending on the state",
-        "The funeral home can usually order these for you",
-        "Some institutions accept photocopies, but most require certified originals",
-        "Keep track of which institutions keep the certificate vs. return it"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null
-    },
-    {
       "id": "notify-immediate-family",
       "title": "Tell family and close friends",
       "description": "Contact the people who need to know. It's okay to ask someone to help make calls—you don't have to do them all yourself.",
@@ -45,9 +26,9 @@
       "title": "Contact a funeral home",
       "description": "If they had pre-planned arrangements, find those first. Otherwise, choose a funeral home—you don't have to decide everything today.",
       "task_type": "logistics",
-      "priority": 1,
+      "priority": 2,
       "stages": ["immediate"],
-      "why_it_matters": "Funeral arrangements need to happen quickly, especially if there will be a viewing. Pre-planned arrangements may already be paid for.",
+      "why_it_matters": "Funeral arrangements need to happen quickly, especially if there will be a viewing. Pre-planned arrangements may already be paid for. The funeral home will also help you order death certificates.",
       "documents_needed": [
         "Pre-planned funeral arrangements (if any)",
         "Deceased's identification",
@@ -59,7 +40,46 @@
         "You can negotiate funeral costs—get itemized pricing",
         "The FTC Funeral Rule requires funeral homes to provide price lists",
         "Consider having a trusted friend or family member accompany you",
-        "It's okay to take a day before making decisions if you need time"
+        "It's okay to take a day before making decisions if you need time",
+        "The funeral home will help you order death certificates"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "locate-will-documents",
+      "title": "Find the will and important papers",
+      "description": "Look for the will, life insurance policies, and other critical paperwork. Check their filing cabinet, home safe, safe deposit box, or with their attorney.",
+      "task_type": "legal",
+      "priority": 3,
+      "stages": ["immediate", "navigating"],
+      "why_it_matters": "The will names the executor and contains burial wishes. Life insurance policies may have time limits for filing. These documents guide all future decisions.",
+      "documents_needed": [],
+      "tips": [
+        "Check with their attorney, accountant, or financial advisor",
+        "Look for a safe deposit box key—check their bank",
+        "Search email for insurance companies, attorneys, or financial advisors",
+        "Check for a fireproof safe at their home",
+        "Some people store important documents with a trusted family member"
+      ],
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "arrange-pet-care",
+      "title": "Take care of their pets",
+      "description": "If they had pets, make sure someone is caring for them. Permanent arrangements can wait.",
+      "task_type": "logistics",
+      "priority": 3,
+      "stages": ["immediate"],
+      "why_it_matters": "Pets need immediate care and can be a source of comfort during grief. Making permanent arrangements can wait, but immediate needs cannot.",
+      "documents_needed": [],
+      "tips": [
+        "Check if the will mentions arrangements for pets",
+        "Ask family members if anyone can take them temporarily or permanently",
+        "Locate veterinary records for any ongoing medications",
+        "Gather pet supplies from the deceased's home",
+        "Consider if keeping the pet might be comforting for a surviving spouse"
       ],
       "is_paperwork_task": false,
       "paperwork_wizard_id": null
@@ -69,7 +89,7 @@
       "title": "Secure their home",
       "description": "If they lived alone, make sure the house is locked up and safe. Collect mail so it doesn't pile up.",
       "task_type": "logistics",
-      "priority": 2,
+      "priority": 4,
       "stages": ["immediate", "navigating"],
       "why_it_matters": "Unfortunately, home break-ins after a death (especially after obituaries are published) do happen. Securing the property protects belongings and the estate.",
       "documents_needed": [],
@@ -85,30 +105,11 @@
       "requires_property": true
     },
     {
-      "id": "locate-will-documents",
-      "title": "Find the will and important papers",
-      "description": "Look for the will, life insurance policies, and other critical paperwork. Check their filing cabinet, home safe, safe deposit box, or with their attorney.",
-      "task_type": "legal",
-      "priority": 1,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "The will names the executor and contains burial wishes. Life insurance policies may have time limits for filing. These documents guide all future decisions.",
-      "documents_needed": [],
-      "tips": [
-        "Check with their attorney, accountant, or financial advisor",
-        "Look for a safe deposit box key—check their bank",
-        "Search email for insurance companies, attorneys, or financial advisors",
-        "Check for a fireproof safe at their home",
-        "Some people store important documents with a trusted family member"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null
-    },
-    {
       "id": "notify-employer",
       "title": "Let their employer know",
       "description": "If they were working, contact HR. Ask about final paychecks, life insurance through work, and their 401(k).",
       "task_type": "notifications",
-      "priority": 2,
+      "priority": 5,
       "stages": ["immediate", "navigating"],
       "why_it_matters": "The employer may owe final wages, vacation pay, or death benefits. Many employers offer life insurance as a benefit that families don't know about.",
       "documents_needed": [
@@ -125,20 +126,20 @@
       "paperwork_wizard_id": null
     },
     {
-      "id": "arrange-pet-care",
-      "title": "Take care of their pets",
-      "description": "If they had pets, make sure someone is caring for them. Permanent arrangements can wait.",
-      "task_type": "logistics",
-      "priority": 1,
-      "stages": ["immediate"],
-      "why_it_matters": "Pets need immediate care and can be a source of comfort during grief. Making permanent arrangements can wait, but immediate needs cannot.",
+      "id": "obtain-death-certificates",
+      "title": "Order death certificates",
+      "description": "Ask the funeral home to order 10-15 certified copies. Banks, insurance companies, and government offices all require them.",
+      "task_type": "paperwork",
+      "priority": 6,
+      "stages": ["immediate", "navigating"],
+      "why_it_matters": "Banks, insurance companies, government agencies, and financial institutions all require certified copies. Getting enough upfront saves time and additional trips to vital records.",
       "documents_needed": [],
       "tips": [
-        "Check if the will mentions arrangements for pets",
-        "Ask family members if anyone can take them temporarily or permanently",
-        "Locate veterinary records for any ongoing medications",
-        "Gather pet supplies from the deceased's home",
-        "Consider if keeping the pet might be comforting for a surviving spouse"
+        "The funeral home can order these for you—this is the easiest way",
+        "Order more copies than you think you need—10-15 is typical",
+        "Certified copies cost $10-25 each depending on the state",
+        "Some institutions accept photocopies, but most require certified originals",
+        "Keep track of which institutions keep the certificate vs. return it"
       ],
       "is_paperwork_task": false,
       "paperwork_wizard_id": null
@@ -148,7 +149,7 @@
       "title": "Cancel medical appointments",
       "description": "Let their doctors know and cancel upcoming appointments. Return any rented medical equipment.",
       "task_type": "notifications",
-      "priority": 3,
+      "priority": 7,
       "stages": ["immediate", "navigating"],
       "why_it_matters": "This prevents appointment reminders and ensures medical records are updated. If hospice was involved, they can help with this process.",
       "documents_needed": [],
