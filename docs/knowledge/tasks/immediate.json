@@ -1,164 +1,267 @@
 {
   "category": "immediate",
-  "description": "Critical tasks for the first 48-72 hours after a death",
+  "description": "Tasks for the first 2 weeks after death. Focus: Handle true emergencies first, then stabilize. Most things can wait—these can't.",
   "tasks": [
     {
-      "id": "notify-immediate-family",
-      "title": "Tell family and close friends",
-      "description": "Contact the people who need to know. It's okay to ask someone to help make calls—you don't have to do them all yourself.",
-      "task_type": "notifications",
+      "id": "handle-immediate-arrangements",
+      "title": "Handle the body / contact funeral home",
+      "description": "If death happened at home: call hospice (if enrolled) or 911. They'll pronounce death. Hospital handles this if they died there. Then call a funeral home—they come get the body and guide you.",
+      "task_type": "logistics",
       "priority": 1,
       "stages": ["immediate"],
-      "why_it_matters": "Close family and friends deserve to hear the news directly, not through social media or other channels. They may also want to help with arrangements.",
+      "timeframe": "First hours",
+      "why_now": "This literally must happen first. The body needs to be taken care of.",
+      "why_it_matters": "This is the first thing that needs to happen. The funeral home will pick up the body and help you through the initial steps. You don't need a full plan yet—just someone to call.",
       "documents_needed": [],
       "tips": [
-        "It's okay to ask someone else to make some of these calls for you",
-        "Have a brief script ready if that helps",
-        "It's okay to send texts if phone calls feel too overwhelming",
-        "Consider creating a phone tree where each person calls 2-3 others",
-        "You don't need to have all the details—it's okay to say 'I don't know yet'"
+        "If death happened at home with hospice: call the hospice number first—they'll guide you",
+        "If death happened at home without hospice: call 911—they'll pronounce death",
+        "If death happened at hospital: the hospital staff will guide you",
+        "You don't need to have chosen a funeral home yet—any one can pick up the body",
+        "If there were pre-planned arrangements, find those first"
       ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
       "is_paperwork_task": false,
       "paperwork_wizard_id": null
     },
     {
-      "id": "contact-funeral-home",
-      "title": "Contact a funeral home",
-      "description": "If they had pre-planned arrangements, find those first. Otherwise, choose a funeral home—you don't have to decide everything today.",
-      "task_type": "logistics",
+      "id": "order-death-certificates",
+      "title": "Order death certificates",
+      "description": "The funeral home does this for you. Order 10-15 certified copies. They cost $10-25 each but you'll need them for banks, insurance, government, everything.",
+      "task_type": "paperwork",
       "priority": 2,
       "stages": ["immediate"],
-      "why_it_matters": "Funeral arrangements need to happen quickly, especially if there will be a viewing. Pre-planned arrangements may already be paid for. The funeral home will also help you order death certificates.",
-      "documents_needed": [
-        "Pre-planned funeral arrangements (if any)",
-        "Deceased's identification",
-        "Social Security number",
-        "Veteran discharge papers (DD-214) if applicable"
-      ],
-      "tips": [
-        "Ask if your loved one left any written wishes about their service",
-        "You can negotiate funeral costs—get itemized pricing",
-        "The FTC Funeral Rule requires funeral homes to provide price lists",
-        "Consider having a trusted friend or family member accompany you",
-        "It's okay to take a day before making decisions if you need time",
-        "The funeral home will help you order death certificates"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null
-    },
-    {
-      "id": "locate-will-documents",
-      "title": "Find the will and important papers",
-      "description": "Look for the will, life insurance policies, and other critical paperwork. Check their filing cabinet, home safe, safe deposit box, or with their attorney.",
-      "task_type": "legal",
-      "priority": 3,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "The will names the executor and contains burial wishes. Life insurance policies may have time limits for filing. These documents guide all future decisions.",
-      "documents_needed": [],
-      "tips": [
-        "Check with their attorney, accountant, or financial advisor",
-        "Look for a safe deposit box key—check their bank",
-        "Search email for insurance companies, attorneys, or financial advisors",
-        "Check for a fireproof safe at their home",
-        "Some people store important documents with a trusted family member"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null
-    },
-    {
-      "id": "arrange-pet-care",
-      "title": "Take care of their pets",
-      "description": "If they had pets, make sure someone is caring for them. Permanent arrangements can wait.",
-      "task_type": "logistics",
-      "priority": 3,
-      "stages": ["immediate"],
-      "why_it_matters": "Pets need immediate care and can be a source of comfort during grief. Making permanent arrangements can wait, but immediate needs cannot.",
-      "documents_needed": [],
-      "tips": [
-        "Check if the will mentions arrangements for pets",
-        "Ask family members if anyone can take them temporarily or permanently",
-        "Locate veterinary records for any ongoing medications",
-        "Gather pet supplies from the deceased's home",
-        "Consider if keeping the pet might be comforting for a surviving spouse"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null
-    },
-    {
-      "id": "secure-deceased-home",
-      "title": "Secure their home",
-      "description": "If they lived alone, make sure the house is locked up and safe. Collect mail so it doesn't pile up.",
-      "task_type": "logistics",
-      "priority": 4,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "Unfortunately, home break-ins after a death (especially after obituaries are published) do happen. Securing the property protects belongings and the estate.",
-      "documents_needed": [],
-      "tips": [
-        "Collect mail regularly to prevent it from piling up",
-        "Set lights on timers to make the home look occupied",
-        "Ask a neighbor to keep an eye on the property",
-        "Don't announce funeral times in obituaries—this tells burglars when the home will be empty",
-        "Consider removing obvious valuables temporarily"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "requires_property": true
-    },
-    {
-      "id": "notify-employer",
-      "title": "Let their employer know",
-      "description": "If they were working, contact HR. Ask about final paychecks, life insurance through work, and their 401(k).",
-      "task_type": "notifications",
-      "priority": 5,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "The employer may owe final wages, vacation pay, or death benefits. Many employers offer life insurance as a benefit that families don't know about.",
-      "documents_needed": [
-        "Death certificate (may be needed later)"
-      ],
-      "tips": [
-        "Ask about any life insurance through the employer",
-        "Inquire about 401(k) or pension benefits",
-        "Ask about COBRA health insurance continuation if applicable",
-        "Request any personal items from their workspace",
-        "Ask about any unpaid wages, bonuses, or commissions owed"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null
-    },
-    {
-      "id": "obtain-death-certificates",
-      "title": "Order death certificates",
-      "description": "Ask the funeral home to order 10-15 certified copies. Banks, insurance companies, and government offices all require them.",
-      "task_type": "paperwork",
-      "priority": 6,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "Banks, insurance companies, government agencies, and financial institutions all require certified copies. Getting enough upfront saves time and additional trips to vital records.",
+      "timeframe": "Day 1-2",
+      "why_now": "You cannot do anything else—close accounts, file insurance claims, access funds—without certified death certificates. Everything depends on this.",
+      "why_it_matters": "Banks, insurance companies, government agencies all require certified copies. Getting enough upfront saves time. Order more than you think you need—10-15 is typical.",
       "documents_needed": [],
       "tips": [
         "The funeral home can order these for you—this is the easiest way",
-        "Order more copies than you think you need—10-15 is typical",
+        "Order 10-15 copies minimum—more if the estate is complex",
         "Certified copies cost $10-25 each depending on the state",
-        "Some institutions accept photocopies, but most require certified originals",
-        "Keep track of which institutions keep the certificate vs. return it"
+        "Keep track of which institutions keep the certificate vs. return it",
+        "You can order more later from vital records, but it takes longer"
       ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
       "is_paperwork_task": false,
       "paperwork_wizard_id": null
     },
     {
-      "id": "notify-doctors",
-      "title": "Cancel medical appointments",
-      "description": "Let their doctors know and cancel upcoming appointments. Return any rented medical equipment.",
+      "id": "call-someone-to-help",
+      "title": "Call one person who can help make calls",
+      "description": "You don't have to do this alone. Call one trusted person—sibling, friend, anyone—who can help notify others. You don't have to make every call yourself.",
       "task_type": "notifications",
-      "priority": 7,
-      "stages": ["immediate", "navigating"],
-      "why_it_matters": "This prevents appointment reminders and ensures medical records are updated. If hospice was involved, they can help with this process.",
+      "priority": 3,
+      "stages": ["immediate"],
+      "timeframe": "Day 1-2",
+      "why_now": "You're in shock. Having someone help spread the word means you don't have to repeat the hardest conversation 20 times.",
+      "why_it_matters": "Sharing the burden of notifications protects your energy for the decisions only you can make. One person can create a phone tree to reach everyone.",
       "documents_needed": [],
       "tips": [
-        "Ask for copies of medical records if needed for insurance claims",
-        "Cancel any prescription auto-refills",
-        "Return any rented medical equipment (hospital beds, oxygen, etc.)",
-        "Ask about any outstanding medical bills"
+        "Ask this person to help notify extended family and friends",
+        "It's okay to text or email instead of calling everyone",
+        "You don't have to have all the details—'I don't know yet' is fine",
+        "Consider a phone tree where each person calls 2-3 others",
+        "It's okay to not answer your phone right now"
       ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "take-care-of-pets",
+      "title": "Take care of their pets",
+      "description": "If they had pets at their home, someone needs to care for them. Permanent arrangements can wait—just make sure they're fed and safe.",
+      "task_type": "logistics",
+      "priority": 4,
+      "stages": ["immediate"],
+      "timeframe": "Day 1-2",
+      "why_now": "Pets can't wait. They need food, water, and care. Permanent decisions about them can come later.",
+      "why_it_matters": "Pets need immediate care. Making permanent arrangements can wait, but their basic needs cannot.",
+      "documents_needed": [],
+      "tips": [
+        "Just focus on immediate care—feeding, walking, medication if needed",
+        "Ask a family member or neighbor to help temporarily",
+        "Locate veterinary records for any ongoing medications",
+        "Permanent arrangements can wait until you're ready",
+        "Pets can be a source of comfort during grief"
+      ],
+      "can_wait_message": "Permanent arrangements for pets can wait—just ensure their basic needs are met now.",
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "secure-home",
+      "title": "Secure their home",
+      "description": "If they lived alone: lock up, adjust thermostat (prevent frozen pipes), check for perishables, collect mail. Hold off on cleaning anything out.",
+      "task_type": "logistics",
+      "priority": 5,
+      "stages": ["immediate"],
+      "timeframe": "Day 1-3",
+      "why_now": "An empty house can be targeted (especially after obituaries are published). Basic security and prevention of damage.",
+      "why_it_matters": "Home break-ins after a death do happen, especially when obituaries reveal funeral times. Basic security protects belongings and prevents damage.",
+      "documents_needed": [],
+      "tips": [
+        "Lock all doors and windows",
+        "Set lights on timers to make the home look occupied",
+        "Adjust thermostat to prevent frozen pipes or excessive humidity",
+        "Collect mail regularly—piled up mail signals an empty home",
+        "Don't start cleaning out or sorting belongings yet—that can wait"
+      ],
+      "can_wait_message": "Cleaning out the house can wait. Just secure it for now.",
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "find-important-papers",
+      "title": "Find the important papers",
+      "description": "You're hunting now because you need them: will, insurance policies, bank statements, deed, anything official. Check: filing cabinet, desk, safe, safe deposit box, email.",
+      "task_type": "discovery",
+      "priority": 6,
+      "stages": ["immediate"],
+      "timeframe": "Week 1",
+      "why_now": "You need to find the will to know who's in charge. You need insurance policies to file claims. Gather now—act later.",
+      "why_it_matters": "These documents guide everything else: who's the executor, what assets exist, what insurance can be claimed. You're gathering information, not making decisions yet.",
+      "documents_needed": [],
+      "tips": [
+        "Check: filing cabinet, desk drawers, home safe, closet boxes",
+        "Look for a safe deposit box key—check their wallet and keychain",
+        "Search email for 'policy', 'account', 'statement', attorney names",
+        "Check mail for recent statements from banks or insurance companies",
+        "Ask surviving spouse or siblings if they know where things are"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "figure-out-will",
+      "title": "Figure out if there's a will",
+      "description": "This tells you who's legally in charge (the executor). Check the papers you found, ask surviving parent, search email for 'attorney' or 'estate'. No will = intestate probate.",
+      "task_type": "legal",
+      "priority": 7,
+      "stages": ["immediate"],
+      "timeframe": "Week 1",
+      "why_now": "The will names the executor—the person legally authorized to manage the estate. Without knowing this, you don't know who can make decisions.",
+      "why_it_matters": "The executor named in the will has legal authority over the estate. If there's no will (intestate), the court will appoint an administrator—usually next of kin.",
+      "documents_needed": [],
+      "tips": [
+        "Check the documents you gathered for anything labeled 'Last Will'",
+        "Ask if they had an attorney who might have a copy",
+        "Check their email for any law firm names",
+        "No will doesn't mean no inheritance—it just means state rules apply",
+        "The will may also contain burial wishes—check if there's time"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "notify-employer",
+      "title": "Notify their employer (if working)",
+      "description": "Call HR. Ask about: final paycheck, life insurance through work, 401k/pension, COBRA for any dependents. HR handles this regularly—they'll tell you what they need.",
+      "task_type": "notifications",
+      "priority": 8,
+      "stages": ["immediate"],
+      "timeframe": "Week 1",
+      "why_now": "The employer may owe final wages and may have life insurance you don't know about. Many people have employer-provided life insurance.",
+      "why_it_matters": "Employers often provide life insurance as a benefit that families forget about. There may also be final pay, vacation payout, pension or 401k benefits.",
+      "documents_needed": [
+        "Death certificate (may be needed later for benefits)"
+      ],
+      "tips": [
+        "Ask about any life insurance through the employer—this is common",
+        "Ask about 401(k) or pension benefits and how to claim them",
+        "Ask about COBRA health insurance if there are dependents",
+        "Request any personal items from their workspace",
+        "Ask about unpaid wages, vacation time, or bonuses owed"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "notify-social-security",
+      "title": "Notify Social Security",
+      "description": "Call 1-800-772-1213 or the funeral home may do this for you—ask. Benefits stop. Surviving spouse may qualify for survivor benefits.",
+      "task_type": "paperwork",
+      "priority": 9,
+      "stages": ["immediate"],
+      "timeframe": "Week 1-2",
+      "why_now": "Benefits paid after death must be returned. Better to notify quickly. Surviving spouse benefits must be applied for.",
+      "why_it_matters": "Social Security benefits stop at death and any payments received after must be returned. A surviving spouse may be eligible for survivor benefits—potentially up to 100% of the deceased's benefit.",
+      "documents_needed": [
+        "Death certificate",
+        "Deceased's Social Security number",
+        "Surviving spouse's Social Security number (if applying for survivor benefits)"
+      ],
+      "tips": [
+        "The funeral home often reports the death—ask if they did",
+        "Call SSA at 1-800-772-1213",
+        "Benefits are not prorated—the full month's payment must be returned",
+        "Survivor benefits must be applied for—they're not automatic",
+        "A surviving spouse can receive benefits as early as age 60"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": true,
+      "paperwork_wizard_id": "social-security-survivor-benefits"
+    },
+    {
+      "id": "find-life-insurance",
+      "title": "Find out about life insurance",
+      "description": "Check papers you gathered, their email, bank statements for premium payments. Ask employer about group coverage. These claims can be filed soon and pay within weeks.",
+      "task_type": "financial",
+      "priority": 10,
+      "stages": ["immediate"],
+      "timeframe": "Week 1-2",
+      "why_now": "Life insurance claims typically pay within 2-4 weeks of filing. This money may be needed for funeral costs or family support.",
+      "why_it_matters": "Life insurance provides funds quickly and doesn't go through probate. Many policies go unclaimed because families don't know they exist.",
+      "documents_needed": [
+        "Death certificate",
+        "Policy numbers (if known)",
+        "Beneficiary identification"
+      ],
+      "tips": [
+        "Check the documents you gathered for any insurance policies",
+        "Search email for insurance company names",
+        "Check bank statements for premium payment deductions",
+        "Ask employer about group life insurance coverage",
+        "Check for coverage through professional associations or credit cards"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "permission-to-pause",
+      "title": "Give yourself permission to pause",
+      "description": "You don't have to do everything this week. Banks aren't going anywhere. Bills can be late. The only true urgencies are: the body, death certificates, and preventing damage to an empty home.",
+      "task_type": "self_care",
+      "priority": 11,
+      "stages": ["immediate"],
+      "timeframe": "Always",
+      "why_now": "You're in shock and grief. Most things can wait even if they feel urgent.",
+      "why_it_matters": "In the fog of grief, everything feels urgent. Most things aren't. Taking care of yourself is not optional—it's required.",
+      "documents_needed": [],
+      "tips": [
+        "The only true urgencies: body/funeral home, death certificates, securing the home",
+        "Banks, accounts, bills—all of this can wait a few days or even weeks",
+        "Don't pay their bills from your own money—there's no rush",
+        "It's okay to let calls go to voicemail",
+        "Eating, sleeping, and breathing come first"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
       "is_paperwork_task": false,
       "paperwork_wizard_id": null
     }

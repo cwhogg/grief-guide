@@ -1,10 +1,9 @@
 import type { GriefStage, KnowledgeStatus, Task, TimelineCategory, TaskType } from "@/lib/supabase/types";
 
-// Import task templates
+// Import task templates - organized by grief stage
+// Note: first-week.json and first-month.json have been consolidated into immediate.json and ongoing.json
 import anticipatingData from "../../../docs/knowledge/tasks/anticipating.json";
 import immediateData from "../../../docs/knowledge/tasks/immediate.json";
-import firstWeekData from "../../../docs/knowledge/tasks/first-week.json";
-import firstMonthData from "../../../docs/knowledge/tasks/first-month.json";
 import ongoingData from "../../../docs/knowledge/tasks/ongoing.json";
 import discoveryData from "../../../docs/knowledge/tasks/discovery.json";
 
@@ -15,9 +14,14 @@ interface TaskTemplate {
   task_type: string;
   priority: number;
   stages: string[];
+  timeframe?: string;
+  why_now?: string;
   why_it_matters: string;
+  can_wait_message?: string | null;
   documents_needed: string[];
   tips: string[];
+  requires_death_certificate?: boolean;
+  requires_parent_alive?: boolean;
   is_paperwork_task: boolean;
   paperwork_wizard_id: string | null;
 }
@@ -60,11 +64,13 @@ export function getTasksForUser(options: GetTasksOptions): Task[] {
     insurance: options.knowsInsurance || "unknown",
   };
 
+  // Map grief stages to timeline categories for tasks
+  // anticipating stage -> anticipating timeline
+  // immediate stage -> immediate timeline
+  // navigating stage -> ongoing timeline
   const allTemplates: (TaskTemplate & { timeline_category: string })[] = [
     ...anticipatingData.tasks.map((t) => ({ ...t, timeline_category: "anticipating" } as TaskTemplate & { timeline_category: string })),
     ...immediateData.tasks.map((t) => ({ ...t, timeline_category: "immediate" } as TaskTemplate & { timeline_category: string })),
-    ...firstWeekData.tasks.map((t) => ({ ...t, timeline_category: "first_week" } as TaskTemplate & { timeline_category: string })),
-    ...firstMonthData.tasks.map((t) => ({ ...t, timeline_category: "first_month" } as TaskTemplate & { timeline_category: string })),
     ...ongoingData.tasks.map((t) => ({ ...t, timeline_category: "ongoing" } as TaskTemplate & { timeline_category: string })),
   ];
 

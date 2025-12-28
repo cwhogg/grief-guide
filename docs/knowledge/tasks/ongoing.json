@@ -1,219 +1,276 @@
 {
   "category": "ongoing",
-  "description": "Tasks for months 1-6 and beyond after a death",
+  "description": "Tasks for weeks to months after death. Focus: Work through the administrative backlog systematically. This is a marathon, not a sprint.",
   "tasks": [
     {
-      "id": "file-final-tax-return",
-      "title": "File the deceased's final tax return",
-      "description": "File a final income tax return (Form 1040) for the deceased covering January 1 through the date of death. This is due by the normal April deadline.",
+      "id": "file-life-insurance-claims",
+      "title": "File life insurance claims",
+      "description": "If you found policies, file claims now. You need: death certificate, policy number, claim form. Claims typically pay within 2-4 weeks of filing.",
       "task_type": "financial",
       "priority": 1,
-      "why_it_matters": "The final tax return is a legal requirement. It may result in a refund to the estate or identify taxes owed. The estate cannot be fully settled until taxes are resolved.",
+      "stages": ["navigating"],
+      "timeframe": "ASAP if not done",
+      "why_now": "This gets money flowing. Life insurance doesn't go through probate—beneficiaries receive it directly.",
+      "why_it_matters": "Life insurance provides funds that may be needed for funeral costs, ongoing support, or estate expenses. Claims that aren't filed don't get paid.",
+      "documents_needed": [
+        "Death certificate",
+        "Policy number",
+        "Beneficiary identification"
+      ],
+      "tips": [
+        "Call the insurance company to request claim forms",
+        "Claims typically pay within 2-4 weeks of filing",
+        "Life insurance bypasses probate—beneficiaries receive directly",
+        "If you can't find a policy, check the state's unclaimed property database",
+        "Some policies have accidental death benefits—ask if they apply"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "open-probate",
+      "title": "Open probate (if required)",
+      "description": "If there's a will with assets over state threshold, or no will, you may need to file with probate court. This gives you legal authority to act. Some states have simplified processes for small estates.",
+      "task_type": "legal",
+      "priority": 2,
+      "stages": ["navigating"],
+      "timeframe": "Month 1-2",
+      "why_now": "Without probate (if required), you can't legally access many accounts or sell property. Some assets don't require probate—an attorney can advise.",
+      "why_it_matters": "Probate gives the executor legal authority to manage the estate—access accounts, pay debts, distribute assets. Without it, institutions won't work with you.",
+      "documents_needed": [
+        "Original will (if exists)",
+        "Death certificate",
+        "Inventory of assets (rough estimate)",
+        "List of heirs/beneficiaries"
+      ],
+      "tips": [
+        "Not all assets go through probate (joint accounts, beneficiary designations, trusts)",
+        "Small estates may qualify for simplified procedures—check your state's threshold",
+        "An estate attorney can advise if probate is needed",
+        "Filing probate yourself is possible but complex—consider an attorney",
+        "Probate typically takes 6-12 months, sometimes longer"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "notify-banks-accounts",
+      "title": "Notify banks and financial institutions",
+      "description": "With death certificate and proof you're executor: notify each bank, close or transfer accounts. Joint accounts usually transfer to surviving holder. Individual accounts may require probate.",
+      "task_type": "financial",
+      "priority": 3,
+      "stages": ["navigating"],
+      "timeframe": "Month 1-2",
+      "why_now": "Banks need to be notified to protect the estate. Some accounts (POD/TOD, joint) can transfer without probate.",
+      "why_it_matters": "Banks freeze accounts when notified of death (to protect the estate). Joint accounts and POD/TOD accounts transfer directly. Individual accounts require executor authority.",
+      "documents_needed": [
+        "Death certificate",
+        "Your identification",
+        "Letters Testamentary or Letters of Administration (for executor access)",
+        "Account numbers if known"
+      ],
+      "tips": [
+        "Joint accounts transfer to surviving owner automatically",
+        "POD (payable on death) accounts transfer to named beneficiary",
+        "Individual accounts require probate authority to access",
+        "Ask about any automatic payments that will stop",
+        "Safe deposit boxes may require court order or executor authority"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "claim-retirement-accounts",
+      "title": "Claim retirement accounts",
+      "description": "401k, IRA, pension—each has beneficiary designations. Contact each institution with death certificate. Beneficiaries can claim directly—these don't go through probate.",
+      "task_type": "financial",
+      "priority": 4,
+      "stages": ["navigating"],
+      "timeframe": "Month 1-2",
+      "why_now": "Retirement accounts pass to named beneficiaries directly. Beneficiaries may have options about how to take distributions.",
+      "why_it_matters": "Retirement accounts can be significant assets. Beneficiaries inherit directly (outside probate) but need to take action to claim them.",
+      "documents_needed": [
+        "Death certificate",
+        "Account information",
+        "Beneficiary identification"
+      ],
+      "tips": [
+        "Contact the employer's HR or the account custodian",
+        "Beneficiaries may have options: lump sum, transfer to IRA, or required distributions",
+        "Spouse beneficiaries have more flexible options than non-spouse",
+        "There are tax implications to how you take distributions—consider consulting a tax advisor",
+        "Don't forget about pensions—these may have survivor benefits"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "notify-credit-bureaus",
+      "title": "Notify credit bureaus",
+      "description": "Send death certificate to Equifax, Experian, TransUnion. This prevents identity theft and stops credit offers. Request a credit report to find accounts you might not know about.",
+      "task_type": "paperwork",
+      "priority": 5,
+      "stages": ["navigating"],
+      "timeframe": "Month 1-2",
+      "why_now": "Identity theft of deceased persons is common. Flagging the account protects the estate.",
+      "why_it_matters": "Deceased persons are targets for identity theft. Notifying bureaus puts a 'deceased' flag on their credit file and helps you discover accounts you may not know about.",
+      "documents_needed": [
+        "Death certificate",
+        "Proof of relationship or executor status"
+      ],
+      "tips": [
+        "Request a credit report—it reveals accounts you might not know about",
+        "Send written notice with death certificate to each bureau",
+        "This stops pre-approved credit offers",
+        "Keep checking periodically for new fraudulent accounts",
+        "Equifax: 1-800-525-6285, Experian: 1-888-397-3742, TransUnion: 1-800-680-7289"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "cancel-subscriptions",
+      "title": "Cancel subscriptions and memberships",
+      "description": "Streaming services, gym, magazines, anything on autopay. Check their bank/card statements to find recurring charges. Cancel to stop bleeding money.",
+      "task_type": "financial",
+      "priority": 6,
+      "stages": ["navigating"],
+      "timeframe": "Month 1-3",
+      "why_now": "Subscriptions keep charging until cancelled. The estate shouldn't pay for services no longer being used.",
+      "why_it_matters": "Recurring charges add up. The estate shouldn't pay for Netflix, gym memberships, or magazine subscriptions that aren't being used.",
+      "documents_needed": [
+        "Death certificate (some services require)",
+        "Account information"
+      ],
+      "tips": [
+        "Check bank and credit card statements for recurring charges",
+        "Common subscriptions: streaming (Netflix, Hulu), newspapers, gyms, Amazon Prime",
+        "Some services will refund recent charges—ask",
+        "Cancel autopay through the bank if you can't reach the service",
+        "Keep a list of what you've cancelled"
+      ],
+      "can_wait_message": "This can wait a few weeks, but subscriptions keep charging until cancelled.",
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "handle-mail-forwarding",
+      "title": "Forward mail",
+      "description": "Forward their mail to you or surviving parent. This catches bills, statements, and important notices you might miss.",
+      "task_type": "logistics",
+      "priority": 7,
+      "stages": ["navigating"],
+      "timeframe": "Month 1-2",
+      "why_now": "Mail reveals accounts and bills you don't know about. It also prevents important notices from going unread.",
+      "why_it_matters": "Mail forwarding helps you discover accounts, catch bills, and receive important legal notices. It also prevents mail from piling up at an empty home.",
+      "documents_needed": [
+        "Death certificate (for some requests)",
+        "Proof of executor status (sometimes)"
+      ],
+      "tips": [
+        "Forward mail at usps.com or your local post office",
+        "Consider forwarding for 6-12 months to catch everything",
+        "Watch for bills, statements, and notices from unknown companies",
+        "Some first-class mail won't forward—check the original address periodically",
+        "Ask neighbors to collect any packages"
+      ],
+      "can_wait_message": null,
+      "requires_death_certificate": false,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "handle-property",
+      "title": "Deal with property",
+      "description": "If they owned a home: decide keep/sell, handle mortgage, transfer title (usually requires probate), manage maintenance meanwhile. No rush—make decisions when ready.",
+      "task_type": "logistics",
+      "priority": 8,
+      "stages": ["navigating"],
+      "timeframe": "Months 2-6",
+      "why_now": "Property needs ongoing maintenance and insurance. But major decisions (sell/keep) can wait until you're ready.",
+      "why_it_matters": "Real estate is often the largest estate asset. The property needs maintenance and insurance, but decisions about what to do with it don't have to be rushed.",
+      "documents_needed": [
+        "Deed",
+        "Mortgage information (if any)",
+        "Probate authority (usually needed to transfer title)"
+      ],
+      "tips": [
+        "Keep paying mortgage and insurance to protect the asset",
+        "Get the property appraised for estate value purposes",
+        "Transfer title usually requires probate—an attorney can help",
+        "Don't rush to sell—make decisions when you're ready",
+        "Consider an estate sale for contents if selling"
+      ],
+      "can_wait_message": "Major decisions can wait. Just keep up insurance and basic maintenance.",
+      "requires_death_certificate": true,
+      "is_paperwork_task": false,
+      "paperwork_wizard_id": null
+    },
+    {
+      "id": "file-final-tax-return",
+      "title": "File final tax return",
+      "description": "Their final return covers Jan 1 to death date. Due by the April deadline. Estate may also need a separate return if it generated income. A CPA can help.",
+      "task_type": "financial",
+      "priority": 9,
+      "stages": ["navigating"],
+      "timeframe": "By April deadline",
+      "why_now": "This is a legal requirement. The estate cannot be fully settled until taxes are resolved.",
+      "why_it_matters": "The final tax return is legally required. It may result in a refund or identify taxes owed. The estate may also need its own tax return if it earned income.",
       "documents_needed": [
         "W-2s and 1099s for the year of death",
         "Previous year's tax return for reference",
-        "Social Security number",
         "Death certificate",
         "Records of all income through date of death"
       ],
       "tips": [
         "Write 'DECEASED' and the date of death across the top of Form 1040",
-        "The surviving spouse can file jointly for the year of death",
-        "Consider hiring a CPA experienced with estate taxes",
+        "A surviving spouse can file jointly for the year of death",
         "File for an extension if you need more time (Form 4868)",
-        "Keep records—the IRS can audit estate returns for 3 years"
+        "Consider hiring a CPA experienced with estate taxes",
+        "The estate may need its own tax return (Form 1041) if it earned income"
       ],
+      "can_wait_message": "You have until the April deadline (or can file for extension).",
+      "requires_death_certificate": true,
       "is_paperwork_task": true,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
+      "paperwork_wizard_id": null
     },
     {
-      "id": "probate-process",
-      "title": "Complete the probate process",
-      "description": "If required, work through the probate court process to validate the will, settle debts, and legally transfer assets to beneficiaries.",
+      "id": "distribute-belongings-close-estate",
+      "title": "Distribute belongings and close estate",
+      "description": "When accounts are settled and debts paid, distribute remaining assets per the will (or state law if no will). Sentimental items often take longer—that's okay.",
       "task_type": "legal",
-      "priority": 1,
-      "why_it_matters": "Probate gives the executor legal authority to act on behalf of the estate. It ensures debts are properly paid and assets legally transferred.",
-      "documents_needed": [
-        "Original will",
-        "Death certificate",
-        "Inventory of all assets",
-        "List of debts and creditors",
-        "List of beneficiaries with addresses"
-      ],
-      "tips": [
-        "Not all assets go through probate (joint accounts, beneficiary designations, trusts)",
-        "Small estates may qualify for simplified probate procedures",
-        "The executor may be entitled to compensation (varies by state)",
-        "Keep detailed records of all transactions and decisions",
-        "Probate typically takes 6-12 months, sometimes longer"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
-    },
-    {
-      "id": "distribute-assets",
-      "title": "Distribute assets per will or trust",
-      "description": "Once debts are paid and probate permits, distribute remaining assets to beneficiaries according to the will or trust, or by state law if there's no will.",
-      "task_type": "legal",
-      "priority": 2,
-      "why_it_matters": "This is the ultimate purpose of estate administration—ensuring your loved one's wishes are honored and beneficiaries receive their inheritance.",
+      "priority": 10,
+      "stages": ["navigating"],
+      "timeframe": "Months 3-12",
+      "why_now": "This can only happen after debts are paid and probate (if needed) allows distribution.",
+      "why_it_matters": "This is the final step—honoring your loved one's wishes (or following state law) in distributing what remains. Closure for the legal process.",
       "documents_needed": [
         "Will or trust document",
-        "Court approval for distribution (in probate)",
-        "Release forms for beneficiaries to sign",
-        "Records of all distributions made"
+        "Court approval (if in probate)",
+        "Records of all distributions"
       ],
       "tips": [
         "Get receipts or releases from beneficiaries for each distribution",
-        "Consider tax implications of distributing certain assets",
-        "Personal items with sentimental value can be the hardest—consider a family meeting",
-        "If beneficiaries disagree, a mediator may help",
-        "Keep reserves for any final taxes or unexpected expenses"
+        "Personal items with sentimental value can be the hardest—take your time",
+        "Consider a family meeting to discuss personal items",
+        "Keep some reserve for unexpected final expenses or taxes",
+        "Keep records of everything distributed"
       ],
+      "can_wait_message": "This is the final step and will take months. No need to rush.",
+      "requires_death_certificate": false,
       "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
-    },
-    {
-      "id": "sell-property",
-      "title": "Handle property sale (if applicable)",
-      "description": "If the estate includes real property that will be sold, work with a real estate agent to list and sell the property. Ensure title is clear and proceeds go to the estate.",
-      "task_type": "logistics",
-      "priority": 2,
-      "why_it_matters": "Real estate is often the largest estate asset. A proper sale ensures maximum value and legal transfer. Proceeds are typically needed to settle the estate.",
-      "documents_needed": [
-        "Property deed",
-        "Mortgage information (if any)",
-        "Letters Testamentary or court authority to sell",
-        "Property tax records",
-        "HOA documents if applicable"
-      ],
-      "tips": [
-        "Get the property appraised for estate tax purposes",
-        "Consider an estate sale for contents before listing",
-        "A real estate attorney can help with title issues",
-        "The estate may be responsible for maintenance until sold",
-        "Capital gains on inherited property are calculated from date-of-death value"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
-    },
-    {
-      "id": "close-remaining-accounts",
-      "title": "Close remaining accounts",
-      "description": "Close any remaining accounts in the deceased's name once the estate is settled. This includes bank accounts, investment accounts, and any remaining credit accounts.",
-      "task_type": "financial",
-      "priority": 3,
-      "why_it_matters": "Closing accounts completes the financial wind-down of the estate and prevents any ongoing fees or potential fraud.",
-      "documents_needed": [
-        "Death certificate",
-        "Letters Testamentary",
-        "Account statements",
-        "Your identification"
-      ],
-      "tips": [
-        "Transfer remaining funds to the estate account before closing",
-        "Get confirmation letters that accounts are closed",
-        "Request final statements for record-keeping",
-        "Close investment accounts after distributing assets to beneficiaries",
-        "Keep estate bank account open until all distributions are complete"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
-    },
-    {
-      "id": "file-estate-tax-return",
-      "title": "File estate tax return (if required)",
-      "description": "If the estate exceeds the federal exemption ($12.92M in 2023, adjusted for inflation), file IRS Form 706. Some states have lower thresholds.",
-      "task_type": "financial",
-      "priority": 2,
-      "why_it_matters": "Federal estate tax is 40% on amounts over the exemption. Missing the deadline can result in penalties and interest.",
-      "documents_needed": [
-        "Complete inventory of all assets at fair market value",
-        "Appraisals for real estate, businesses, and valuables",
-        "Death certificate",
-        "Records of all deductions (debts, funeral expenses, etc.)"
-      ],
-      "tips": [
-        "Most estates don't owe federal estate tax (exemption is over $12M)",
-        "Some states have estate or inheritance taxes with lower thresholds",
-        "A CPA or estate attorney experienced in estate taxes is essential",
-        "Form 706 is due 9 months after death (extension available)",
-        "Portability allows surviving spouse to use unused exemption"
-      ],
-      "is_paperwork_task": true,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
-    },
-    {
-      "id": "handle-digital-assets",
-      "title": "Handle digital assets and online accounts",
-      "description": "Close or memorialize social media accounts, cancel online subscriptions, and address email accounts and digital photos.",
-      "task_type": "logistics",
-      "priority": 3,
-      "why_it_matters": "Digital accounts can be targets for hackers. Memorializing social media preserves the profile while preventing login. Digital photos may be precious memories.",
-      "documents_needed": [
-        "Death certificate",
-        "Proof of relationship or executorship",
-        "Any passwords or password manager access"
-      ],
-      "tips": [
-        "Facebook allows memorialization or deletion by verified family",
-        "Google has an Inactive Account Manager for planning ahead",
-        "Back up digital photos before closing any accounts",
-        "Check for any cryptocurrency wallets (may have significant value)",
-        "Some email providers will provide account contents to next of kin"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
-    },
-    {
-      "id": "organize-estate-records",
-      "title": "Organize and store final estate records",
-      "description": "Compile all estate documents, receipts, and records into organized files. Store securely for at least 7 years in case of audits or questions.",
-      "task_type": "logistics",
-      "priority": 3,
-      "why_it_matters": "Good records protect the executor from liability and answer questions that may arise later. Tax authorities can audit for years after.",
-      "documents_needed": [],
-      "tips": [
-        "Keep copies of all filed tax returns",
-        "Maintain records of all distributions to beneficiaries",
-        "Store receipts for all expenses paid from the estate",
-        "Keep the final accounting submitted to the court",
-        "Consider both physical and digital backups"
-      ],
-      "is_paperwork_task": false,
-      "paperwork_wizard_id": null,
-      "stages": [
-        "immediate",
-        "navigating"
-      ]
+      "paperwork_wizard_id": null
     }
   ]
 }
