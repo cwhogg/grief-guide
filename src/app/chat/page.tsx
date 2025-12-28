@@ -54,6 +54,9 @@ const PROMPTS = {
 
 const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
+const CACHE_VERSION_KEY = "grief-guide-cache-version";
+// Increment this when task structure changes to force cache clear
+const CURRENT_CACHE_VERSION = "2";
 
 interface StoredChatState {
   messages: Message[];
@@ -63,8 +66,28 @@ interface StoredChatState {
   lastUpdated: string;
 }
 
+function clearStaleCache(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const storedVersion = localStorage.getItem(CACHE_VERSION_KEY);
+    if (storedVersion !== CURRENT_CACHE_VERSION) {
+      // Cache version mismatch - clear old data
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+      localStorage.removeItem(FIRST_VISIT_KEY);
+      localStorage.setItem(CACHE_VERSION_KEY, CURRENT_CACHE_VERSION);
+      console.log("Cleared stale cache - version updated to", CURRENT_CACHE_VERSION);
+    }
+  } catch (e) {
+    console.error("Failed to check cache version:", e);
+  }
+}
+
 function loadChatState(): StoredChatState | null {
   if (typeof window === "undefined") return null;
+
+  // Always check for stale cache first
+  clearStaleCache();
+
   try {
     const stored = localStorage.getItem(CHAT_STORAGE_KEY);
     if (stored) {
