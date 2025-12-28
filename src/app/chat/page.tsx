@@ -56,7 +56,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "2";
+const CURRENT_CACHE_VERSION = "3";
 
 interface StoredChatState {
   messages: Message[];
@@ -878,9 +878,11 @@ function MessageBubble({
   }
 
   // Assistant messages
-  const { segments, taskIds } = parseMessageContent(message.content);
-  const contextualActions = isLastMessage && !isStreaming
-    ? generateContextualActions(message.content, taskIds[0])
+  const { segments, taskIds, actions: explicitActions } = parseMessageContent(message.content);
+
+  // Use explicit actions from message if present, otherwise generate contextual actions
+  const effectiveActions = isLastMessage && !isStreaming
+    ? (explicitActions.length > 0 ? explicitActions : generateContextualActions(message.content, taskIds[0]))
     : [];
 
   const handleTaskAction = async (taskId: string, action: "complete" | "skip" | "details") => {
@@ -943,10 +945,10 @@ function MessageBubble({
                   </div>
                 )}
 
-                {/* Action buttons */}
-                {isLastSegment && isLastMessage && !isStreaming && !message.showWalkthrough && contextualActions.length > 0 && taskIds.length === 0 && (
+                {/* Action buttons - show explicit actions from Guide or contextual actions */}
+                {isLastSegment && isLastMessage && !isStreaming && !message.showWalkthrough && effectiveActions.length > 0 && (
                   <MessageActions
-                    actions={contextualActions}
+                    actions={effectiveActions}
                     onSendMessage={onSendMessage}
                     onTaskAction={handleTaskAction}
                   />
