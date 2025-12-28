@@ -14,6 +14,8 @@ interface Message {
   content: string;
   timestamp: Date;
   suggestedPrompts?: string[];
+  showWalkthrough?: boolean; // Shows Yes/No buttons for initial walkthrough
+  showTopTasks?: boolean; // Shows top 3 priority tasks
 }
 
 type ChatMode = "guide" | "therapist";
@@ -22,9 +24,10 @@ type ConversationContext = "initial" | "task" | "emotional" | "general";
 // Contextual prompts based on conversation state
 const PROMPTS = {
   initial: [
-    "What should I focus on first?",
+    "What should I do first?",
     "I don't know where to start",
-    "I just need to talk",
+    "Tell me what to do next",
+    "I want help with my grief",
   ],
   task: [
     "Walk me through this",
@@ -239,17 +242,14 @@ export default function ChatPage() {
   useEffect(() => {
     if (profile && !hasGreeted.current && messages.length === 0) {
       hasGreeted.current = true;
-      const name = profile.full_name?.split(" ")[0];
+      const parentName = profile.deceased_name || "your loved one";
       const stage = profile.grief_stage;
-      const parentName = profile.deceased_name;
 
       let greeting = "";
       if (stage === "anticipating") {
-        greeting = `Hi${name ? ` ${name}` : ""}. I'm here to help you figure out what to ask and what to gather while you still can. What's on your mind?`;
-      } else if (stage === "immediate") {
-        greeting = `Hi${name ? ` ${name}` : ""}. There's a lot to handle right now${parentName ? ` after ${parentName}'s death` : ""}, but you don't have to figure it all out today. What's weighing on you most?`;
+        greeting = `Hi. I know this is a difficult time as you prepare for what's ahead with ${parentName}. I'm here to help you figure out what to ask and what to gather while you still can. Would you like me to walk you through a few things to think about first?`;
       } else {
-        greeting = `Hi${name ? ` ${name}` : ""}. What can I help you with?`;
+        greeting = `Hi. I know there is a lot to handle right now after ${parentName}'s death, but you don't have to figure it all out right now. I am here to help you through the process. Would you like me to walk you through a few things to think about first?`;
       }
 
       const greetingMessage: Message = {
@@ -258,6 +258,7 @@ export default function ChatPage() {
         content: greeting,
         timestamp: new Date(),
         suggestedPrompts: PROMPTS.initial,
+        showWalkthrough: true, // Special flag to show Yes/No buttons
       };
       setMessages([greetingMessage]);
       historyRef.current = [{ role: "assistant", content: greeting }];
@@ -505,17 +506,14 @@ export default function ChatPage() {
     historyRef.current = [];
 
     // Generate fresh greeting
-    const name = profile?.full_name?.split(" ")[0];
+    const parentName = profile?.deceased_name || "your loved one";
     const stage = profile?.grief_stage;
-    const parentName = profile?.deceased_name;
 
     let greeting = "";
     if (stage === "anticipating") {
-      greeting = `Hi${name ? ` ${name}` : ""}. I'm here to help you figure out what to ask and what to gather while you still can. What's on your mind?`;
-    } else if (stage === "immediate") {
-      greeting = `Hi${name ? ` ${name}` : ""}. There's a lot to handle right now${parentName ? ` after ${parentName}'s death` : ""}, but you don't have to figure it all out today. What's weighing on you most?`;
+      greeting = `Hi. I know this is a difficult time as you prepare for what's ahead with ${parentName}. I'm here to help you figure out what to ask and what to gather while you still can. Would you like me to walk you through a few things to think about first?`;
     } else {
-      greeting = `Hi${name ? ` ${name}` : ""}. What can I help you with?`;
+      greeting = `Hi. I know there is a lot to handle right now after ${parentName}'s death, but you don't have to figure it all out right now. I am here to help you through the process. Would you like me to walk you through a few things to think about first?`;
     }
 
     const greetingMessage: Message = {
@@ -524,10 +522,57 @@ export default function ChatPage() {
       content: greeting,
       timestamp: new Date(),
       suggestedPrompts: PROMPTS.initial,
+      showWalkthrough: true,
     };
 
     setMessages([greetingMessage]);
     historyRef.current = [{ role: "assistant", content: greeting }];
+  };
+
+  // Handle walkthrough Yes/No buttons
+  const handleWalkthroughResponse = (accepted: boolean) => {
+    // Remove the walkthrough buttons from the greeting message
+    setMessages(prev => prev.map(m =>
+      m.showWalkthrough ? { ...m, showWalkthrough: false } : m
+    ));
+
+    if (accepted) {
+      // Get top 3 priority tasks
+      const topTasks = tasks
+        .filter(t => t.status === "pending")
+        .sort((a, b) => (a.priority || 99) - (b.priority || 99))
+        .slice(0, 3);
+
+      const taskIds = topTasks.map(t => t.id);
+      const taskRefs = taskIds.map(id => `[task:${id}]`).join("\n\n");
+
+      const responseContent = topTasks.length > 0
+        ? `Great. Here are the most important things to focus on right now:\n\n${taskRefs}\n\nTake these one at a time. Click "Walk me through it" on any task to get step-by-step help.`
+        : "I'll help you figure out what needs to be done. Let's start by understanding your situation better.";
+
+      const responseMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: responseContent,
+        timestamp: new Date(),
+        suggestedPrompts: PROMPTS.task,
+      };
+
+      setMessages(prev => [...prev, responseMessage]);
+      historyRef.current.push({ role: "assistant", content: responseContent });
+      setConversationContext("task");
+    } else {
+      const responseMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "That's okay. I'm here whenever you need me. You can ask me anything, or just let me know when you're ready to look at what needs to be done.",
+        timestamp: new Date(),
+        suggestedPrompts: PROMPTS.initial,
+      };
+
+      setMessages(prev => [...prev, responseMessage]);
+      historyRef.current.push({ role: "assistant", content: responseMessage.content });
+    }
   };
 
   if (userLoading || !isReady) {
@@ -694,6 +739,7 @@ export default function ChatPage() {
             onTaskStatusChange={handleTaskStatusChange}
             onTellMeMore={handleTellMeMore}
             onSendMessage={handleSendMessage}
+            onWalkthroughResponse={handleWalkthroughResponse}
             isLastMessage={index === messages.length - 1 && !isStreaming}
           />
         ))}
@@ -811,6 +857,7 @@ function MessageBubble({
   onTaskStatusChange,
   onTellMeMore,
   onSendMessage,
+  onWalkthroughResponse,
   isStreaming = false,
   isLastMessage = false,
 }: {
@@ -820,6 +867,7 @@ function MessageBubble({
   onTaskStatusChange: (taskId: string, status: TaskStatus) => Promise<void>;
   onTellMeMore: (task: Task) => void;
   onSendMessage: (message: string) => void;
+  onWalkthroughResponse?: (accepted: boolean) => void;
   isStreaming?: boolean;
   isLastMessage?: boolean;
 }) {
@@ -899,8 +947,26 @@ function MessageBubble({
                   )}
                 </div>
 
+                {/* Walkthrough Yes/No buttons */}
+                {isLastSegment && message.showWalkthrough && onWalkthroughResponse && (
+                  <div className="flex gap-2 mt-3">
+                    <button
+                      onClick={() => onWalkthroughResponse(true)}
+                      className="px-4 py-2.5 text-sm font-medium bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+                    >
+                      Yes, walk me through it
+                    </button>
+                    <button
+                      onClick={() => onWalkthroughResponse(false)}
+                      className="px-4 py-2.5 text-sm font-medium text-stone-700 border border-stone-200 rounded-lg hover:bg-stone-50 transition-colors"
+                    >
+                      Not right now
+                    </button>
+                  </div>
+                )}
+
                 {/* Inline action buttons for last text segment of last message */}
-                {isLastSegment && isLastMessage && !isStreaming && contextualActions.length > 0 && taskIds.length === 0 && (
+                {isLastSegment && isLastMessage && !isStreaming && !message.showWalkthrough && contextualActions.length > 0 && taskIds.length === 0 && (
                   <MessageActions
                     actions={contextualActions}
                     onSendMessage={onSendMessage}
