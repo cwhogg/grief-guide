@@ -679,7 +679,7 @@ export default function ChatPage() {
 
       {/* First-time guidance hint */}
       {showFirstTimeHint && (
-        <div className="mx-5 mt-4 p-4 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-2xl animate-slide-up">
+        <div className="mx-5 mt-4 max-w-3xl md:mx-auto p-4 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-[var(--radius-lg)] animate-slide-up">
           <p className="text-sm text-[var(--foreground)] leading-relaxed">
             You can ask me about what needs to be done, get help with specific tasks, or just talk when things feel heavy. I'm here for all of it.
           </p>
@@ -693,7 +693,8 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
+      <div className="flex-1 overflow-y-auto px-5 py-6">
+        <div className="max-w-3xl mx-auto space-y-4">
         {messages.map((message, index) => (
           <MessageBubble
             key={message.id}
@@ -740,6 +741,7 @@ export default function ChatPage() {
         )}
 
         <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input area */}
@@ -747,7 +749,7 @@ export default function ChatPage() {
         {/* Suggested prompts */}
         {!isStreaming && currentPrompts && currentPrompts.length > 0 && (
           <div className="px-5 pt-3 pb-2">
-            <div className="flex gap-2 overflow-x-auto pb-1 -mx-5 px-5 scrollbar-hide">
+            <div className="max-w-3xl mx-auto flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
               {currentPrompts.map((prompt, i) => (
                 <button
                   key={i}
