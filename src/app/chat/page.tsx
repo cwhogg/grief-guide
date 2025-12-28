@@ -50,6 +50,43 @@ const PROMPTS = {
 };
 
 const FIRST_VISIT_KEY = "grief-guide-chat-visited";
+const CHAT_STORAGE_KEY = "grief-guide-chat-state";
+
+interface StoredChatState {
+  messages: Message[];
+  mode: ChatMode;
+  conversationContext: ConversationContext;
+  history: Array<{ role: "user" | "assistant"; content: string }>;
+  lastUpdated: string;
+}
+
+function loadChatState(): StoredChatState | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored) as StoredChatState;
+      // Convert timestamp strings back to Date objects
+      parsed.messages = parsed.messages.map(m => ({
+        ...m,
+        timestamp: new Date(m.timestamp),
+      }));
+      return parsed;
+    }
+  } catch (e) {
+    console.error("Failed to load chat state:", e);
+  }
+  return null;
+}
+
+function saveChatState(state: StoredChatState): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error("Failed to save chat state:", e);
+  }
+}
 
 export default function ChatPage() {
   const router = useRouter();
@@ -71,6 +108,7 @@ export default function ChatPage() {
   const historyRef = useRef<Array<{ role: "user" | "assistant"; content: string }>>([]);
   const hasGreeted = useRef(false);
   const tasksFetched = useRef(false);
+  const hasLoadedFromStorage = useRef(false);
 
   useEffect(() => {
     initialize();
@@ -81,6 +119,35 @@ export default function ChatPage() {
       router.push("/onboarding");
     }
   }, [userLoading, profile, router]);
+
+  // Load chat state from localStorage on mount
+  useEffect(() => {
+    if (hasLoadedFromStorage.current) return;
+    hasLoadedFromStorage.current = true;
+
+    const stored = loadChatState();
+    if (stored && stored.messages.length > 0) {
+      setMessages(stored.messages);
+      setMode(stored.mode);
+      setConversationContext(stored.conversationContext);
+      historyRef.current = stored.history;
+      hasGreeted.current = true; // Don't re-greet
+      setIsReady(true);
+    }
+  }, []);
+
+  // Save chat state to localStorage whenever it changes
+  useEffect(() => {
+    if (messages.length === 0) return;
+
+    saveChatState({
+      messages,
+      mode,
+      conversationContext,
+      history: historyRef.current,
+      lastUpdated: new Date().toISOString(),
+    });
+  }, [messages, mode, conversationContext]);
 
   // Check for first visit
   useEffect(() => {
@@ -426,6 +493,26 @@ export default function ChatPage() {
     handleSendMessage("How do I use Grief Guide? What can you help me with?");
   };
 
+  const handleStartNewConversation = () => {
+    setMenuOpen(false);
+    // Clear stored state
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+    }
+    // Reset state
+    setMessages([]);
+    setMode("guide");
+    setConversationContext("initial");
+    historyRef.current = [];
+    hasGreeted.current = false;
+    // Trigger re-greeting
+    setIsReady(false);
+    setTimeout(() => {
+      hasGreeted.current = false;
+      setIsReady(false);
+    }, 0);
+  };
+
   if (userLoading || !isReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-stone-50">
@@ -530,6 +617,15 @@ export default function ChatPage() {
                   </div>
                 </a>
                 <div className="border-t border-stone-100 my-2" />
+                <button
+                  onClick={handleStartNewConversation}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-left"
+                >
+                  <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span className="text-stone-700">Start new conversation</span>
+                </button>
                 <Link
                   href="/settings"
                   className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-stone-500"
