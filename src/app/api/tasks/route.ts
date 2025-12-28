@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import type { GriefStage, KnowledgeStatus } from "@/lib/supabase/types";
 
-// Import task templates
+// Import task templates - organized by grief stage
+// Note: first-week.json and first-month.json have been consolidated into immediate.json and ongoing.json
 import anticipatingData from "../../../../docs/knowledge/tasks/anticipating.json";
 import immediateData from "../../../../docs/knowledge/tasks/immediate.json";
-import firstWeekData from "../../../../docs/knowledge/tasks/first-week.json";
-import firstMonthData from "../../../../docs/knowledge/tasks/first-month.json";
 import ongoingData from "../../../../docs/knowledge/tasks/ongoing.json";
 import discoveryData from "../../../../docs/knowledge/tasks/discovery.json";
 
@@ -86,11 +85,13 @@ function generateTasksFromTemplates(
   griefStage: GriefStage = "immediate",
   knowledgeStatus: KnowledgeStatusMap = defaultKnowledgeStatus
 ): DemoTask[] {
+  // Map grief stages to timeline categories for tasks
+  // anticipating stage -> anticipating timeline
+  // immediate stage -> immediate timeline
+  // navigating stage -> ongoing timeline
   const allTemplates: (TaskTemplate & { timeline_category: string })[] = [
     ...anticipatingData.tasks.map((t) => ({ ...t, timeline_category: "anticipating" } as TaskTemplate & { timeline_category: string })),
     ...immediateData.tasks.map((t) => ({ ...t, timeline_category: "immediate" } as TaskTemplate & { timeline_category: string })),
-    ...firstWeekData.tasks.map((t) => ({ ...t, timeline_category: "first_week" } as TaskTemplate & { timeline_category: string })),
-    ...firstMonthData.tasks.map((t) => ({ ...t, timeline_category: "first_month" } as TaskTemplate & { timeline_category: string })),
     ...ongoingData.tasks.map((t) => ({ ...t, timeline_category: "ongoing" } as TaskTemplate & { timeline_category: string })),
   ];
 
@@ -125,6 +126,8 @@ function generateTasksFromTemplates(
   });
 
   // Add discovery tasks for areas where user has 'unknown' status
+  // Discovery tasks slot in around "Find important papers" (priority 5-6)
+  // They help users find specific info they don't know about
   const discoveryTasks: DemoTask[] = [];
   const discoveryTemplates = discoveryData.tasks as DiscoveryTaskTemplate[];
 
@@ -135,6 +138,10 @@ function generateTasksFromTemplates(
       // Also check if it applies to this grief stage
       if (template.stages && template.stages.includes(griefStage)) {
         const storedState = taskStateStore.get(template.id) || {};
+        // Discovery tasks should come after the first critical tasks (1-4) but around
+        // the same priority as "Find important papers" (5) and "Figure out will" (6)
+        // Base priority of 5, with template priority adding minor ordering within discovery tasks
+        const discoveryPriority = 5 + (template.priority || 1) * 0.1;
         discoveryTasks.push({
           id: template.id,
           user_id: "demo-user-123",
@@ -144,7 +151,7 @@ function generateTasksFromTemplates(
           timeline_category: "discovery",
           task_type: template.task_type,
           status: storedState.status || "pending",
-          priority: 0, // High priority - discovery tasks come first
+          priority: discoveryPriority,
           due_date: null,
           completed_at: storedState.completed_at || null,
           notes: storedState.notes || null,
@@ -165,8 +172,11 @@ function generateTasksFromTemplates(
     }
   }
 
-  // Discovery tasks first, then regular tasks
-  return [...discoveryTasks, ...regularTasks];
+  // Combine all tasks and sort by priority (lower number = higher priority)
+  const allTasks = [...regularTasks, ...discoveryTasks];
+  allTasks.sort((a, b) => a.priority - b.priority);
+
+  return allTasks;
 }
 
 // GET - Fetch all tasks
