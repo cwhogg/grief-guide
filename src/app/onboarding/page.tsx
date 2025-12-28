@@ -21,8 +21,8 @@ function OnboardingContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
@@ -33,8 +33,8 @@ function OnboardingContent() {
 export default function OnboardingPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     }>
       <OnboardingContent />

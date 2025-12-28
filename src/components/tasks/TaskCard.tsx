@@ -16,8 +16,8 @@ const STATUS_CONFIG: Record<
 > = {
   pending: {
     label: "Not Started",
-    color: "text-stone-600",
-    bgColor: "bg-stone-100",
+    color: "text-[var(--gray-600)]",
+    bgColor: "bg-[var(--gray-100)]",
   },
   in_progress: {
     label: "In Progress",
@@ -26,18 +26,18 @@ const STATUS_CONFIG: Record<
   },
   completed: {
     label: "Completed",
-    color: "text-green-700",
-    bgColor: "bg-green-50",
+    color: "text-[var(--primary-700)]",
+    bgColor: "bg-[var(--primary-50)]",
   },
   blocked: {
     label: "Blocked",
-    color: "text-orange-700",
-    bgColor: "bg-orange-50",
+    color: "text-[var(--accent-600)]",
+    bgColor: "bg-[var(--accent-400)]/20",
   },
   skipped: {
     label: "Not Applicable",
-    color: "text-stone-500",
-    bgColor: "bg-stone-50",
+    color: "text-[var(--gray-500)]",
+    bgColor: "bg-[var(--gray-50)]",
   },
 };
 
@@ -80,10 +80,10 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
 
   return (
     <div
-      className={`bg-white rounded-lg border transition-all ${
+      className={`bg-white rounded-[var(--radius-lg)] border transition-all ${
         isCompleted
-          ? "border-stone-200 opacity-75"
-          : "border-stone-200 hover:border-stone-300 hover:shadow-sm"
+          ? "border-[var(--gray-200)] opacity-75"
+          : "border-[var(--gray-200)] hover:border-[var(--gray-300)] hover:shadow-sm"
       }`}
     >
       {/* Header row - always visible */}
@@ -99,10 +99,10 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
             disabled={isUpdating}
             className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded border-2 transition-colors ${
               task.status === "completed"
-                ? "bg-green-600 border-green-600"
+                ? "bg-[var(--primary-600)] border-[var(--primary-600)]"
                 : task.status === "skipped"
-                ? "bg-stone-400 border-stone-400"
-                : "border-stone-300 hover:border-green-500"
+                ? "bg-[var(--gray-400)] border-[var(--gray-400)]"
+                : "border-[var(--gray-300)] hover:border-[var(--primary-500)]"
             } ${isUpdating ? "opacity-50" : ""}`}
           >
             {(task.status === "completed" || task.status === "skipped") && (
@@ -130,14 +130,14 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                   href={`/tasks/${task.id}`}
                   className={`font-medium hover:underline ${
                     isCompleted
-                      ? "text-stone-500 line-through"
-                      : "text-stone-900"
+                      ? "text-[var(--gray-500)] line-through"
+                      : "text-[var(--gray-900)]"
                   }`}
                 >
                   {task.title}
                 </Link>
                 {task.description && !isExpanded && (
-                  <p className="text-sm text-stone-500 line-clamp-1 mt-0.5">
+                  <p className="text-sm text-[var(--gray-500)] line-clamp-1 mt-0.5">
                     {task.description}
                   </p>
                 )}
@@ -152,7 +152,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                 </span>
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="p-1 text-stone-400 hover:text-stone-600 transition-colors"
+                  className="p-1 text-[var(--gray-400)] hover:text-[var(--gray-600)] transition-colors"
                 >
                   <svg
                     className={`w-5 h-5 transition-transform ${
@@ -165,7 +165,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={1.5}
                       d="M19 9l-7 7-7-7"
                     />
                   </svg>
@@ -175,7 +175,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
 
             {/* Task type badge */}
             <div className="flex items-center gap-2 mt-2">
-              <span className="inline-flex items-center gap-1 text-xs text-stone-500">
+              <span className="inline-flex items-center gap-1 text-xs text-[var(--gray-500)]">
                 <svg
                   className="w-3.5 h-3.5"
                   fill="none"
@@ -185,14 +185,14 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d={TASK_TYPE_ICONS[task.task_type] || TASK_TYPE_ICONS.logistics}
                   />
                 </svg>
                 <span className="capitalize">{task.task_type}</span>
               </span>
               {task.due_date && (
-                <span className="text-xs text-stone-400">
+                <span className="text-xs text-[var(--gray-400)]">
                   Due: {new Date(task.due_date).toLocaleDateString()}
                 </span>
               )}
@@ -203,42 +203,42 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
 
       {/* Expanded content */}
       {isExpanded && (
-        <div className="px-4 pb-4 pt-0 border-t border-stone-100">
+        <div className="px-4 pb-4 pt-0 border-t border-[var(--gray-100)]">
           <div className="pt-4 space-y-4">
             {/* Full description */}
             {task.description && (
               <div>
-                <h4 className="text-sm font-medium text-stone-700 mb-1">
+                <h4 className="text-sm font-medium text-[var(--gray-700)] mb-1">
                   Description
                 </h4>
-                <p className="text-sm text-stone-600">{task.description}</p>
+                <p className="text-sm text-[var(--gray-600)]">{task.description}</p>
               </div>
             )}
 
             {/* Why it matters */}
             {task.why_it_matters && (
-              <div className="bg-amber-50 rounded-lg p-3">
-                <h4 className="text-sm font-medium text-amber-800 mb-1">
+              <div className="bg-[var(--primary-50)] rounded-[var(--radius-md)] p-3">
+                <h4 className="text-sm font-medium text-[var(--primary-700)] mb-1">
                   Why this matters
                 </h4>
-                <p className="text-sm text-amber-700">{task.why_it_matters}</p>
+                <p className="text-sm text-[var(--primary-600)]">{task.why_it_matters}</p>
               </div>
             )}
 
             {/* Documents needed */}
             {task.documents_needed && task.documents_needed.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-stone-700 mb-2">
+                <h4 className="text-sm font-medium text-[var(--gray-700)] mb-2">
                   What you&apos;ll need
                 </h4>
                 <ul className="space-y-1">
                   {task.documents_needed.map((doc, index) => (
                     <li
                       key={index}
-                      className="flex items-start gap-2 text-sm text-stone-600"
+                      className="flex items-start gap-2 text-sm text-[var(--gray-600)]"
                     >
                       <svg
-                        className="w-4 h-4 mt-0.5 text-stone-400 flex-shrink-0"
+                        className="w-4 h-4 mt-0.5 text-[var(--gray-400)] flex-shrink-0"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -246,7 +246,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
+                          strokeWidth={1.5}
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         />
                       </svg>
@@ -259,7 +259,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
 
             {/* Tips */}
             {task.tips && task.tips.length > 0 && (
-              <div className="bg-blue-50 rounded-lg p-3">
+              <div className="bg-blue-50 rounded-[var(--radius-md)] p-3">
                 <h4 className="text-sm font-medium text-blue-800 mb-2">Tips</h4>
                 <ul className="space-y-1">
                   {task.tips.map((tip, index) => (
@@ -276,7 +276,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
+                          strokeWidth={1.5}
                           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
@@ -290,13 +290,13 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
             {/* Notes section */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium text-stone-700">
+                <h4 className="text-sm font-medium text-[var(--gray-700)]">
                   Your notes
                 </h4>
                 {!showNotesInput && (
                   <button
                     onClick={() => setShowNotesInput(true)}
-                    className="text-sm text-amber-600 hover:text-amber-700"
+                    className="text-sm text-[var(--primary-600)] hover:text-[var(--primary-700)]"
                   >
                     {task.notes ? "Edit" : "Add note"}
                   </button>
@@ -308,14 +308,14 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Add any notes about this task..."
-                    className="w-full p-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-600 focus:border-amber-600"
+                    className="input text-sm"
                     rows={3}
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={handleSaveNotes}
                       disabled={isUpdating}
-                      className="px-3 py-1.5 bg-amber-600 text-white text-sm rounded-lg hover:bg-amber-700 disabled:opacity-50"
+                      className="px-3 py-1.5 bg-[var(--accent-500)] text-white text-sm rounded-[var(--radius-md)] hover:bg-[var(--accent-600)] disabled:opacity-50"
                     >
                       Save
                     </button>
@@ -324,28 +324,28 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                         setNotes(task.notes || "");
                         setShowNotesInput(false);
                       }}
-                      className="px-3 py-1.5 text-stone-600 text-sm hover:text-stone-900"
+                      className="px-3 py-1.5 text-[var(--gray-600)] text-sm hover:text-[var(--gray-900)]"
                     >
                       Cancel
                     </button>
                   </div>
                 </div>
               ) : task.notes ? (
-                <p className="text-sm text-stone-600 bg-stone-50 rounded-lg p-2">
+                <p className="text-sm text-[var(--gray-600)] bg-[var(--gray-50)] rounded-[var(--radius-md)] p-2">
                   {task.notes}
                 </p>
               ) : (
-                <p className="text-sm text-stone-400 italic">No notes yet</p>
+                <p className="text-sm text-[var(--gray-400)] italic">No notes yet</p>
               )}
             </div>
 
             {/* Action buttons */}
-            <div className="flex flex-wrap gap-2 pt-2 border-t border-stone-100">
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--gray-100)]">
               {task.status !== "completed" && (
                 <button
                   onClick={() => handleStatusChange("completed")}
                   disabled={isUpdating}
-                  className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  className="px-3 py-1.5 bg-[var(--primary-600)] text-white text-sm rounded-[var(--radius-md)] hover:bg-[var(--primary-700)] disabled:opacity-50 min-h-[36px]"
                 >
                   Mark Complete
                 </button>
@@ -354,7 +354,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                 <button
                   onClick={() => handleStatusChange("in_progress")}
                   disabled={isUpdating}
-                  className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-[var(--radius-md)] hover:bg-blue-700 disabled:opacity-50 min-h-[36px]"
                 >
                   Start Task
                 </button>
@@ -363,7 +363,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                 <button
                   onClick={() => handleStatusChange("blocked")}
                   disabled={isUpdating}
-                  className="px-3 py-1.5 border border-orange-300 text-orange-700 text-sm rounded-lg hover:bg-orange-50 disabled:opacity-50"
+                  className="px-3 py-1.5 border border-[var(--accent-400)] text-[var(--accent-600)] text-sm rounded-[var(--radius-md)] hover:bg-[var(--accent-400)]/10 disabled:opacity-50 min-h-[36px]"
                 >
                   Mark Blocked
                 </button>
@@ -372,7 +372,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                 <button
                   onClick={() => handleStatusChange("skipped")}
                   disabled={isUpdating}
-                  className="px-3 py-1.5 border border-stone-300 text-stone-600 text-sm rounded-lg hover:bg-stone-50 disabled:opacity-50"
+                  className="px-3 py-1.5 border border-[var(--gray-300)] text-[var(--gray-600)] text-sm rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] disabled:opacity-50 min-h-[36px]"
                 >
                   Not Applicable
                 </button>
@@ -381,7 +381,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
                 <button
                   onClick={() => handleStatusChange("pending")}
                   disabled={isUpdating}
-                  className="px-3 py-1.5 border border-stone-300 text-stone-600 text-sm rounded-lg hover:bg-stone-50 disabled:opacity-50"
+                  className="px-3 py-1.5 border border-[var(--gray-300)] text-[var(--gray-600)] text-sm rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] disabled:opacity-50 min-h-[36px]"
                 >
                   Reopen Task
                 </button>
@@ -389,7 +389,7 @@ export function TaskCard({ task, onStatusChange, onNotesChange }: TaskCardProps)
               {task.is_paperwork_task && task.paperwork_wizard_id && (
                 <Link
                   href={`/tasks/${task.id}`}
-                  className="px-3 py-1.5 bg-amber-600 text-white text-sm rounded-lg hover:bg-amber-700"
+                  className="px-3 py-1.5 bg-[var(--accent-500)] text-white text-sm rounded-[var(--radius-md)] hover:bg-[var(--accent-600)] min-h-[36px] inline-flex items-center"
                 >
                   Start Paperwork Wizard
                 </Link>

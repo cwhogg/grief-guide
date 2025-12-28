@@ -14,8 +14,8 @@ interface Message {
   content: string;
   timestamp: Date;
   suggestedPrompts?: string[];
-  showWalkthrough?: boolean; // Shows Yes/No buttons for initial walkthrough
-  showTopTasks?: boolean; // Shows top 3 priority tasks
+  showWalkthrough?: boolean;
+  showTopTasks?: boolean;
 }
 
 type ChatMode = "guide" | "therapist";
@@ -69,7 +69,6 @@ function loadChatState(): StoredChatState | null {
     const stored = localStorage.getItem(CHAT_STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored) as StoredChatState;
-      // Convert timestamp strings back to Date objects
       parsed.messages = parsed.messages.map(m => ({
         ...m,
         timestamp: new Date(m.timestamp),
@@ -123,7 +122,6 @@ export default function ChatPage() {
     }
   }, [userLoading, profile, router]);
 
-  // Load chat state from localStorage on mount
   useEffect(() => {
     if (hasLoadedFromStorage.current) return;
     hasLoadedFromStorage.current = true;
@@ -134,12 +132,11 @@ export default function ChatPage() {
       setMode(stored.mode);
       setConversationContext(stored.conversationContext);
       historyRef.current = stored.history;
-      hasGreeted.current = true; // Don't re-greet
+      hasGreeted.current = true;
       setIsReady(true);
     }
   }, []);
 
-  // Save chat state to localStorage whenever it changes
   useEffect(() => {
     if (messages.length === 0) return;
 
@@ -152,7 +149,6 @@ export default function ChatPage() {
     });
   }, [messages, mode, conversationContext]);
 
-  // Check for first visit
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hasVisited = localStorage.getItem(FIRST_VISIT_KEY);
@@ -169,7 +165,6 @@ export default function ChatPage() {
     }
   };
 
-  // Fetch tasks
   useEffect(() => {
     if (profile && !tasksFetched.current) {
       tasksFetched.current = true;
@@ -219,17 +214,14 @@ export default function ChatPage() {
     handleSendMessage(message);
   };
 
-  // Detect conversation context from messages
   const detectContext = useCallback((lastAssistantMessage: string, lastUserMessage: string): ConversationContext => {
     const combined = (lastAssistantMessage + " " + lastUserMessage).toLowerCase();
 
-    // Check for task-related content
     const taskIndicators = ["task", "step", "document", "form", "certificate", "account", "bank", "insurance", "will", "probate", "estate"];
     if (taskIndicators.some(t => combined.includes(t))) {
       return "task";
     }
 
-    // Check for emotional content
     const emotionalIndicators = ["feel", "hard", "difficult", "miss", "grief", "sad", "overwhelm", "cry", "tough", "struggle"];
     if (emotionalIndicators.some(t => combined.includes(t))) {
       return "emotional";
@@ -238,7 +230,6 @@ export default function ChatPage() {
     return "general";
   }, []);
 
-  // Generate initial greeting based on user context and stage
   useEffect(() => {
     if (profile && !hasGreeted.current && messages.length === 0) {
       hasGreeted.current = true;
@@ -258,7 +249,7 @@ export default function ChatPage() {
         content: greeting,
         timestamp: new Date(),
         suggestedPrompts: PROMPTS.initial,
-        showWalkthrough: true, // Special flag to show Yes/No buttons
+        showWalkthrough: true,
       };
       setMessages([greetingMessage]);
       historyRef.current = [{ role: "assistant", content: greeting }];
@@ -266,12 +257,10 @@ export default function ChatPage() {
     }
   }, [profile, messages.length]);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streamingContent]);
 
-  // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -279,7 +268,6 @@ export default function ChatPage() {
     }
   }, [input]);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = () => setMenuOpen(false);
     if (menuOpen) {
@@ -288,30 +276,17 @@ export default function ChatPage() {
     }
   }, [menuOpen]);
 
-  // Detect mode switching triggers in user input
   const detectModeSwitch = useCallback((message: string): ChatMode | null => {
     const lowerMessage = message.toLowerCase();
     const therapistTriggers = [
-      "i need to talk",
-      "just need someone to listen",
-      "i'm struggling",
-      "i'm having a hard",
-      "feeling overwhelmed",
-      "i can't stop crying",
-      "i miss them",
-      "i miss him",
-      "i miss her",
-      "how am i supposed to feel",
-      "i don't know how to feel",
+      "i need to talk", "just need someone to listen", "i'm struggling",
+      "i'm having a hard", "feeling overwhelmed", "i can't stop crying",
+      "i miss them", "i miss him", "i miss her",
+      "how am i supposed to feel", "i don't know how to feel",
     ];
     const guideTriggers = [
-      "back to practical",
-      "back to tasks",
-      "what should i do",
-      "what do i need to",
-      "help me with",
-      "next steps",
-      "ready to look at practical",
+      "back to practical", "back to tasks", "what should i do",
+      "what do i need to", "help me with", "next steps", "ready to look at practical",
     ];
 
     if (mode === "guide" && therapistTriggers.some(t => lowerMessage.includes(t))) {
@@ -328,7 +303,6 @@ export default function ChatPage() {
 
     setMode(newMode);
 
-    // Gentle transition messages
     const transitionMessage: Message = {
       id: crypto.randomUUID(),
       role: "assistant",
@@ -344,21 +318,15 @@ export default function ChatPage() {
     setConversationContext(newMode === "therapist" ? "emotional" : "task");
   }, [mode]);
 
-  // Generate suggested prompts based on response content
   const generateSuggestedPrompts = useCallback((content: string, userMessage: string): string[] => {
     const context = detectContext(content, userMessage);
     setConversationContext(context);
 
-    // Check if response mentions specific tasks
     const mentionsTask = content.includes("[task:") ||
       /death certificate|will|probate|bank|insurance|account/i.test(content);
 
     if (mentionsTask) {
-      return [
-        "Walk me through this",
-        "What else should I know?",
-        "What's next after this?",
-      ];
+      return ["Walk me through this", "What else should I know?", "What's next after this?"];
     }
 
     return PROMPTS[context];
@@ -367,7 +335,6 @@ export default function ChatPage() {
   const handleSendMessage = useCallback(async (messageText: string) => {
     if (!messageText.trim() || isStreaming) return;
 
-    // Check for mode switch
     const switchTo = detectModeSwitch(messageText);
     if (switchTo) {
       const userMessage: Message = {
@@ -381,7 +348,6 @@ export default function ChatPage() {
       return;
     }
 
-    // Add user message
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: "user",
@@ -445,7 +411,6 @@ export default function ChatPage() {
         }
       }
 
-      // Generate contextual prompts based on response
       const suggestedPrompts = generateSuggestedPrompts(fullContent, messageText);
 
       const assistantMessage: Message = {
@@ -496,16 +461,13 @@ export default function ChatPage() {
 
   const handleStartNewConversation = () => {
     setMenuOpen(false);
-    // Clear stored state
     if (typeof window !== "undefined") {
       localStorage.removeItem(CHAT_STORAGE_KEY);
     }
-    // Reset state and create new greeting directly
     setMode("guide");
     setConversationContext("initial");
     historyRef.current = [];
 
-    // Generate fresh greeting
     const parentName = profile?.deceased_name || "your loved one";
     const stage = profile?.grief_stage;
 
@@ -529,15 +491,12 @@ export default function ChatPage() {
     historyRef.current = [{ role: "assistant", content: greeting }];
   };
 
-  // Handle walkthrough Yes/No buttons
   const handleWalkthroughResponse = (accepted: boolean) => {
-    // Remove the walkthrough buttons from the greeting message
     setMessages(prev => prev.map(m =>
       m.showWalkthrough ? { ...m, showWalkthrough: false } : m
     ));
 
     if (accepted) {
-      // Get top 3 priority tasks
       const topTasks = tasks
         .filter(t => t.status === "pending")
         .sort((a, b) => (a.priority || 99) - (b.priority || 99))
@@ -575,10 +534,18 @@ export default function ChatPage() {
     }
   };
 
+  // Loading state
   if (userLoading || !isReady) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[var(--primary-100)] flex items-center justify-center">
+            <svg className="w-5 h-5 text-[var(--primary-500)] animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <p className="text-[var(--foreground-muted)] text-sm">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -587,32 +554,32 @@ export default function ChatPage() {
     return null;
   }
 
-  // Get current prompts - from last assistant message or based on context
   const lastAssistantMessage = [...messages].reverse().find(m => m.role === "assistant");
   const currentPrompts = lastAssistantMessage?.suggestedPrompts || PROMPTS[conversationContext];
 
+  const isTherapistMode = mode === "therapist";
+
   return (
-    <div className="h-screen flex flex-col bg-stone-50">
+    <div className={`h-screen h-[100dvh] flex flex-col bg-[var(--background)] ${isTherapistMode ? "therapist-mode" : ""}`}>
       {/* Header */}
-      <header className={`bg-white border-b ${mode === "therapist" ? "border-violet-100" : "border-stone-200"} px-4 py-3`}>
-        <div className="flex items-center justify-between">
-          {/* Logo and title */}
+      <header className={`bg-white border-b ${isTherapistMode ? "border-[var(--purple-light)]" : "border-[var(--gray-200)]"} px-5 py-3 safe-area-top`}>
+        <div className="flex items-center justify-between max-w-3xl mx-auto">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full ${mode === "therapist" ? "bg-violet-100" : "bg-amber-100"} flex items-center justify-center`}>
-              {mode === "therapist" ? (
-                <svg className="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isTherapistMode ? "bg-[var(--purple-light)]" : "bg-[var(--primary-100)]"}`}>
+              {isTherapistMode ? (
+                <svg className="w-5 h-5 text-[var(--purple-main)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                 </svg>
               ) : (
-                <svg className="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <svg className="w-5 h-5 text-[var(--primary-500)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
                 </svg>
               )}
             </div>
             <div>
-              <h1 className="font-semibold text-stone-900">Grief Guide</h1>
-              <p className="text-xs text-stone-500">
-                {mode === "therapist" ? "Emotional support" : "Here to help"}
+              <h1 className="font-semibold text-[var(--foreground)]">Grief Guide</h1>
+              <p className="text-xs text-[var(--foreground-muted)]">
+                {isTherapistMode ? "Emotional support" : "Here to help"}
               </p>
             </div>
           </div>
@@ -624,77 +591,74 @@ export default function ChatPage() {
                 e.stopPropagation();
                 setMenuOpen(!menuOpen);
               }}
-              className="p-2 rounded-lg hover:bg-stone-100 transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-[var(--gray-100)] active:bg-[var(--gray-200)] transition-colors"
+              aria-label="Menu"
             >
-              <svg className="w-6 h-6 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg className="w-6 h-6 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             </button>
 
             {/* Dropdown menu */}
             {menuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-stone-200 py-2 z-50">
+              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-lg border border-[var(--gray-200)] py-2 z-50 animate-fade-in">
                 <button
                   onClick={handleHelpRequest}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-left"
+                  className="menu-item w-full text-left"
                 >
-                  <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
                   </svg>
-                  <span className="text-stone-700">How to use Grief Guide</span>
+                  <span>How to use Grief Guide</span>
                 </button>
-                <div className="border-t border-stone-100 my-2" />
-                <Link
-                  href="/tasks"
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors"
-                >
-                  <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+
+                <div className="border-t border-[var(--gray-100)] my-2" />
+
+                <Link href="/tasks" className="menu-item">
+                  <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
                   </svg>
-                  <span className="text-stone-700">View all tasks</span>
+                  <span>View all tasks</span>
                 </Link>
+
                 <button
                   onClick={() => {
                     setMenuOpen(false);
                     handleSendMessage("I need help finding professionals - what kind of help is available?");
                   }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-left"
+                  className="menu-item w-full text-left"
                 >
-                  <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
                   </svg>
-                  <span className="text-stone-700">Find help</span>
+                  <span>Find professional help</span>
                 </button>
-                <div className="border-t border-stone-100 my-2" />
-                <a
-                  href="tel:988"
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-violet-50 transition-colors"
-                >
-                  <svg className="w-5 h-5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+
+                <div className="border-t border-[var(--gray-100)] my-2" />
+
+                <a href="tel:988" className="menu-item hover:bg-[var(--purple-light)]/20">
+                  <svg className="w-5 h-5 text-[var(--purple-main)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                   </svg>
                   <div>
-                    <span className="text-violet-700 font-medium">Crisis support (988)</span>
-                    <p className="text-xs text-stone-500">24/7 help available</p>
+                    <span className="text-[var(--purple-main)] font-medium">Crisis support (988)</span>
+                    <p className="text-xs text-[var(--foreground-muted)]">24/7 help available</p>
                   </div>
                 </a>
-                <div className="border-t border-stone-100 my-2" />
-                <button
-                  onClick={handleStartNewConversation}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-left"
-                >
-                  <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+
+                <div className="border-t border-[var(--gray-100)] my-2" />
+
+                <button onClick={handleStartNewConversation} className="menu-item w-full text-left">
+                  <svg className="w-5 h-5 text-[var(--foreground-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                   </svg>
-                  <span className="text-stone-700">Start new conversation</span>
+                  <span>Start new conversation</span>
                 </button>
-                <Link
-                  href="/settings"
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-stone-500"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+                <Link href="/settings" className="menu-item text-[var(--foreground-muted)]">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <span>Settings</span>
                 </Link>
@@ -705,9 +669,9 @@ export default function ChatPage() {
       </header>
 
       {/* Therapist mode banner */}
-      {mode === "therapist" && (
-        <div className="bg-gradient-to-r from-violet-50 to-rose-50 border-b border-violet-100 px-4 py-2">
-          <p className="text-sm text-violet-700 text-center">
+      {isTherapistMode && (
+        <div className="bg-gradient-to-r from-[var(--purple-light)]/30 to-[var(--purple-light)]/10 border-b border-[var(--purple-light)] px-5 py-2.5">
+          <p className="text-sm text-[var(--purple-main)] text-center font-medium">
             Sometimes you just need to talk.
           </p>
         </div>
@@ -715,13 +679,13 @@ export default function ChatPage() {
 
       {/* First-time guidance hint */}
       {showFirstTimeHint && (
-        <div className="mx-4 mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-          <p className="text-sm text-amber-900 mb-3">
+        <div className="mx-5 mt-4 p-4 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-2xl animate-slide-up">
+          <p className="text-sm text-[var(--foreground)] leading-relaxed">
             You can ask me about what needs to be done, get help with specific tasks, or just talk when things feel heavy. I'm here for all of it.
           </p>
           <button
             onClick={dismissFirstTimeHint}
-            className="text-sm font-medium text-amber-700 hover:text-amber-900 transition-colors"
+            className="mt-3 text-sm font-medium text-[var(--primary-600)] hover:text-[var(--primary-700)] transition-colors"
           >
             Got it
           </button>
@@ -729,7 +693,7 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+      <div className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
         {messages.map((message, index) => (
           <MessageBubble
             key={message.id}
@@ -764,12 +728,12 @@ export default function ChatPage() {
 
         {/* Typing indicator */}
         {isStreaming && !streamingContent && (
-          <div className="flex gap-3">
-            <div className={`w-8 h-8 rounded-full ${mode === "therapist" ? "bg-violet-100" : "bg-amber-100"} flex items-center justify-center flex-shrink-0`}>
+          <div className="flex gap-3 animate-fade-in">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isTherapistMode ? "bg-[var(--purple-light)]" : "bg-[var(--primary-100)]"}`}>
               <div className="flex gap-1">
-                <div className={`w-1.5 h-1.5 ${mode === "therapist" ? "bg-violet-400" : "bg-amber-400"} rounded-full animate-bounce`} />
-                <div className={`w-1.5 h-1.5 ${mode === "therapist" ? "bg-violet-400" : "bg-amber-400"} rounded-full animate-bounce`} style={{ animationDelay: "0.1s" }} />
-                <div className={`w-1.5 h-1.5 ${mode === "therapist" ? "bg-violet-400" : "bg-amber-400"} rounded-full animate-bounce`} style={{ animationDelay: "0.2s" }} />
+                <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${isTherapistMode ? "bg-[var(--purple-main)]" : "bg-[var(--primary-500)]"}`} />
+                <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${isTherapistMode ? "bg-[var(--purple-main)]" : "bg-[var(--primary-500)]"}`} style={{ animationDelay: "0.1s" }} />
+                <div className={`w-1.5 h-1.5 rounded-full animate-bounce ${isTherapistMode ? "bg-[var(--purple-main)]" : "bg-[var(--primary-500)]"}`} style={{ animationDelay: "0.2s" }} />
               </div>
             </div>
           </div>
@@ -778,20 +742,20 @@ export default function ChatPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area with suggested prompts */}
-      <div className="border-t border-stone-200 bg-white">
-        {/* Suggested prompts - always show below input when not streaming */}
+      {/* Input area */}
+      <div className="border-t border-[var(--gray-200)] bg-white safe-area-bottom">
+        {/* Suggested prompts */}
         {!isStreaming && currentPrompts && currentPrompts.length > 0 && (
-          <div className="px-4 pt-3 pb-1">
-            <div className="flex flex-wrap gap-2 justify-center">
+          <div className="px-5 pt-3 pb-2">
+            <div className="flex gap-2 overflow-x-auto pb-1 -mx-5 px-5 scrollbar-hide">
               {currentPrompts.map((prompt, i) => (
                 <button
                   key={i}
                   onClick={() => handlePromptClick(prompt)}
-                  className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
-                    mode === "therapist"
-                      ? "border-violet-200 hover:bg-violet-50 text-violet-700"
-                      : "border-stone-200 hover:bg-stone-50 text-stone-600"
+                  className={`chip flex-shrink-0 ${
+                    isTherapistMode
+                      ? "border-[var(--purple-light)] hover:bg-[var(--purple-light)]/20 text-[var(--purple-main)]"
+                      : ""
                   }`}
                 >
                   {prompt}
@@ -802,7 +766,7 @@ export default function ChatPage() {
         )}
 
         {/* Input form */}
-        <div className="p-4 pt-2">
+        <div className="px-5 pb-3 pt-2">
           <form onSubmit={handleSubmit} className="flex gap-3 max-w-3xl mx-auto">
             <div className="flex-1 relative">
               <textarea
@@ -810,36 +774,37 @@ export default function ChatPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={mode === "therapist" ? "Share what's on your mind..." : "Ask me anything..."}
+                placeholder={isTherapistMode ? "Share what's on your mind..." : "Ask me anything..."}
                 disabled={isStreaming}
                 rows={1}
-                className={`w-full px-4 py-3 border rounded-xl resize-none focus:ring-2 disabled:opacity-50 disabled:bg-stone-50 ${
-                  mode === "therapist"
-                    ? "border-violet-200 focus:ring-violet-500 focus:border-violet-500"
-                    : "border-stone-300 focus:ring-amber-600 focus:border-amber-600"
+                className={`input resize-none ${
+                  isTherapistMode
+                    ? "border-[var(--purple-light)] focus:border-[var(--purple-main)] focus:shadow-[0_0_0_3px_var(--purple-light)]"
+                    : ""
                 }`}
               />
             </div>
             <button
               type="submit"
               disabled={!input.trim() || isStreaming}
-              className={`px-4 py-3 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
-                mode === "therapist"
-                  ? "bg-violet-600 hover:bg-violet-700"
-                  : "bg-amber-600 hover:bg-amber-700"
+              className={`w-12 h-12 flex items-center justify-center rounded-xl text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+                isTherapistMode
+                  ? "bg-[var(--purple-main)] hover:bg-[var(--purple-main)]/90 active:bg-[var(--purple-main)]/80"
+                  : "bg-[var(--accent-500)] hover:bg-[var(--accent-600)] active:bg-[var(--accent-600)]"
               }`}
+              aria-label="Send message"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
               </svg>
             </button>
           </form>
 
-          {/* Subtle crisis support link */}
-          <div className="text-center pb-2">
+          {/* Crisis support link */}
+          <div className="text-center pt-2 pb-1">
             <a
               href="tel:988"
-              className="text-xs text-stone-400 hover:text-violet-600 transition-colors"
+              className="text-xs text-[var(--foreground-muted)] hover:text-[var(--purple-main)] transition-colors"
             >
               In crisis? Call or text 988
             </a>
@@ -872,20 +837,14 @@ function MessageBubble({
   isLastMessage?: boolean;
 }) {
   const isUser = message.role === "user";
+  const isTherapistMode = mode === "therapist";
 
-  // For user messages, just render plain text
+  // User messages
   if (isUser) {
     return (
-      <div className="flex gap-3 flex-row-reverse">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-stone-200">
-          <svg className="w-4 h-4 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        </div>
-        <div className={`max-w-[85%] rounded-2xl px-4 py-3 rounded-tr-sm ${
-          mode === "therapist" ? "bg-violet-600 text-white" : "bg-amber-600 text-white"
-        }`}>
-          <div className="whitespace-pre-wrap break-words text-white">
+      <div className="flex justify-end animate-slide-up">
+        <div className={`chat-bubble chat-bubble-user ${isTherapistMode ? "!bg-[var(--purple-main)]" : "!bg-[var(--primary-500)]"}`}>
+          <div className="whitespace-pre-wrap break-words">
             {message.content}
           </div>
         </div>
@@ -893,15 +852,12 @@ function MessageBubble({
     );
   }
 
-  // For assistant messages, parse content and generate actions
+  // Assistant messages
   const { segments, taskIds } = parseMessageContent(message.content);
-
-  // Generate contextual actions for the last message (not streaming)
   const contextualActions = isLastMessage && !isStreaming
     ? generateContextualActions(message.content, taskIds[0])
     : [];
 
-  // Handler for task actions from action buttons
   const handleTaskAction = async (taskId: string, action: "complete" | "skip" | "details") => {
     if (action === "details") {
       const task = taskMap.get(taskId);
@@ -914,58 +870,55 @@ function MessageBubble({
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 animate-slide-up">
       {/* Avatar */}
       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-        mode === "therapist" ? "bg-violet-100" : "bg-amber-100"
+        isTherapistMode ? "bg-[var(--purple-light)]" : "bg-[var(--primary-100)]"
       }`}>
-        {mode === "therapist" ? (
-          <svg className="w-4 h-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        {isTherapistMode ? (
+          <svg className="w-4 h-4 text-[var(--purple-main)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
           </svg>
         ) : (
-          <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          <svg className="w-4 h-4 text-[var(--primary-500)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
           </svg>
         )}
       </div>
 
-      {/* Message content with embedded task cards and action buttons */}
-      <div className="max-w-[85%] space-y-2">
+      {/* Message content */}
+      <div className="max-w-[85%] space-y-3">
         {segments.map((segment, index) => {
           if (segment.type === "text") {
             const isLastSegment = index === segments.length - 1;
             return (
-              <div
-                key={index}
-                className="bg-white shadow-sm border border-stone-200 rounded-2xl rounded-tl-sm px-4 py-3"
-              >
-                <div className="whitespace-pre-wrap break-words text-stone-700">
+              <div key={index} className="chat-bubble chat-bubble-assistant">
+                <div className="whitespace-pre-wrap break-words text-[var(--foreground)]">
                   {segment.content}
                   {isStreaming && isLastSegment && (
-                    <span className={`inline-block w-1.5 h-4 ml-0.5 ${mode === "therapist" ? "bg-violet-600" : "bg-amber-600"} animate-pulse`} />
+                    <span className={`inline-block w-0.5 h-5 ml-0.5 rounded-full animate-pulse ${isTherapistMode ? "bg-[var(--purple-main)]" : "bg-[var(--primary-500)]"}`} />
                   )}
                 </div>
 
-                {/* Walkthrough Yes/No buttons */}
+                {/* Walkthrough buttons */}
                 {isLastSegment && message.showWalkthrough && onWalkthroughResponse && (
-                  <div className="flex gap-2 mt-3">
+                  <div className="flex gap-2 mt-4 flex-wrap">
                     <button
                       onClick={() => onWalkthroughResponse(true)}
-                      className="px-4 py-2.5 text-sm font-medium bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+                      className="action-btn action-btn-primary flex-1 min-w-[140px]"
                     >
                       Yes, walk me through it
                     </button>
                     <button
                       onClick={() => onWalkthroughResponse(false)}
-                      className="px-4 py-2.5 text-sm font-medium text-stone-700 border border-stone-200 rounded-lg hover:bg-stone-50 transition-colors"
+                      className="action-btn flex-1 min-w-[100px]"
                     >
                       Not right now
                     </button>
                   </div>
                 )}
 
-                {/* Inline action buttons for last text segment of last message */}
+                {/* Action buttons */}
                 {isLastSegment && isLastMessage && !isStreaming && !message.showWalkthrough && contextualActions.length > 0 && taskIds.length === 0 && (
                   <MessageActions
                     actions={contextualActions}
@@ -987,19 +940,20 @@ function MessageBubble({
                 />
               );
             } else {
-              // Task not found - show a helpful message instead of error
               return (
-                <div key={index} className="my-2 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl">
-                  <div className="flex items-center gap-2 text-amber-700">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    <span className="text-sm font-medium">Task: {segment.taskId}</span>
+                <div key={index} className="task-card">
+                  <div className="task-card-header">
+                    <div className="flex items-center gap-2 text-[var(--foreground-muted)]">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                      </svg>
+                      <span className="text-sm font-medium">Task: {segment.taskId}</span>
+                    </div>
                   </div>
-                  <div className="mt-2 flex gap-2">
+                  <div className="task-card-actions">
                     <button
                       onClick={() => onSendMessage(`Tell me more about "${segment.taskId}"`)}
-                      className="px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-100 rounded-lg hover:bg-amber-200 transition-colors"
+                      className="action-btn action-btn-primary flex-1"
                     >
                       Tell me more
                     </button>

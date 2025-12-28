@@ -1,26 +1,530 @@
 @import "tailwindcss";
 
+/* ========================================
+   GRIEF GUIDE DESIGN SYSTEM
+   Mobile-first, calm, modern, credible
+   ======================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary: Soft sage green */
+  --primary-50: #F4F7F5;
+  --primary-100: #E8F0EA;
+  --primary-200: #C8DCC9;
+  --primary-300: #9EC4A1;
+  --primary-400: #6BA36E;
+  --primary-500: #4A8B4E;
+  --primary-600: #3D7340;
+  --primary-700: #2F5A32;
+
+  /* Warm accent: Soft terracotta/coral */
+  --accent-400: #E8A598;
+  --accent-500: #D4806E;
+  --accent-600: #C06A55;
+
+  /* Neutral: Warm grays */
+  --gray-50: #FAFAF9;
+  --gray-100: #F5F4F2;
+  --gray-200: #E8E6E3;
+  --gray-300: #D4D1CC;
+  --gray-400: #A8A29E;
+  --gray-500: #78716C;
+  --gray-600: #57534E;
+  --gray-700: #3F3B37;
+  --gray-800: #292524;
+  --gray-900: #1C1917;
+
+  /* Supporting colors */
+  --purple-light: #C4BEE0;
+  --purple-main: #8B7EC8;
+  --success: #5A9A6E;
+  --warning: #D4A84B;
+  --error: #C75D5D;
+
+  /* Semantic colors */
+  --background: #FAFAF9;
+  --surface: #FFFFFF;
+  --foreground: #3F3B37;
+  --foreground-muted: #78716C;
+
+  /* Spacing (8px base grid) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows (warm-toned) */
+  --shadow-sm: 0 1px 2px rgba(60, 54, 48, 0.04);
+  --shadow-md: 0 2px 8px rgba(60, 54, 48, 0.04), 0 4px 16px rgba(60, 54, 48, 0.04);
+  --shadow-lg: 0 4px 12px rgba(60, 54, 48, 0.06), 0 8px 24px rgba(60, 54, 48, 0.06);
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 200ms ease-out;
 }
 
+/* Register Tailwind theme tokens */
 @theme inline {
+  /* Colors */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+
+  --color-warm-50: var(--gray-50);
+  --color-warm-100: var(--gray-100);
+  --color-warm-200: var(--gray-200);
+  --color-warm-300: var(--gray-300);
+  --color-warm-400: var(--gray-400);
+  --color-warm-500: var(--gray-500);
+  --color-warm-600: var(--gray-600);
+  --color-warm-700: var(--gray-700);
+  --color-warm-800: var(--gray-800);
+  --color-warm-900: var(--gray-900);
+
+  --color-purple-light: var(--purple-light);
+  --color-purple-main: var(--purple-main);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground-muted: var(--foreground-muted);
+
+  /* Font */
+  --font-sans: var(--font-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base styles */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Safe area insets for mobile */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Focus styles - visible but not jarring */
+:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Remove tap highlight on mobile */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Button press states */
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Transitions for interactive elements */
+button, a, input, textarea, select {
+  transition: all var(--transition-fast);
+}
+
+/* Disable dark mode - we're staying light */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override dark mode - keep light theme */
+    --background: #FAFAF9;
+    --foreground: #3F3B37;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Card styles */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+}
+
+.card-compact {
+  padding: 16px;
+}
+
+/* Button base styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+  min-height: 52px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-500);
+  color: white;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-600);
+}
+
+.btn-primary:active:not(:disabled) {
+  background: var(--accent-600);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--gray-700);
+  border: 1.5px solid var(--gray-300);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--gray-400);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--primary-600);
+  border: none;
+  padding: 12px 16px;
+  min-height: auto;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--primary-50);
+}
+
+/* Input styles */
+.input {
+  width: 100%;
+  background: white;
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 16px;
+  min-height: 52px;
+  color: var(--foreground);
+  transition: all var(--transition-fast);
+}
+
+.input::placeholder {
+  color: var(--gray-400);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+/* Chat bubble styles */
+.chat-bubble {
+  max-width: 85%;
+  padding: 14px 18px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.chat-bubble-user {
+  background: var(--primary-500);
+  color: white;
+  border-radius: 20px 20px 4px 20px;
+  margin-left: auto;
+}
+
+.chat-bubble-assistant {
+  background: white;
+  border: 1px solid var(--gray-200);
+  color: var(--gray-800);
+  border-radius: 20px 20px 20px 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Therapist mode variants */
+.therapist-mode .chat-bubble-user {
+  background: var(--purple-main);
+}
+
+/* Action button styles (RCS-style in chat) */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: var(--gray-200);
+}
+
+.action-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.action-btn-primary {
+  background: var(--accent-500);
+  border-color: var(--accent-500);
+  color: white;
+}
+
+.action-btn-primary:hover:not(:disabled) {
+  background: var(--accent-600);
+  border-color: var(--accent-600);
+}
+
+/* Chip/pill styles for suggested prompts */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  min-height: 44px;
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
+.chip:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Task card in chat */
+.task-card {
+  background: white;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  max-width: 90%;
+}
+
+.task-card-header {
+  padding: 16px 16px 12px;
+}
+
+.task-card-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--gray-100);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 4px;
+  background: var(--gray-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary-500);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+/* Menu item */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  min-height: 56px;
+  color: var(--gray-700);
+  transition: background var(--transition-fast);
+}
+
+.menu-item:hover {
+  background: var(--gray-50);
+}
+
+.menu-item:active {
+  background: var(--gray-100);
+}
+
+/* Typography utilities */
+.text-display {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 600;
+}
+
+.text-h1 {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 600;
+}
+
+.text-h2 {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.text-body {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.text-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.text-caption {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-normal) ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--gray-100) 25%,
+    var(--gray-200) 50%,
+    var(--gray-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

@@ -95,8 +95,8 @@ export default function GuideChatPage() {
 
   if (userLoading || !isReady) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
@@ -106,13 +106,13 @@ export default function GuideChatPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-stone-50">
+    <div className="h-screen h-[100dvh] flex flex-col bg-[var(--background)]">
       {/* Navigation bar */}
-      <nav className="bg-white border-b border-stone-200 px-4 py-2 flex items-center justify-between">
+      <nav className="bg-white border-b border-[var(--gray-200)] px-5 py-2 flex items-center justify-between safe-area-top">
         <div className="flex items-center gap-4">
           <Link
             href="/chat"
-            className="text-stone-600 hover:text-stone-900 transition-colors"
+            className="text-[var(--gray-600)] hover:text-[var(--gray-900)] transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -123,23 +123,23 @@ export default function GuideChatPage() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
           </Link>
-          <span className="text-stone-900 font-medium">Grief Guide</span>
+          <span className="text-[var(--gray-900)] font-medium">Grief Guide</span>
         </div>
         <div className="flex items-center gap-2">
           <Link
             href="/tasks"
-            className="text-sm text-stone-600 hover:text-stone-900 px-3 py-1.5 rounded-lg hover:bg-stone-100 transition-colors"
+            className="text-sm text-[var(--gray-600)] hover:text-[var(--gray-900)] px-3 py-1.5 rounded-[var(--radius-md)] hover:bg-[var(--gray-100)] transition-colors min-h-[36px] flex items-center"
           >
             Tasks
           </Link>
           <Link
             href="/chat/therapist"
-            className="text-sm text-stone-600 hover:text-stone-900 px-3 py-1.5 rounded-lg hover:bg-stone-100 transition-colors"
+            className="text-sm text-[var(--gray-600)] hover:text-[var(--gray-900)] px-3 py-1.5 rounded-[var(--radius-md)] hover:bg-[var(--gray-100)] transition-colors min-h-[36px] flex items-center"
           >
             Emotional Support
           </Link>
@@ -168,24 +168,24 @@ export default function GuideChatPage() {
       </div>
 
       {/* Agent switcher */}
-      <div className="bg-white border-t border-stone-200 px-4 py-3">
+      <div className="bg-white border-t border-[var(--gray-200)] px-5 py-3 safe-area-bottom">
         <div className="flex items-center justify-center gap-4 text-sm">
-          <span className="text-stone-500">Switch to:</span>
+          <span className="text-[var(--gray-500)]">Switch to:</span>
           <Link
             href="/chat/therapist"
-            className="text-amber-600 hover:text-amber-700 font-medium"
+            className="text-[var(--primary-600)] hover:text-[var(--primary-700)] font-medium"
           >
             Emotional Support
           </Link>
           <Link
             href="/chat/legal"
-            className="text-amber-600 hover:text-amber-700 font-medium"
+            className="text-[var(--primary-600)] hover:text-[var(--primary-700)] font-medium"
           >
             Legal Questions
           </Link>
           <Link
             href="/chat/financial"
-            className="text-amber-600 hover:text-amber-700 font-medium"
+            className="text-[var(--primary-600)] hover:text-[var(--primary-700)] font-medium"
           >
             Financial Help
           </Link>

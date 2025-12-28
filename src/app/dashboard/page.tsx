@@ -13,8 +13,8 @@ export default function DashboardPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-stone-50">
-      <div className="text-stone-600">Redirecting...</div>
+    <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+      <div className="text-[var(--foreground-muted)]">Redirecting...</div>
     </div>
   );
 }

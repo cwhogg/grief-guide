@@ -13,9 +13,9 @@ interface ChatTaskCardProps {
 const STATUS_BADGE: Record<TaskStatus, { label: string; className: string } | null> = {
   pending: null,
   in_progress: { label: "In progress", className: "bg-blue-100 text-blue-700" },
-  completed: { label: "Done", className: "bg-green-100 text-green-700" },
-  blocked: { label: "Stuck", className: "bg-orange-100 text-orange-700" },
-  skipped: { label: "Skipped", className: "bg-stone-100 text-stone-500" },
+  completed: { label: "Done", className: "bg-[var(--primary-100)] text-[var(--primary-700)]" },
+  blocked: { label: "Stuck", className: "bg-[var(--accent-400)]/20 text-[var(--accent-600)]" },
+  skipped: { label: "Skipped", className: "bg-[var(--gray-100)] text-[var(--gray-500)]" },
 };
 
 export function ChatTaskCard({
@@ -58,13 +58,13 @@ export function ChatTaskCard({
 
   if (justCompleted) {
     return (
-      <div className="my-2 px-4 py-3 bg-green-50 border border-green-200 rounded-xl">
-        <div className="flex items-center gap-2 text-green-700">
+      <div className="my-2 px-4 py-3 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-xl">
+        <div className="flex items-center gap-2 text-[var(--primary-700)]">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
           </svg>
           <span className="font-medium">{task.status === "skipped" ? "Skipped" : "Done"}</span>
-          <span className="text-green-600">— {task.title}</span>
+          <span className="text-[var(--primary-600)]">— {task.title}</span>
         </div>
       </div>
     );
@@ -73,23 +73,23 @@ export function ChatTaskCard({
   return (
     <div
       className={`my-2 bg-white border rounded-xl overflow-hidden transition-opacity ${
-        isCompleted ? "border-stone-200 opacity-60" : "border-amber-200 shadow-sm"
+        isCompleted ? "border-[var(--gray-200)] opacity-60" : "border-[var(--primary-200)] shadow-sm"
       }`}
     >
       {/* Task header with icon */}
       <div className="px-4 py-3">
         <div className="flex items-start gap-3">
           {/* Task icon */}
-          <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-            <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          <div className="w-8 h-8 rounded-lg bg-[var(--primary-100)] flex items-center justify-center flex-shrink-0">
+            <svg className="w-4 h-4 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           </div>
 
           <div className="flex-1 min-w-0">
             {/* Title with optional status badge */}
             <div className="flex items-center gap-2 flex-wrap">
-              <h4 className={`font-medium ${isCompleted ? "text-stone-500 line-through" : "text-stone-900"}`}>
+              <h4 className={`font-medium ${isCompleted ? "text-[var(--gray-500)] line-through" : "text-[var(--gray-900)]"}`}>
                 {task.title}
               </h4>
               {statusBadge && (
@@ -101,7 +101,7 @@ export function ChatTaskCard({
 
             {/* Description */}
             {truncatedDescription && (
-              <p className="text-sm text-stone-500 mt-1">
+              <p className="text-sm text-[var(--gray-500)] mt-1">
                 {truncatedDescription}
               </p>
             )}
@@ -111,25 +111,25 @@ export function ChatTaskCard({
 
       {/* Action buttons - RCS style, inside card */}
       {!isCompleted && (
-        <div className="px-3 py-2 border-t border-stone-100 flex flex-wrap gap-2">
+        <div className="px-3 py-2 border-t border-[var(--gray-100)] flex flex-wrap gap-2">
           <button
             onClick={() => onTellMeMore(task)}
             disabled={isUpdating}
-            className="flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 disabled:opacity-50 transition-colors"
+            className="flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium text-[var(--accent-600)] bg-[var(--accent-400)]/10 border border-[var(--accent-400)]/30 rounded-lg hover:bg-[var(--accent-400)]/20 disabled:opacity-50 transition-colors"
           >
             Walk me through it
           </button>
           <button
             onClick={handleDone}
             disabled={isUpdating}
-            className="px-4 py-2.5 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 text-sm font-medium text-[var(--primary-700)] bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-lg hover:bg-[var(--primary-100)] disabled:opacity-50 transition-colors"
           >
             Done
           </button>
           <button
             onClick={handleSkip}
             disabled={isUpdating}
-            className="px-4 py-2.5 text-sm text-stone-500 border border-stone-200 rounded-lg hover:bg-stone-50 disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 text-sm text-[var(--gray-500)] border border-[var(--gray-200)] rounded-lg hover:bg-[var(--gray-50)] disabled:opacity-50 transition-colors"
           >
             Skip
           </button>
@@ -261,8 +261,8 @@ export function MessageActions({ actions, onSendMessage, onTaskAction }: Message
             onClick={handleClick}
             className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
               isPrimary
-                ? "bg-amber-600 text-white hover:bg-amber-700"
-                : "border border-stone-200 text-stone-700 hover:bg-stone-50"
+                ? "bg-[var(--accent-500)] text-white hover:bg-[var(--accent-600)]"
+                : "border border-[var(--gray-200)] text-[var(--gray-700)] hover:bg-[var(--gray-50)]"
             }`}
           >
             {action.label}

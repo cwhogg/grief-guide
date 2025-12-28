@@ -100,8 +100,8 @@ export default function TherapistChatPage() {
 
   if (userLoading || !isReady) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
@@ -111,13 +111,13 @@ export default function TherapistChatPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-stone-50">
+    <div className="h-screen h-[100dvh] flex flex-col bg-[var(--background)]">
       {/* Navigation bar */}
-      <nav className="bg-white border-b border-stone-200 px-4 py-2 flex items-center justify-between">
+      <nav className="bg-white border-b border-[var(--gray-200)] px-5 py-2 flex items-center justify-between safe-area-top">
         <div className="flex items-center gap-4">
           <Link
             href="/chat"
-            className="text-stone-600 hover:text-stone-900 transition-colors"
+            className="text-[var(--gray-600)] hover:text-[var(--gray-900)] transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -128,23 +128,23 @@ export default function TherapistChatPage() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
           </Link>
-          <span className="text-stone-900 font-medium">Grief Guide</span>
+          <span className="text-[var(--gray-900)] font-medium">Grief Guide</span>
         </div>
         <div className="flex items-center gap-2">
           <Link
             href="/tasks"
-            className="text-sm text-stone-600 hover:text-stone-900 px-3 py-1.5 rounded-lg hover:bg-stone-100 transition-colors"
+            className="text-sm text-[var(--gray-600)] hover:text-[var(--gray-900)] px-3 py-1.5 rounded-[var(--radius-md)] hover:bg-[var(--gray-100)] transition-colors min-h-[36px] flex items-center"
           >
             Tasks
           </Link>
           <Link
             href="/chat/guide"
-            className="text-sm text-stone-600 hover:text-stone-900 px-3 py-1.5 rounded-lg hover:bg-stone-100 transition-colors"
+            className="text-sm text-[var(--gray-600)] hover:text-[var(--gray-900)] px-3 py-1.5 rounded-[var(--radius-md)] hover:bg-[var(--gray-100)] transition-colors min-h-[36px] flex items-center"
           >
             Practical Help
           </Link>
@@ -152,11 +152,11 @@ export default function TherapistChatPage() {
       </nav>
 
       {/* Warm banner */}
-      <div className="bg-gradient-to-r from-violet-50 to-rose-50 border-b border-violet-100 px-4 py-3">
+      <div className="bg-[var(--purple-light)]/30 border-b border-[var(--purple-light)] px-5 py-3">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-[var(--purple-light)] flex items-center justify-center flex-shrink-0">
             <svg
-              className="w-4 h-4 text-violet-600"
+              className="w-4 h-4 text-[var(--purple-main)]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -164,12 +164,12 @@ export default function TherapistChatPage() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
           </div>
-          <p className="text-sm text-violet-800">
+          <p className="text-sm text-[var(--gray-700)]">
             Sometimes you just need to talk.
           </p>
         </div>
@@ -197,32 +197,32 @@ export default function TherapistChatPage() {
       </div>
 
       {/* Crisis resources footer */}
-      <div className="bg-white border-t border-stone-200 px-4 py-3">
+      <div className="bg-white border-t border-[var(--gray-200)] px-5 py-3 safe-area-bottom">
         <div className="max-w-2xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
             <div className="flex items-center gap-4">
-              <span className="text-stone-500">Switch to:</span>
+              <span className="text-[var(--gray-500)]">Switch to:</span>
               <Link
                 href="/chat/guide"
-                className="text-amber-600 hover:text-amber-700 font-medium"
+                className="text-[var(--primary-600)] hover:text-[var(--primary-700)] font-medium"
               >
                 Practical Help
               </Link>
             </div>
-            <div className="flex items-center gap-2 text-stone-500">
+            <div className="flex items-center gap-2 text-[var(--gray-500)]">
               <span>In crisis?</span>
               <a
                 href="tel:988"
-                className="text-violet-600 hover:text-violet-700 font-medium"
+                className="text-[var(--purple-main)] hover:underline font-medium"
               >
                 Call or text 988
               </a>
-              <span className="text-stone-300">|</span>
+              <span className="text-[var(--gray-300)]">|</span>
               <a
                 href="https://988lifeline.org/chat/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-violet-600 hover:text-violet-700 font-medium"
+                className="text-[var(--purple-main)] hover:underline font-medium"
               >
                 Chat online
               </a>

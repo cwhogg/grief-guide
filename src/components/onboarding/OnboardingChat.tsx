@@ -171,11 +171,11 @@ export function OnboardingChat() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col">
+    <div className="min-h-screen min-h-[100dvh] bg-[var(--background)] flex flex-col">
       {/* Progress bar */}
-      <div className="h-1 bg-stone-200">
+      <div className="h-1 bg-[var(--gray-200)]">
         <div
-          className="h-full bg-amber-500 transition-all duration-300"
+          className="h-full bg-[var(--primary-500)] transition-all duration-300"
           style={{
             width: step === "welcome" ? "20%" :
                    step === "stage" ? "40%" :
@@ -186,42 +186,42 @@ export function OnboardingChat() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-5">
         <div className="w-full max-w-md">
 
           {/* Step 1: Welcome */}
           {step === "welcome" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-8 h-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-16 h-16 bg-[var(--primary-100)] rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </div>
-                <h1 className="text-2xl font-semibold text-stone-900 mb-4">
+                <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-4">
                   We're here to help
                 </h1>
-                <p className="text-stone-600 leading-relaxed">
+                <p className="text-[var(--gray-600)] leading-relaxed">
                   Losing a parent is one of life's hardest experiences. On top of the grief, there's an overwhelming amount to manage—legal documents, accounts, notifications, and countless decisions.
                 </p>
-                <p className="text-stone-600 leading-relaxed mt-4">
+                <p className="text-[var(--gray-600)] leading-relaxed mt-4">
                   Grief Guide helps you navigate these practical matters step by step. We'll be here whenever you need guidance.
                 </p>
               </div>
 
               <button
                 onClick={() => setStep("stage")}
-                className="w-full py-3 px-4 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 transition-colors"
+                className="w-full py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] transition-colors min-h-[52px]"
               >
                 Continue
               </button>
 
               {/* Dev Tools */}
               {showDevTools && (
-                <div className="mt-8 pt-6 border-t border-stone-200">
+                <div className="mt-8 pt-6 border-t border-[var(--gray-200)]">
                   <button
                     onClick={() => setShowDevTools(!showDevTools)}
-                    className="text-xs text-stone-400 mb-3 hover:text-stone-600"
+                    className="text-xs text-[var(--gray-400)] mb-3 hover:text-[var(--gray-600)]"
                   >
                     Dev Tools
                   </button>
@@ -231,7 +231,7 @@ export function OnboardingChat() {
                         key={scenario.value}
                         onClick={() => handleTestAccount(scenario.value)}
                         disabled={isSubmitting}
-                        className="px-2 py-1.5 text-xs bg-stone-100 text-stone-600 rounded hover:bg-stone-200 disabled:opacity-50 transition-colors"
+                        className="px-2 py-1.5 text-xs bg-[var(--gray-100)] text-[var(--gray-600)] rounded hover:bg-[var(--gray-200)] disabled:opacity-50 transition-colors"
                       >
                         {scenario.label}
                       </button>
@@ -244,9 +244,9 @@ export function OnboardingChat() {
 
           {/* Step 2: Grief Stage */}
           {step === "stage" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
-                <h1 className="text-2xl font-semibold text-stone-900 mb-2">
+                <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-2">
                   Where are you in this journey?
                 </h1>
               </div>
@@ -256,50 +256,50 @@ export function OnboardingChat() {
                   onClick={() => setGriefStage("anticipating")}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                     griefStage === "anticipating"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:border-stone-300"
+                      ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
+                      : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
-                  <div className="font-medium text-stone-900">My parent is sick or in hospice</div>
-                  <div className="text-sm text-stone-500 mt-1">Preparing for what's ahead</div>
+                  <div className="font-medium text-[var(--gray-900)]">My parent is sick or in hospice</div>
+                  <div className="text-sm text-[var(--gray-500)] mt-1">Preparing for what's ahead</div>
                 </button>
 
                 <button
                   onClick={() => setGriefStage("immediate")}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                     griefStage === "immediate"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:border-stone-300"
+                      ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
+                      : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
-                  <div className="font-medium text-stone-900">My parent recently passed</div>
-                  <div className="text-sm text-stone-500 mt-1">In the first days or weeks</div>
+                  <div className="font-medium text-[var(--gray-900)]">My parent recently passed</div>
+                  <div className="text-sm text-[var(--gray-500)] mt-1">In the first days or weeks</div>
                 </button>
 
                 <button
                   onClick={() => setGriefStage("navigating")}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                     griefStage === "navigating"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:border-stone-300"
+                      ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
+                      : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
-                  <div className="font-medium text-stone-900">My parent passed a while ago</div>
-                  <div className="text-sm text-stone-500 mt-1">Still working through things</div>
+                  <div className="font-medium text-[var(--gray-900)]">My parent passed a while ago</div>
+                  <div className="text-sm text-[var(--gray-500)] mt-1">Still working through things</div>
                 </button>
               </div>
 
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep("welcome")}
-                  className="px-4 py-3 text-stone-600 hover:text-stone-900 transition-colors"
+                  className="px-4 py-3 text-[var(--gray-600)] hover:text-[var(--gray-900)] transition-colors min-h-[52px]"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => setStep("parent")}
                   disabled={!griefStage}
-                  className="flex-1 py-3 px-4 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
                 >
                   Continue
                 </button>
@@ -309,16 +309,16 @@ export function OnboardingChat() {
 
           {/* Step 3: Parent Info */}
           {step === "parent" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
-                <h1 className="text-2xl font-semibold text-stone-900 mb-2">
+                <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-2">
                   Tell us about your parent
                 </h1>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--gray-700)] mb-2">
                     Their name
                   </label>
                   <input
@@ -326,39 +326,39 @@ export function OnboardingChat() {
                     value={parentName}
                     onChange={(e) => setParentName(e.target.value)}
                     placeholder="First name is fine"
-                    className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+                    className="input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--gray-700)] mb-2">
                     What state are you in?
                   </label>
                   <select
                     value={state}
                     onChange={(e) => setState(e.target.value)}
-                    className="w-full px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white transition-colors"
+                    className="input"
                   >
                     <option value="">Select a state...</option>
                     {US_STATES.map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))}
                   </select>
-                  <p className="text-xs text-stone-500 mt-2">Laws vary by state, so this helps us give better guidance.</p>
+                  <p className="text-xs text-[var(--gray-500)] mt-2">Laws vary by state, so this helps us give better guidance.</p>
                 </div>
               </div>
 
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep("stage")}
-                  className="px-4 py-3 text-stone-600 hover:text-stone-900 transition-colors"
+                  className="px-4 py-3 text-[var(--gray-600)] hover:text-[var(--gray-900)] transition-colors min-h-[52px]"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => setStep("knowledge")}
                   disabled={!parentName.trim() || !state}
-                  className="flex-1 py-3 px-4 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
                 >
                   Continue
                 </button>
@@ -368,12 +368,12 @@ export function OnboardingChat() {
 
           {/* Step 4: Knowledge Level */}
           {step === "knowledge" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-6">
-                <h1 className="text-2xl font-semibold text-stone-900 mb-2">
+                <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-2">
                   What do you know about their affairs?
                 </h1>
-                <p className="text-stone-500">
+                <p className="text-[var(--gray-500)]">
                   It's okay if you don't know much—most people don't. We'll help you figure it out.
                 </p>
               </div>
@@ -383,50 +383,50 @@ export function OnboardingChat() {
                   onClick={() => setKnowledgeLevel("full")}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                     knowledgeLevel === "full"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:border-stone-300"
+                      ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
+                      : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
-                  <div className="font-medium text-stone-900">I have a good picture</div>
-                  <div className="text-sm text-stone-500 mt-1">I know about their finances and legal documents</div>
+                  <div className="font-medium text-[var(--gray-900)]">I have a good picture</div>
+                  <div className="text-sm text-[var(--gray-500)] mt-1">I know about their finances and legal documents</div>
                 </button>
 
                 <button
                   onClick={() => setKnowledgeLevel("partial")}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                     knowledgeLevel === "partial"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:border-stone-300"
+                      ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
+                      : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
-                  <div className="font-medium text-stone-900">I know some things</div>
-                  <div className="text-sm text-stone-500 mt-1">But not everything</div>
+                  <div className="font-medium text-[var(--gray-900)]">I know some things</div>
+                  <div className="text-sm text-[var(--gray-500)] mt-1">But not everything</div>
                 </button>
 
                 <button
                   onClick={() => setKnowledgeLevel("none")}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                     knowledgeLevel === "none"
-                      ? "border-amber-500 bg-amber-50"
-                      : "border-stone-200 hover:border-stone-300"
+                      ? "border-[var(--primary-500)] bg-[var(--primary-50)]"
+                      : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
-                  <div className="font-medium text-stone-900">Honestly, I have no idea</div>
-                  <div className="text-sm text-stone-500 mt-1">That's completely okay</div>
+                  <div className="font-medium text-[var(--gray-900)]">Honestly, I have no idea</div>
+                  <div className="text-sm text-[var(--gray-500)] mt-1">That's completely okay</div>
                 </button>
               </div>
 
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep("parent")}
-                  className="px-4 py-3 text-stone-600 hover:text-stone-900 transition-colors"
+                  className="px-4 py-3 text-[var(--gray-600)] hover:text-[var(--gray-900)] transition-colors min-h-[52px]"
                 >
                   Back
                 </button>
                 <button
                   onClick={() => setStep("complete")}
                   disabled={!knowledgeLevel}
-                  className="flex-1 py-3 px-4 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1 py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[52px]"
                 >
                   Continue
                 </button>
@@ -436,21 +436,21 @@ export function OnboardingChat() {
 
           {/* Step 5: Complete */}
           {step === "complete" && (
-            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-[var(--gray-200)] p-8">
               <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <div className="w-16 h-16 bg-[var(--primary-100)] rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h1 className="text-2xl font-semibold text-stone-900 mb-4">
+                <h1 className="text-2xl font-semibold text-[var(--gray-900)] mb-4">
                   You're all set
                 </h1>
-                <p className="text-stone-600 leading-relaxed">
+                <p className="text-[var(--gray-600)] leading-relaxed">
                   {getCompletionMessage()}
                 </p>
                 {(knowledgeLevel === "none" || knowledgeLevel === "partial") && (
-                  <p className="text-stone-600 leading-relaxed mt-4">
+                  <p className="text-[var(--gray-600)] leading-relaxed mt-4">
                     Don't worry about not knowing everything—we'll figure it out together.
                   </p>
                 )}
@@ -459,7 +459,7 @@ export function OnboardingChat() {
               <button
                 onClick={handleComplete}
                 disabled={isSubmitting}
-                className="w-full py-3 px-4 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 disabled:opacity-50 transition-colors"
+                className="w-full py-3 px-4 bg-[var(--accent-500)] text-white rounded-xl font-medium hover:bg-[var(--accent-600)] disabled:opacity-50 transition-colors min-h-[52px]"
               >
                 {isSubmitting ? "Getting started..." : "Get Started"}
               </button>

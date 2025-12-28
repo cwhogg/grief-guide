@@ -83,8 +83,8 @@ export default function TasksPage() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
@@ -94,31 +94,25 @@ export default function TasksPage() {
   }
 
   return (
-    <main className="min-h-screen bg-stone-50">
+    <main className="min-h-screen min-h-[100dvh] bg-[var(--background)]">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200">
-        <div className="max-w-4xl mx-auto px-4 py-6">
+      <header className="bg-white border-b border-[var(--gray-200)] safe-area-top">
+        <div className="max-w-4xl mx-auto px-5 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-stone-900">
+              <h1 className="text-2xl font-semibold text-[var(--gray-900)]">
                 Your Tasks
               </h1>
-              <p className="text-stone-500 mt-1">
+              <p className="text-[var(--gray-500)] mt-1">
                 One step at a time. We&apos;re here to help you through this.
               </p>
             </div>
             <nav className="flex items-center gap-4">
               <a
-                href="/dashboard"
-                className="text-stone-600 hover:text-stone-900 transition-colors"
-              >
-                Dashboard
-              </a>
-              <a
                 href="/chat"
-                className="text-stone-600 hover:text-stone-900 transition-colors"
+                className="text-[var(--primary-600)] hover:text-[var(--primary-700)] transition-colors font-medium"
               >
-                Get Help
+                Back to Chat
               </a>
             </nav>
           </div>
@@ -126,9 +120,9 @@ export default function TasksPage() {
       </header>
 
       {/* Main content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-5 py-6">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          <div className="mb-6 p-4 bg-[var(--error)]/10 border border-[var(--error)]/30 rounded-[var(--radius-lg)] text-[var(--error)]">
             {error}
             <button
               onClick={() => {

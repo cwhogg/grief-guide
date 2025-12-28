@@ -107,8 +107,8 @@ export default function TaskDetailPage() {
 
   if (userLoading || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
@@ -119,18 +119,18 @@ export default function TaskDetailPage() {
 
   if (error || !task) {
     return (
-      <main className="min-h-screen bg-stone-50">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="bg-white rounded-xl border border-stone-200 p-8 text-center">
-            <h1 className="text-xl font-semibold text-stone-900">
+      <main className="min-h-screen min-h-[100dvh] bg-[var(--background)]">
+        <div className="max-w-4xl mx-auto px-5 py-8">
+          <div className="card p-8 text-center">
+            <h1 className="text-xl font-semibold text-[var(--gray-900)]">
               {error || "Task not found"}
             </h1>
-            <p className="text-stone-500 mt-2">
+            <p className="text-[var(--gray-500)] mt-2">
               We couldn&apos;t find this task. It may have been deleted.
             </p>
             <Link
               href="/tasks"
-              className="inline-block mt-4 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700"
+              className="btn btn-primary inline-block mt-4"
             >
               Back to Tasks
             </Link>
@@ -146,16 +146,16 @@ export default function TaskDetailPage() {
     : null;
 
   return (
-    <main className="min-h-screen bg-stone-50">
+    <main className="min-h-screen min-h-[100dvh] bg-[var(--background)]">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+      <header className="bg-white border-b border-[var(--gray-200)] safe-area-top">
+        <div className="max-w-4xl mx-auto px-5 py-4">
           <nav className="flex items-center gap-2 text-sm">
-            <Link href="/tasks" className="text-amber-600 hover:text-amber-700">
+            <Link href="/tasks" className="text-[var(--primary-600)] hover:text-[var(--primary-700)]">
               Tasks
             </Link>
             <svg
-              className="w-4 h-4 text-stone-400"
+              className="w-4 h-4 text-[var(--gray-400)]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -163,17 +163,17 @@ export default function TaskDetailPage() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M9 5l7 7-7 7"
               />
             </svg>
-            <span className="text-stone-600 truncate">{task.title}</span>
+            <span className="text-[var(--gray-600)] truncate">{task.title}</span>
           </nav>
         </div>
       </header>
 
       {/* Main content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-5 py-8">
         {paperworkGuide ? (
           // Render the paperwork wizard
           <PaperworkWizard
@@ -216,17 +216,17 @@ function TaskDetailView({
   };
 
   const statusConfig: Record<Task["status"], { label: string; color: string }> = {
-    pending: { label: "Not Started", color: "bg-stone-100 text-stone-700" },
+    pending: { label: "Not Started", color: "bg-[var(--gray-100)] text-[var(--gray-700)]" },
     in_progress: { label: "In Progress", color: "bg-blue-100 text-blue-700" },
-    completed: { label: "Completed", color: "bg-green-100 text-green-700" },
-    blocked: { label: "Blocked", color: "bg-orange-100 text-orange-700" },
-    skipped: { label: "Not Applicable", color: "bg-stone-100 text-stone-500" },
+    completed: { label: "Completed", color: "bg-[var(--primary-100)] text-[var(--primary-700)]" },
+    blocked: { label: "Blocked", color: "bg-[var(--accent-100)] text-[var(--accent-700)]" },
+    skipped: { label: "Not Applicable", color: "bg-[var(--gray-100)] text-[var(--gray-500)]" },
   };
 
   return (
     <div className="space-y-6">
       {/* Task header */}
-      <div className="bg-white rounded-xl border border-stone-200 p-6">
+      <div className="card">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -237,21 +237,21 @@ function TaskDetailView({
               >
                 {statusConfig[task.status].label}
               </span>
-              <span className="text-xs text-stone-500 capitalize">
+              <span className="text-xs text-[var(--gray-500)] capitalize">
                 {task.task_type}
               </span>
             </div>
-            <h1 className="text-2xl font-semibold text-stone-900">
+            <h1 className="text-2xl font-semibold text-[var(--gray-900)]">
               {task.title}
             </h1>
             {task.description && (
-              <p className="text-stone-600 mt-2">{task.description}</p>
+              <p className="text-[var(--gray-600)] mt-2">{task.description}</p>
             )}
           </div>
         </div>
 
         {task.due_date && (
-          <div className="mt-4 flex items-center gap-2 text-sm text-stone-500">
+          <div className="mt-4 flex items-center gap-2 text-sm text-[var(--gray-500)]">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -261,7 +261,7 @@ function TaskDetailView({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={1.5}
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
@@ -272,28 +272,28 @@ function TaskDetailView({
 
       {/* Why it matters */}
       {task.why_it_matters && (
-        <div className="bg-amber-50 rounded-xl border border-amber-200 p-6">
-          <h2 className="font-semibold text-amber-900 mb-2">
+        <div className="bg-[var(--accent-50)] rounded-[var(--radius-lg)] border border-[var(--accent-200)] p-6">
+          <h2 className="font-semibold text-[var(--accent-900)] mb-2">
             Why This Matters
           </h2>
-          <p className="text-amber-800">{task.why_it_matters}</p>
+          <p className="text-[var(--accent-800)]">{task.why_it_matters}</p>
         </div>
       )}
 
       {/* Documents needed */}
       {task.documents_needed && task.documents_needed.length > 0 && (
-        <div className="bg-white rounded-xl border border-stone-200 p-6">
-          <h2 className="font-semibold text-stone-900 mb-3">
+        <div className="card">
+          <h2 className="font-semibold text-[var(--gray-900)] mb-3">
             What You&apos;ll Need
           </h2>
           <ul className="space-y-2">
             {task.documents_needed.map((doc, index) => (
               <li
                 key={index}
-                className="flex items-start gap-2 text-stone-600"
+                className="flex items-start gap-2 text-[var(--gray-600)]"
               >
                 <svg
-                  className="w-5 h-5 text-stone-400 mt-0.5 flex-shrink-0"
+                  className="w-5 h-5 text-[var(--gray-400)] mt-0.5 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -301,7 +301,7 @@ function TaskDetailView({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
@@ -314,7 +314,7 @@ function TaskDetailView({
 
       {/* Tips */}
       {task.tips && task.tips.length > 0 && (
-        <div className="bg-blue-50 rounded-xl border border-blue-200 p-6">
+        <div className="bg-blue-50 rounded-[var(--radius-lg)] border border-blue-200 p-6">
           <h2 className="font-semibold text-blue-900 mb-3">Tips</h2>
           <ul className="space-y-2">
             {task.tips.map((tip, index) => (
@@ -331,7 +331,7 @@ function TaskDetailView({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
@@ -344,21 +344,21 @@ function TaskDetailView({
 
       {/* Notes */}
       {task.notes && (
-        <div className="bg-white rounded-xl border border-stone-200 p-6">
-          <h2 className="font-semibold text-stone-900 mb-2">Your Notes</h2>
-          <p className="text-stone-600">{task.notes}</p>
+        <div className="card">
+          <h2 className="font-semibold text-[var(--gray-900)] mb-2">Your Notes</h2>
+          <p className="text-[var(--gray-600)]">{task.notes}</p>
         </div>
       )}
 
       {/* Actions */}
-      <div className="bg-white rounded-xl border border-stone-200 p-6">
-        <h2 className="font-semibold text-stone-900 mb-4">Actions</h2>
+      <div className="card">
+        <h2 className="font-semibold text-[var(--gray-900)] mb-4">Actions</h2>
         <div className="flex flex-wrap gap-3">
           {task.status !== "completed" && (
             <button
               onClick={() => handleStatusChange("completed")}
               disabled={isUpdating}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+              className="px-4 py-2 bg-[var(--primary-600)] text-white rounded-[var(--radius-md)] hover:bg-[var(--primary-700)] disabled:opacity-50 min-h-[44px]"
             >
               Mark Complete
             </button>
@@ -367,7 +367,7 @@ function TaskDetailView({
             <button
               onClick={() => handleStatusChange("in_progress")}
               disabled={isUpdating}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-blue-600 text-white rounded-[var(--radius-md)] hover:bg-blue-700 disabled:opacity-50 min-h-[44px]"
             >
               Start Task
             </button>
@@ -376,7 +376,7 @@ function TaskDetailView({
             <button
               onClick={() => handleStatusChange("blocked")}
               disabled={isUpdating}
-              className="px-4 py-2 border border-orange-300 text-orange-700 rounded-lg hover:bg-orange-50 disabled:opacity-50"
+              className="px-4 py-2 border border-[var(--accent-300)] text-[var(--accent-700)] rounded-[var(--radius-md)] hover:bg-[var(--accent-50)] disabled:opacity-50 min-h-[44px]"
             >
               Mark Blocked
             </button>
@@ -385,7 +385,7 @@ function TaskDetailView({
             <button
               onClick={() => handleStatusChange("skipped")}
               disabled={isUpdating}
-              className="px-4 py-2 border border-stone-300 text-stone-600 rounded-lg hover:bg-stone-50 disabled:opacity-50"
+              className="px-4 py-2 border border-[var(--gray-300)] text-[var(--gray-600)] rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] disabled:opacity-50 min-h-[44px]"
             >
               Not Applicable
             </button>
@@ -394,7 +394,7 @@ function TaskDetailView({
             <button
               onClick={() => handleStatusChange("pending")}
               disabled={isUpdating}
-              className="px-4 py-2 border border-stone-300 text-stone-600 rounded-lg hover:bg-stone-50 disabled:opacity-50"
+              className="px-4 py-2 border border-[var(--gray-300)] text-[var(--gray-600)] rounded-[var(--radius-md)] hover:bg-[var(--gray-50)] disabled:opacity-50 min-h-[44px]"
             >
               Reopen Task
             </button>
@@ -406,7 +406,7 @@ function TaskDetailView({
       <div className="text-center">
         <Link
           href="/tasks"
-          className="text-amber-600 hover:text-amber-700 text-sm"
+          className="text-[var(--primary-600)] hover:text-[var(--primary-700)] text-sm"
         >
           &larr; Back to all tasks
         </Link>

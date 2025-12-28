@@ -172,7 +172,7 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-stone-500">Loading your tasks...</div>
+        <div className="text-[var(--foreground-muted)]">Loading your tasks...</div>
       </div>
     );
   }
@@ -182,35 +182,35 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
   return (
     <div className="space-y-6">
       {/* Progress overview */}
-      <div className="bg-white rounded-xl border border-stone-200 p-6">
+      <div className="card">
         <div className="mb-3">
-          <h2 className="text-lg font-semibold text-stone-900">
+          <h2 className="text-lg font-semibold text-[var(--gray-900)]">
             {stats.completed > 0
               ? `${stats.completed} thing${stats.completed === 1 ? "" : "s"} done`
               : "Your tasks"}
           </h2>
           {remaining > 0 && (
-            <p className="text-sm text-stone-500 mt-1">
+            <p className="text-sm text-[var(--gray-500)] mt-1">
               {remaining} thing{remaining === 1 ? "" : "s"} left
             </p>
           )}
         </div>
 
-        <p className="text-sm text-stone-600 italic">
+        <p className="text-sm text-[var(--gray-600)] italic">
           {getProgressMessage(stats.completed)}
         </p>
 
         {/* Quick stats - only show if there's something notable */}
         {(stats.inProgress > 0 || stats.blocked > 0) && (
-          <div className="flex gap-4 mt-4 pt-4 border-t border-stone-100">
+          <div className="flex gap-4 mt-4 pt-4 border-t border-[var(--gray-100)]">
             {stats.inProgress > 0 && (
-              <div className="text-sm text-stone-600">
+              <div className="text-sm text-[var(--gray-600)]">
                 <span className="font-medium text-blue-600">{stats.inProgress}</span> in progress
               </div>
             )}
             {stats.blocked > 0 && (
-              <div className="text-sm text-stone-600">
-                <span className="font-medium text-orange-600">{stats.blocked}</span> stuck
+              <div className="text-sm text-[var(--gray-600)]">
+                <span className="font-medium text-[var(--accent-600)]">{stats.blocked}</span> stuck
               </div>
             )}
           </div>
@@ -218,14 +218,14 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-stone-200 p-4">
+      <div className="card card-compact">
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="flex items-center justify-between w-full text-left"
         >
-          <span className="font-medium text-stone-900">Filters</span>
+          <span className="font-medium text-[var(--gray-900)]">Filters</span>
           <svg
-            className={`w-5 h-5 text-stone-400 transition-transform ${
+            className={`w-5 h-5 text-[var(--gray-400)] transition-transform ${
               showFilters ? "rotate-180" : ""
             }`}
             fill="none"
@@ -235,7 +235,7 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={1.5}
               d="M19 9l-7 7-7-7"
             />
           </svg>
@@ -245,7 +245,7 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
           <div className="mt-4 space-y-4">
             {/* Status filters */}
             <div>
-              <label className="text-sm font-medium text-stone-700 block mb-2">
+              <label className="text-sm font-medium text-[var(--gray-700)] block mb-2">
                 Status
               </label>
               <div className="flex flex-wrap gap-2">
@@ -253,10 +253,10 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
                   <button
                     key={status.value}
                     onClick={() => toggleStatus(status.value)}
-                    className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
+                    className={`px-3 py-1.5 text-sm rounded-full transition-colors min-h-[36px] ${
                       selectedStatuses.includes(status.value)
-                        ? "bg-amber-600 text-white"
-                        : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                        ? "bg-[var(--primary-500)] text-white"
+                        : "bg-[var(--gray-100)] text-[var(--gray-600)] hover:bg-[var(--gray-200)]"
                     }`}
                   >
                     {status.label}
@@ -267,7 +267,7 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
 
             {/* Type filters */}
             <div>
-              <label className="text-sm font-medium text-stone-700 block mb-2">
+              <label className="text-sm font-medium text-[var(--gray-700)] block mb-2">
                 Type
               </label>
               <div className="flex flex-wrap gap-2">
@@ -275,10 +275,10 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
                   <button
                     key={type.value}
                     onClick={() => toggleType(type.value)}
-                    className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
+                    className={`px-3 py-1.5 text-sm rounded-full transition-colors min-h-[36px] ${
                       selectedTypes.includes(type.value)
-                        ? "bg-amber-600 text-white"
-                        : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                        ? "bg-[var(--primary-500)] text-white"
+                        : "bg-[var(--gray-100)] text-[var(--gray-600)] hover:bg-[var(--gray-200)]"
                     }`}
                   >
                     {type.label}
@@ -294,7 +294,7 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
                   setSelectedStatuses(["pending", "in_progress", "blocked"]);
                   setSelectedTypes([]);
                 }}
-                className="text-sm text-amber-600 hover:text-amber-700"
+                className="text-sm text-[var(--primary-600)] hover:text-[var(--primary-700)]"
               >
                 Reset to defaults
               </button>
@@ -311,8 +311,8 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
         return (
           <div key={category.value} className="space-y-3">
             <div>
-              <h3 className="font-semibold text-stone-900">{category.label}</h3>
-              <p className="text-sm text-stone-500">{category.description}</p>
+              <h3 className="font-semibold text-[var(--gray-900)]">{category.label}</h3>
+              <p className="text-sm text-[var(--gray-500)]">{category.description}</p>
             </div>
 
             <div className="space-y-2">
@@ -333,7 +333,7 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
       {Object.values(groupedTasks).every((group) => group.length === 0) && (
         <div className="text-center py-12">
           <svg
-            className="w-12 h-12 mx-auto text-stone-300"
+            className="w-12 h-12 mx-auto text-[var(--gray-300)]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -345,10 +345,10 @@ export function TaskList({ tasks, onTaskUpdate, isLoading }: TaskListProps) {
               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-stone-900">
+          <h3 className="mt-4 text-lg font-medium text-[var(--gray-900)]">
             No tasks match your filters
           </h3>
-          <p className="mt-2 text-stone-500">
+          <p className="mt-2 text-[var(--gray-500)]">
             Try adjusting your filters to see more tasks.
           </p>
         </div>

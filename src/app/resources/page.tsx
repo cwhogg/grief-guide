@@ -51,13 +51,13 @@ const CATEGORY_ICONS: Record<string, ReactNode> = {
 };
 
 const COLOR_CLASSES: Record<string, { bg: string; text: string; border: string }> = {
-  violet: { bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200" },
+  violet: { bg: "bg-[var(--purple-light)]/30", text: "text-[var(--purple-main)]", border: "border-[var(--purple-light)]" },
   blue: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  green: { bg: "bg-green-50", text: "text-green-700", border: "border-green-200" },
-  amber: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
+  green: { bg: "bg-[var(--primary-50)]", text: "text-[var(--primary-700)]", border: "border-[var(--primary-200)]" },
+  amber: { bg: "bg-[var(--accent-50)]", text: "text-[var(--accent-700)]", border: "border-[var(--accent-200)]" },
   rose: { bg: "bg-rose-50", text: "text-rose-700", border: "border-rose-200" },
-  stone: { bg: "bg-stone-100", text: "text-stone-700", border: "border-stone-200" },
-  red: { bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
+  stone: { bg: "bg-[var(--gray-100)]", text: "text-[var(--gray-700)]", border: "border-[var(--gray-200)]" },
+  red: { bg: "bg-[var(--error)]/10", text: "text-[var(--error)]", border: "border-[var(--error)]/30" },
 };
 
 export default function ResourcesPage() {
@@ -123,8 +123,8 @@ export default function ResourcesPage() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
@@ -138,29 +138,29 @@ export default function ResourcesPage() {
   );
 
   return (
-    <main className="min-h-screen bg-stone-50">
+    <main className="min-h-screen min-h-[100dvh] bg-[var(--background)]">
       {/* Header */}
-      <header className="bg-white border-b border-stone-200">
-        <div className="max-w-6xl mx-auto px-4 py-6">
+      <header className="bg-white border-b border-[var(--gray-200)] safe-area-top">
+        <div className="max-w-6xl mx-auto px-5 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-stone-900">
+              <h1 className="text-2xl font-semibold text-[var(--gray-900)]">
                 Find Help
               </h1>
-              <p className="text-stone-500 mt-1">
+              <p className="text-[var(--gray-500)] mt-1">
                 Professional services to help you through this process
               </p>
             </div>
             <nav className="flex items-center gap-4">
               <Link
                 href="/dashboard"
-                className="text-stone-600 hover:text-stone-900"
+                className="text-[var(--gray-600)] hover:text-[var(--gray-900)]"
               >
                 Dashboard
               </Link>
               <Link
                 href="/tasks"
-                className="text-stone-600 hover:text-stone-900"
+                className="text-[var(--gray-600)] hover:text-[var(--gray-900)]"
               >
                 Tasks
               </Link>
@@ -169,25 +169,27 @@ export default function ResourcesPage() {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-5 py-8">
         {/* Crisis Banner */}
-        <div className="mb-8 bg-red-50 border border-red-200 rounded-xl p-4">
+        <div className="mb-8 bg-[var(--purple-light)]/30 border border-[var(--purple-light)] rounded-[var(--radius-lg)] p-4">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-              {CATEGORY_ICONS.phone}
+            <div className="w-10 h-10 rounded-full bg-[var(--purple-light)] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-[var(--purple-main)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
             </div>
             <div className="flex-1">
-              <p className="font-medium text-red-900">
+              <p className="font-medium text-[var(--gray-900)]">
                 In crisis or need immediate support?
               </p>
-              <p className="text-sm text-red-700">
+              <p className="text-sm text-[var(--gray-600)]">
                 Call or text <strong>988</strong> for the Suicide & Crisis
                 Lifeline, available 24/7
               </p>
             </div>
             <a
               href="tel:988"
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="px-4 py-2 bg-[var(--purple-main)] text-white rounded-[var(--radius-md)] hover:opacity-90 transition-colors min-h-[44px] flex items-center"
             >
               Call 988
             </a>
@@ -196,7 +198,7 @@ export default function ResourcesPage() {
 
         {/* Category Selection */}
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-stone-900 mb-4">
+          <h2 className="text-lg font-semibold text-[var(--gray-900)] mb-4">
             What do you need help with?
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -209,20 +211,20 @@ export default function ResourcesPage() {
                   onClick={() =>
                     setSelectedCategory(isSelected ? null : (key as ResourceCategory))
                   }
-                  className={`p-4 rounded-xl border-2 transition-all text-left ${
+                  className={`p-4 rounded-[var(--radius-lg)] border-2 transition-all text-left min-h-[100px] ${
                     isSelected
-                      ? `${colors.bg} ${colors.border} ring-2 ring-offset-2 ring-${meta.color}-300`
-                      : "bg-white border-stone-200 hover:border-stone-300"
+                      ? `${colors.bg} ${colors.border} ring-2 ring-offset-2 ring-[var(--primary-300)]`
+                      : "bg-white border-[var(--gray-200)] hover:border-[var(--gray-300)]"
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-lg ${colors.bg} ${colors.text} flex items-center justify-center mb-2`}
+                    className={`w-10 h-10 rounded-[var(--radius-md)] ${colors.bg} ${colors.text} flex items-center justify-center mb-2`}
                   >
                     {CATEGORY_ICONS[meta.icon]}
                   </div>
                   <p
                     className={`font-medium text-sm ${
-                      isSelected ? colors.text : "text-stone-900"
+                      isSelected ? colors.text : "text-[var(--gray-900)]"
                     }`}
                   >
                     {meta.label}
@@ -234,7 +236,7 @@ export default function ResourcesPage() {
         </div>
 
         {/* Filters */}
-        <div className="mb-6 bg-white rounded-xl border border-stone-200 p-4">
+        <div className="mb-6 card">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="flex-1 min-w-[200px]">
               <input
@@ -242,14 +244,14 @@ export default function ResourcesPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search resources..."
-                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600"
+                className="input"
               />
             </div>
             <div className="min-w-[180px]">
               <select
                 value={selectedState}
                 onChange={(e) => setSelectedState(e.target.value)}
-                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600"
+                className="input"
               >
                 <option value="">All locations</option>
                 {US_STATES.map((state) => (
@@ -259,23 +261,23 @@ export default function ResourcesPage() {
                 ))}
               </select>
             </div>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
               <input
                 type="checkbox"
                 checked={showNationalOnly}
                 onChange={(e) => setShowNationalOnly(e.target.checked)}
-                className="w-4 h-4 text-amber-600 rounded focus:ring-amber-600"
+                className="w-4 h-4 text-[var(--primary-600)] rounded focus:ring-[var(--primary-600)]"
               />
-              <span className="text-sm text-stone-600">National/Online only</span>
+              <span className="text-sm text-[var(--gray-600)]">National/Online only</span>
             </label>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
               <input
                 type="checkbox"
                 checked={showFreeOnly}
                 onChange={(e) => setShowFreeOnly(e.target.checked)}
-                className="w-4 h-4 text-amber-600 rounded focus:ring-amber-600"
+                className="w-4 h-4 text-[var(--primary-600)] rounded focus:ring-[var(--primary-600)]"
               />
-              <span className="text-sm text-stone-600">Free services only</span>
+              <span className="text-sm text-[var(--gray-600)]">Free services only</span>
             </label>
           </div>
         </div>
@@ -285,7 +287,7 @@ export default function ResourcesPage() {
           <div className="mb-6">
             <button
               onClick={() => setShowGuidance(!showGuidance)}
-              className="flex items-center gap-2 text-amber-600 hover:text-amber-700 font-medium"
+              className="flex items-center gap-2 text-[var(--primary-600)] hover:text-[var(--primary-700)] font-medium min-h-[44px]"
             >
               <svg
                 className={`w-5 h-5 transition-transform ${
@@ -298,7 +300,7 @@ export default function ResourcesPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={1.5}
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
@@ -308,19 +310,19 @@ export default function ResourcesPage() {
             </button>
 
             {showGuidance && (
-              <div className="mt-4 bg-white rounded-xl border border-stone-200 p-6 space-y-6">
+              <div className="mt-4 card space-y-6">
                 <div>
-                  <h3 className="font-semibold text-stone-900 mb-2">
+                  <h3 className="font-semibold text-[var(--gray-900)] mb-2">
                     When to seek this help
                   </h3>
                   <ul className="space-y-1">
                     {guidance.whenToSeek.map((item, index) => (
                       <li
                         key={index}
-                        className="flex items-start gap-2 text-stone-600"
+                        className="flex items-start gap-2 text-[var(--gray-600)]"
                       >
                         <svg
-                          className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"
+                          className="w-5 h-5 text-[var(--primary-500)] mt-0.5 flex-shrink-0"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -328,7 +330,7 @@ export default function ResourcesPage() {
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            strokeWidth={2}
+                            strokeWidth={1.5}
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
@@ -339,16 +341,16 @@ export default function ResourcesPage() {
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-stone-900 mb-2">
+                  <h3 className="font-semibold text-[var(--gray-900)] mb-2">
                     What to look for
                   </h3>
                   <div className="space-y-3">
                     {guidance.whatToLookFor.map((item, index) => (
-                      <div key={index} className="bg-stone-50 rounded-lg p-3">
-                        <p className="font-medium text-stone-900">
+                      <div key={index} className="bg-[var(--gray-50)] rounded-[var(--radius-md)] p-3">
+                        <p className="font-medium text-[var(--gray-900)]">
                           {item.criteria}
                         </p>
-                        <p className="text-sm text-stone-600 mt-1">{item.why}</p>
+                        <p className="text-sm text-[var(--gray-600)] mt-1">{item.why}</p>
                       </div>
                     ))}
                   </div>
@@ -356,14 +358,14 @@ export default function ResourcesPage() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold text-red-800 mb-2">
+                    <h3 className="font-semibold text-[var(--error)] mb-2">
                       Red flags to avoid
                     </h3>
                     <ul className="space-y-1">
                       {guidance.redFlags.map((flag, index) => (
                         <li
                           key={index}
-                          className="flex items-start gap-2 text-red-700 text-sm"
+                          className="flex items-start gap-2 text-[var(--error)] text-sm"
                         >
                           <svg
                             className="w-4 h-4 mt-0.5 flex-shrink-0"
@@ -374,7 +376,7 @@ export default function ResourcesPage() {
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              strokeWidth={2}
+                              strokeWidth={1.5}
                               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                             />
                           </svg>
@@ -385,16 +387,16 @@ export default function ResourcesPage() {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-stone-900 mb-2">
+                    <h3 className="font-semibold text-[var(--gray-900)] mb-2">
                       Questions to ask
                     </h3>
                     <ul className="space-y-1">
                       {guidance.questionsToAsk.slice(0, 5).map((q, index) => (
                         <li
                           key={index}
-                          className="flex items-start gap-2 text-stone-600 text-sm"
+                          className="flex items-start gap-2 text-[var(--gray-600)] text-sm"
                         >
-                          <span className="text-amber-600 font-medium">Q:</span>
+                          <span className="text-[var(--primary-600)] font-medium">Q:</span>
                           {q}
                         </li>
                       ))}
@@ -402,16 +404,16 @@ export default function ResourcesPage() {
                   </div>
                 </div>
 
-                <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
-                  <h3 className="font-semibold text-amber-900 mb-1">
+                <div className="bg-[var(--accent-50)] rounded-[var(--radius-md)] p-4 border border-[var(--accent-200)]">
+                  <h3 className="font-semibold text-[var(--accent-900)] mb-1">
                     Typical costs
                   </h3>
-                  <p className="text-amber-800">
+                  <p className="text-[var(--accent-800)]">
                     ${guidance.costRange.low.toLocaleString()} - $
                     {guidance.costRange.high.toLocaleString()}{" "}
                     {guidance.costRange.unit}
                   </p>
-                  <p className="text-sm text-amber-700 mt-1">
+                  <p className="text-sm text-[var(--accent-700)] mt-1">
                     {guidance.costRange.notes}
                   </p>
                 </div>
@@ -423,12 +425,12 @@ export default function ResourcesPage() {
         {/* Resources List */}
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="text-stone-500">Loading resources...</div>
+            <div className="text-[var(--gray-500)]">Loading resources...</div>
           </div>
         ) : resources.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-xl border border-stone-200">
+          <div className="text-center py-12 card">
             <svg
-              className="w-12 h-12 mx-auto text-stone-300"
+              className="w-12 h-12 mx-auto text-[var(--gray-300)]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -440,16 +442,16 @@ export default function ResourcesPage() {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <h3 className="mt-4 text-lg font-medium text-stone-900">
+            <h3 className="mt-4 text-lg font-medium text-[var(--gray-900)]">
               No resources found
             </h3>
-            <p className="mt-2 text-stone-500">
+            <p className="mt-2 text-[var(--gray-500)]">
               Try adjusting your filters or search terms
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-stone-500">
+            <p className="text-sm text-[var(--gray-500)]">
               {resources.length} resource{resources.length !== 1 ? "s" : ""} found
             </p>
             <div className="grid gap-4 md:grid-cols-2">
@@ -469,16 +471,16 @@ function ResourceCard({ resource }: { resource: Resource }) {
   const colors = COLOR_CLASSES[meta?.color || "stone"];
 
   return (
-    <div className="bg-white rounded-xl border border-stone-200 p-5 hover:shadow-md transition-shadow">
+    <div className="card hover:shadow-md transition-shadow">
       <div className="flex items-start gap-4">
         <div
-          className={`w-12 h-12 rounded-lg ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}
+          className={`w-12 h-12 rounded-[var(--radius-md)] ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0`}
         >
           {CATEGORY_ICONS[meta?.icon || "heart"]}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold text-stone-900">{resource.name}</h3>
+            <h3 className="font-semibold text-[var(--gray-900)]">{resource.name}</h3>
             <div className="flex items-center gap-2 flex-shrink-0">
               {resource.isNational && (
                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
@@ -486,17 +488,17 @@ function ResourceCard({ resource }: { resource: Resource }) {
                 </span>
               )}
               {resource.isFree && (
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                <span className="text-xs bg-[var(--primary-100)] text-[var(--primary-700)] px-2 py-0.5 rounded-full">
                   Free
                 </span>
               )}
             </div>
           </div>
-          <p className="text-sm text-stone-600 mt-1 line-clamp-2">
+          <p className="text-sm text-[var(--gray-600)] mt-1 line-clamp-2">
             {resource.description}
           </p>
           {resource.notes && (
-            <p className="text-xs text-stone-500 mt-2 italic">
+            <p className="text-xs text-[var(--gray-500)] mt-2 italic">
               {resource.notes}
             </p>
           )}
@@ -506,7 +508,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
                 href={resource.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
+                className="text-sm text-[var(--primary-600)] hover:text-[var(--primary-700)] font-medium flex items-center gap-1"
               >
                 Visit website
                 <svg
@@ -518,7 +520,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                   />
                 </svg>
@@ -527,7 +529,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
             {resource.phone && (
               <a
                 href={`tel:${resource.phone}`}
-                className="text-sm text-stone-600 hover:text-stone-900 flex items-center gap-1"
+                className="text-sm text-[var(--gray-600)] hover:text-[var(--gray-900)] flex items-center gap-1"
               >
                 <svg
                   className="w-4 h-4"
@@ -538,7 +540,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}
+                    strokeWidth={1.5}
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                   />
                 </svg>

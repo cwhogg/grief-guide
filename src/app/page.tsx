@@ -25,32 +25,32 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
 
   // Show landing page for unauthenticated users
   return (
-    <main className="min-h-screen bg-stone-50">
+    <main className="min-h-screen min-h-[100dvh] bg-[var(--background)]">
       {/* Hero Section */}
-      <div className="max-w-4xl mx-auto px-4 py-16 sm:py-24">
+      <div className="max-w-4xl mx-auto px-5 py-16 sm:py-24">
         <div className="text-center">
-          <h1 className="text-4xl sm:text-5xl font-semibold text-stone-900 mb-6">
+          <h1 className="text-4xl sm:text-5xl font-semibold text-[var(--gray-900)] mb-6">
             Grief Guide
           </h1>
-          <p className="text-xl text-stone-600 mb-4 max-w-2xl mx-auto">
+          <p className="text-xl text-[var(--gray-600)] mb-4 max-w-2xl mx-auto">
             A friend who knows what comes next.
           </p>
-          <p className="text-lg text-stone-500 mb-10 max-w-xl mx-auto">
+          <p className="text-lg text-[var(--gray-500)] mb-10 max-w-xl mx-auto">
             When a parent dies, there's so much to figure out. I'm here to help.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/onboarding"
-              className="px-8 py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors"
+              className="btn btn-primary"
             >
               Get Started
             </Link>
@@ -59,38 +59,38 @@ export default function Home() {
 
         {/* Features */}
         <div className="mt-20 grid md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-xl p-6 border border-stone-200">
-            <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          <div className="card">
+            <div className="w-12 h-12 bg-[var(--primary-100)] rounded-[var(--radius-md)] flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-[var(--primary-600)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
             </div>
-            <h3 className="font-semibold text-stone-900 mb-2">Know what to do next</h3>
-            <p className="text-stone-600 text-sm">
+            <h3 className="font-semibold text-[var(--gray-900)] mb-2">Know what to do next</h3>
+            <p className="text-[var(--gray-600)] text-sm">
               Death certificates, notifying people, dealing with banks—I'll walk you through all of it, one step at a time.
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-stone-200">
-            <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          <div className="card">
+            <div className="w-12 h-12 bg-[var(--purple-light)]/30 rounded-[var(--radius-md)] flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-[var(--purple-main)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-stone-900 mb-2">Someone to talk to</h3>
-            <p className="text-stone-600 text-sm">
+            <h3 className="font-semibold text-[var(--gray-900)] mb-2">Someone to talk to</h3>
+            <p className="text-[var(--gray-600)] text-sm">
               Sometimes you just need to talk. I'm here whenever, no judgment, no agenda.
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-stone-200">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="card">
+            <div className="w-12 h-12 bg-blue-100 rounded-[var(--radius-md)] flex items-center justify-center mb-4">
               <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-stone-900 mb-2">Find the right people</h3>
-            <p className="text-stone-600 text-sm">
+            <h3 className="font-semibold text-[var(--gray-900)] mb-2">Find the right people</h3>
+            <p className="text-[var(--gray-600)] text-sm">
               When you need a lawyer, accountant, or counselor, I'll help you find someone good.
             </p>
           </div>
@@ -98,28 +98,28 @@ export default function Home() {
 
         {/* Reassurance */}
         <div className="mt-16 text-center">
-          <p className="text-stone-500 text-sm">
+          <p className="text-[var(--gray-500)] text-sm">
             You don't have to figure this out alone.
           </p>
         </div>
       </div>
 
       {/* Crisis Footer */}
-      <footer className="border-t border-stone-200 py-6">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-sm text-stone-500 mb-2">
+      <footer className="border-t border-[var(--gray-200)] py-6 safe-area-bottom">
+        <div className="max-w-4xl mx-auto px-5 text-center">
+          <p className="text-sm text-[var(--gray-500)] mb-2">
             In crisis or need immediate support?
           </p>
           <div className="flex items-center justify-center gap-4 text-sm">
-            <a href="tel:988" className="text-violet-600 hover:text-violet-700 font-medium">
+            <a href="tel:988" className="text-[var(--purple-main)] hover:underline font-medium">
               Call or text 988
             </a>
-            <span className="text-stone-300">|</span>
+            <span className="text-[var(--gray-300)]">|</span>
             <a
               href="https://988lifeline.org/chat/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-violet-600 hover:text-violet-700 font-medium"
+              className="text-[var(--purple-main)] hover:underline font-medium"
             >
               Chat online
             </a>

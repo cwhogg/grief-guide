@@ -70,31 +70,31 @@ export default function LoginPage() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-stone-600">Loading...</div>
+      <div className="min-h-screen min-h-[100dvh] flex items-center justify-center bg-[var(--background)]">
+        <div className="text-[var(--foreground-muted)]">Loading...</div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-stone-50 flex flex-col">
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
+    <main className="min-h-screen min-h-[100dvh] bg-[var(--background)] flex flex-col">
+      <div className="flex-1 flex items-center justify-center px-5 py-12">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
-            <Link href="/" className="text-2xl font-semibold text-stone-900">
+            <Link href="/" className="text-2xl font-semibold text-[var(--gray-900)]">
               Grief Guide
             </Link>
-            <p className="mt-2 text-stone-600">
+            <p className="mt-2 text-[var(--gray-600)]">
               {isSignUp ? "Create your account" : "Welcome back"}
             </p>
           </div>
 
           {/* Form */}
-          <div className="bg-white rounded-xl border border-stone-200 p-8">
+          <div className="card">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-stone-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-[var(--gray-700)] mb-1">
                   Email
                 </label>
                 <input
@@ -103,13 +103,13 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600"
+                  className="input"
                   placeholder="you@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-stone-700 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-[var(--gray-700)] mb-1">
                   Password
                 </label>
                 <input
@@ -119,19 +119,19 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600"
+                  className="input"
                   placeholder="At least 6 characters"
                 />
               </div>
 
               {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                <div className="p-3 bg-[var(--error)]/10 border border-[var(--error)]/30 rounded-[var(--radius-md)] text-sm text-[var(--error)]">
                   {error}
                 </div>
               )}
 
               {message && (
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+                <div className="p-3 bg-[var(--primary-50)] border border-[var(--primary-200)] rounded-[var(--radius-md)] text-sm text-[var(--primary-700)]">
                   {message}
                 </div>
               )}
@@ -139,7 +139,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-primary w-full"
               >
                 {isLoading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
               </button>
@@ -152,7 +152,7 @@ export default function LoginPage() {
                   setError(null);
                   setMessage(null);
                 }}
-                className="text-sm text-amber-600 hover:text-amber-700"
+                className="text-sm text-[var(--primary-600)] hover:text-[var(--primary-700)]"
               >
                 {isSignUp
                   ? "Already have an account? Sign in"
@@ -162,18 +162,18 @@ export default function LoginPage() {
           </div>
 
           {/* Reassurance */}
-          <p className="mt-6 text-center text-sm text-stone-500">
+          <p className="mt-6 text-center text-sm text-[var(--gray-500)]">
             Your information is private and secure.
           </p>
         </div>
       </div>
 
       {/* Crisis Footer */}
-      <footer className="border-t border-stone-200 py-4">
+      <footer className="border-t border-[var(--gray-200)] py-4 safe-area-bottom">
         <div className="text-center">
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-[var(--gray-500)]">
             In crisis?{" "}
-            <a href="tel:988" className="text-violet-600 hover:text-violet-700">
+            <a href="tel:988" className="text-[var(--purple-main)] hover:underline">
               Call or text 988
             </a>
           </p>

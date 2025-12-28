@@ -183,18 +183,18 @@ export function OnboardingWizard() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+    <div className="bg-white rounded-[var(--radius-lg)] shadow-sm border border-[var(--gray-200)] overflow-hidden">
       {/* Progress bar */}
-      <div className="h-1 bg-stone-100">
+      <div className="h-1 bg-[var(--gray-100)]">
         <div
-          className="h-full bg-amber-600 transition-all duration-300"
+          className="h-full bg-[var(--primary-600)] transition-all duration-300"
           style={{ width: `${(step / totalSteps) * 100}%` }}
         />
       </div>
 
       <div className="p-6 sm:p-8">
         {/* Step indicator */}
-        <div className="text-sm text-stone-500 mb-6">
+        <div className="text-sm text-[var(--gray-500)] mb-6">
           Step {step} of {totalSteps}
         </div>
 
@@ -211,17 +211,17 @@ export function OnboardingWizard() {
 
         {/* Error message */}
         {error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="mt-4 p-3 bg-[var(--error)]/10 border border-[var(--error)]/30 rounded-[var(--radius-md)] text-[var(--error)] text-sm">
             {error}
           </div>
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between mt-8 pt-6 border-t border-stone-100">
+        <div className="flex justify-between mt-8 pt-6 border-t border-[var(--gray-100)]">
           <button
             onClick={prevStep}
             disabled={step === 1}
-            className="px-4 py-2 text-stone-600 hover:text-stone-900 disabled:opacity-0 disabled:cursor-default transition-opacity"
+            className="px-4 py-2 text-[var(--gray-600)] hover:text-[var(--gray-900)] disabled:opacity-0 disabled:cursor-default transition-opacity min-h-[44px]"
           >
             Back
           </button>
@@ -230,7 +230,7 @@ export function OnboardingWizard() {
             <button
               onClick={nextStep}
               disabled={!canProceed()}
-              className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="btn btn-primary"
             >
               Continue
             </button>
@@ -238,7 +238,7 @@ export function OnboardingWizard() {
             <button
               onClick={handleSubmit}
               disabled={isSubmitting || !canProceed()}
-              className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="btn btn-primary"
             >
               {isSubmitting ? "Setting up..." : "Get Started"}
             </button>
@@ -252,10 +252,10 @@ export function OnboardingWizard() {
 function StepWelcome() {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-stone-900">
+      <h1 className="text-2xl font-semibold text-[var(--gray-900)]">
         We&apos;re here to help
       </h1>
-      <div className="space-y-4 text-stone-600 leading-relaxed">
+      <div className="space-y-4 text-[var(--gray-600)] leading-relaxed">
         <p>
           Whether you&apos;re preparing for a parent&apos;s passing, in the immediate
           aftermath, or still navigating the logistics months later—there&apos;s
@@ -266,7 +266,7 @@ function StepWelcome() {
           We&apos;ll create a personalized checklist based on where you are right now
           and be here whenever you need guidance or just someone to talk to.
         </p>
-        <p className="text-stone-900 font-medium">
+        <p className="text-[var(--gray-900)] font-medium">
           First, we need to understand your situation so we can help you
           effectively.
         </p>
@@ -284,10 +284,10 @@ function StepStage({
 }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold text-stone-900">
+      <h2 className="text-2xl font-semibold text-[var(--gray-900)]">
         Where are you in this right now?
       </h2>
-      <p className="text-stone-600">
+      <p className="text-[var(--gray-600)]">
         This helps us give you the right guidance for where you are.
       </p>
 
@@ -295,10 +295,10 @@ function StepStage({
         {STAGE_OPTIONS.map((option) => (
           <label
             key={option.value}
-            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+            className={`block p-4 rounded-[var(--radius-md)] border-2 cursor-pointer transition-colors ${
               data.griefStage === option.value
-                ? "border-amber-600 bg-amber-50"
-                : "border-stone-200 hover:border-stone-300"
+                ? "border-[var(--primary-600)] bg-[var(--primary-50)]"
+                : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -308,11 +308,11 @@ function StepStage({
                 value={option.value}
                 checked={data.griefStage === option.value}
                 onChange={() => updateData({ griefStage: option.value })}
-                className="mt-1 text-amber-600 focus:ring-amber-600"
+                className="mt-1 text-[var(--primary-600)] focus:ring-[var(--primary-600)]"
               />
               <div>
-                <div className="font-medium text-stone-900">{option.label}</div>
-                <div className="text-sm text-stone-500">{option.description}</div>
+                <div className="font-medium text-[var(--gray-900)]">{option.label}</div>
+                <div className="text-sm text-[var(--gray-500)]">{option.description}</div>
               </div>
             </div>
           </label>
@@ -331,10 +331,10 @@ function StepRole({
 }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold text-stone-900">
+      <h2 className="text-2xl font-semibold text-[var(--gray-900)]">
         What&apos;s your role?
       </h2>
-      <p className="text-stone-600">
+      <p className="text-[var(--gray-600)]">
         This helps us understand what responsibilities you&apos;re handling.
       </p>
 
@@ -342,10 +342,10 @@ function StepRole({
         {ROLE_OPTIONS.map((option) => (
           <label
             key={option.value}
-            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+            className={`block p-4 rounded-[var(--radius-md)] border-2 cursor-pointer transition-colors ${
               data.userRole === option.value
-                ? "border-amber-600 bg-amber-50"
-                : "border-stone-200 hover:border-stone-300"
+                ? "border-[var(--primary-600)] bg-[var(--primary-50)]"
+                : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -355,11 +355,11 @@ function StepRole({
                 value={option.value}
                 checked={data.userRole === option.value}
                 onChange={() => updateData({ userRole: option.value })}
-                className="mt-1 text-amber-600 focus:ring-amber-600"
+                className="mt-1 text-[var(--primary-600)] focus:ring-[var(--primary-600)]"
               />
               <div>
-                <div className="font-medium text-stone-900">{option.label}</div>
-                <div className="text-sm text-stone-500">{option.description}</div>
+                <div className="font-medium text-[var(--gray-900)]">{option.label}</div>
+                <div className="text-sm text-[var(--gray-500)]">{option.description}</div>
               </div>
             </div>
           </label>
@@ -378,23 +378,23 @@ function StepLocation({
 }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold text-stone-900">
+      <h2 className="text-2xl font-semibold text-[var(--gray-900)]">
         Where are you located?
       </h2>
-      <p className="text-stone-600">
+      <p className="text-[var(--gray-600)]">
         Estate laws vary by state. This helps us provide accurate guidance for
         your situation.
       </p>
 
       <div className="mt-6">
-        <label htmlFor="state" className="block text-sm font-medium text-stone-700 mb-2">
+        <label htmlFor="state" className="block text-sm font-medium text-[var(--gray-700)] mb-2">
           State
         </label>
         <select
           id="state"
           value={data.state}
           onChange={(e) => updateData({ state: e.target.value })}
-          className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-stone-900"
+          className="input"
         >
           <option value="">Select your state</option>
           {US_STATES.map((state) => (
@@ -446,14 +446,14 @@ function StepDeceased({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold text-stone-900">
+      <h2 className="text-2xl font-semibold text-[var(--gray-900)]">
         About {parentName}
       </h2>
 
       {/* Basic info */}
       <div className="space-y-6">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-stone-700 mb-2">
+          <label htmlFor="name" className="block text-sm font-medium text-[var(--gray-700)] mb-2">
             Their name
           </label>
           <input
@@ -462,7 +462,7 @@ function StepDeceased({
             value={data.deceasedName}
             onChange={(e) => updateData({ deceasedName: e.target.value })}
             placeholder="First name is fine"
-            className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-stone-900 placeholder:text-stone-400"
+            className="input"
           />
         </div>
 
@@ -475,19 +475,19 @@ function StepDeceased({
 
       {/* Legal/financial knowledge question */}
       <div className="mt-8 space-y-4">
-        <h3 className="text-lg font-medium text-stone-900">
+        <h3 className="text-lg font-medium text-[var(--gray-900)]">
           Do you know much about {parentName}&apos;s legal and financial situation?
         </h3>
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-[var(--gray-500)]">
           Like whether they have a will, own property, or have retirement accounts.
         </p>
 
         <div className="space-y-3">
           <label
-            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+            className={`block p-4 rounded-[var(--radius-md)] border-2 cursor-pointer transition-colors ${
               data.knowsLegalFinancialSituation === "full"
-                ? "border-amber-600 bg-amber-50"
-                : "border-stone-200 hover:border-stone-300"
+                ? "border-[var(--primary-600)] bg-[var(--primary-50)]"
+                : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -496,20 +496,20 @@ function StepDeceased({
                 name="knowledge"
                 checked={data.knowsLegalFinancialSituation === "full"}
                 onChange={() => handleKnowledgeChange("full")}
-                className="mt-1 text-amber-600 focus:ring-amber-600"
+                className="mt-1 text-[var(--primary-600)] focus:ring-[var(--primary-600)]"
               />
               <div>
-                <div className="font-medium text-stone-900">Yes, I have a pretty good picture</div>
-                <div className="text-sm text-stone-500">I know the basics of what they have</div>
+                <div className="font-medium text-[var(--gray-900)]">Yes, I have a pretty good picture</div>
+                <div className="text-sm text-[var(--gray-500)]">I know the basics of what they have</div>
               </div>
             </div>
           </label>
 
           <label
-            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+            className={`block p-4 rounded-[var(--radius-md)] border-2 cursor-pointer transition-colors ${
               data.knowsLegalFinancialSituation === "partial"
-                ? "border-amber-600 bg-amber-50"
-                : "border-stone-200 hover:border-stone-300"
+                ? "border-[var(--primary-600)] bg-[var(--primary-50)]"
+                : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -518,20 +518,20 @@ function StepDeceased({
                 name="knowledge"
                 checked={data.knowsLegalFinancialSituation === "partial"}
                 onChange={() => handleKnowledgeChange("partial")}
-                className="mt-1 text-amber-600 focus:ring-amber-600"
+                className="mt-1 text-[var(--primary-600)] focus:ring-[var(--primary-600)]"
               />
               <div>
-                <div className="font-medium text-stone-900">I know some things but not everything</div>
-                <div className="text-sm text-stone-500">There are gaps in what I know</div>
+                <div className="font-medium text-[var(--gray-900)]">I know some things but not everything</div>
+                <div className="text-sm text-[var(--gray-500)]">There are gaps in what I know</div>
               </div>
             </div>
           </label>
 
           <label
-            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+            className={`block p-4 rounded-[var(--radius-md)] border-2 cursor-pointer transition-colors ${
               data.knowsLegalFinancialSituation === "none"
-                ? "border-amber-600 bg-amber-50"
-                : "border-stone-200 hover:border-stone-300"
+                ? "border-[var(--primary-600)] bg-[var(--primary-50)]"
+                : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -540,11 +540,11 @@ function StepDeceased({
                 name="knowledge"
                 checked={data.knowsLegalFinancialSituation === "none"}
                 onChange={() => handleKnowledgeChange("none")}
-                className="mt-1 text-amber-600 focus:ring-amber-600"
+                className="mt-1 text-[var(--primary-600)] focus:ring-[var(--primary-600)]"
               />
               <div>
-                <div className="font-medium text-stone-900">Honestly, I have no idea</div>
-                <div className="text-sm text-stone-500">This stuff was never discussed</div>
+                <div className="font-medium text-[var(--gray-900)]">Honestly, I have no idea</div>
+                <div className="text-sm text-[var(--gray-500)]">This stuff was never discussed</div>
               </div>
             </div>
           </label>
@@ -552,8 +552,8 @@ function StepDeceased({
 
         {/* Reassuring message for "none" */}
         {data.knowsLegalFinancialSituation === "none" && (
-          <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
-            <p className="text-sm text-stone-700">
+          <div className="p-4 bg-[var(--gray-50)] border border-[var(--gray-200)] rounded-[var(--radius-md)]">
+            <p className="text-sm text-[var(--gray-700)]">
               That&apos;s completely normal. A lot of people don&apos;t know this stuff—it&apos;s
               not something families usually talk about. We&apos;ll help you figure out
               what to look for and who to ask.
@@ -563,8 +563,8 @@ function StepDeceased({
 
         {/* Partial knowledge - show checkboxes */}
         {data.knowsLegalFinancialSituation === "partial" && (
-          <div className="mt-4 space-y-3 p-4 bg-stone-50 rounded-lg">
-            <p className="text-sm font-medium text-stone-700 mb-3">
+          <div className="mt-4 space-y-3 p-4 bg-[var(--gray-50)] rounded-[var(--radius-md)]">
+            <p className="text-sm font-medium text-[var(--gray-700)] mb-3">
               What do you know about? (Check what you&apos;re sure of)
             </p>
             <KnowledgeCheckbox
@@ -609,16 +609,16 @@ function KnowledgeCheckbox({
   label: string;
 }) {
   return (
-    <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-stone-200">
-      <span className="text-stone-700 text-sm">{label}</span>
+    <div className="flex items-center justify-between p-3 bg-white rounded-[var(--radius-md)] border border-[var(--gray-200)]">
+      <span className="text-[var(--gray-700)] text-sm">{label}</span>
       <div className="flex gap-1">
         <button
           type="button"
           onClick={() => onChange("yes")}
-          className={`px-2.5 py-1 text-xs rounded transition-colors ${
+          className={`px-2.5 py-1 text-xs rounded transition-colors min-h-[28px] ${
             status === "yes"
-              ? "bg-green-600 text-white"
-              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+              ? "bg-[var(--primary-600)] text-white"
+              : "bg-[var(--gray-100)] text-[var(--gray-600)] hover:bg-[var(--gray-200)]"
           }`}
         >
           Yes
@@ -626,10 +626,10 @@ function KnowledgeCheckbox({
         <button
           type="button"
           onClick={() => onChange("no")}
-          className={`px-2.5 py-1 text-xs rounded transition-colors ${
+          className={`px-2.5 py-1 text-xs rounded transition-colors min-h-[28px] ${
             status === "no"
-              ? "bg-stone-600 text-white"
-              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+              ? "bg-[var(--gray-600)] text-white"
+              : "bg-[var(--gray-100)] text-[var(--gray-600)] hover:bg-[var(--gray-200)]"
           }`}
         >
           No
@@ -637,10 +637,10 @@ function KnowledgeCheckbox({
         <button
           type="button"
           onClick={() => onChange("unknown")}
-          className={`px-2.5 py-1 text-xs rounded transition-colors ${
+          className={`px-2.5 py-1 text-xs rounded transition-colors min-h-[28px] ${
             status === "unknown"
-              ? "bg-amber-600 text-white"
-              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+              ? "bg-[var(--accent-500)] text-white"
+              : "bg-[var(--gray-100)] text-[var(--gray-600)] hover:bg-[var(--gray-200)]"
           }`}
         >
           ?
@@ -659,10 +659,10 @@ function StepFamily({
 }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold text-stone-900">
+      <h2 className="text-2xl font-semibold text-[var(--gray-900)]">
         Family structure
       </h2>
-      <p className="text-stone-600">
+      <p className="text-[var(--gray-600)]">
         Understanding your family helps us anticipate coordination needs.
       </p>
 
@@ -674,14 +674,14 @@ function StepFamily({
         />
 
         <div>
-          <label htmlFor="siblings" className="block text-sm font-medium text-stone-700 mb-2">
+          <label htmlFor="siblings" className="block text-sm font-medium text-[var(--gray-700)] mb-2">
             How many siblings do you have?
           </label>
           <select
             id="siblings"
             value={data.numberOfSiblings}
             onChange={(e) => updateData({ numberOfSiblings: parseInt(e.target.value) })}
-            className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-amber-600 text-stone-900"
+            className="input"
           >
             <option value={0}>I&apos;m an only child</option>
             <option value={1}>1 sibling</option>
@@ -705,10 +705,10 @@ function StepPreferences({
 }) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold text-stone-900">
+      <h2 className="text-2xl font-semibold text-[var(--gray-900)]">
         Your preferences
       </h2>
-      <p className="text-stone-600">
+      <p className="text-[var(--gray-600)]">
         How often would you like us to check in with you?
       </p>
 
@@ -716,10 +716,10 @@ function StepPreferences({
         {FREQUENCY_OPTIONS.map((option) => (
           <label
             key={option.value}
-            className={`block p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+            className={`block p-4 rounded-[var(--radius-md)] border-2 cursor-pointer transition-colors ${
               data.checkInFrequency === option.value
-                ? "border-amber-600 bg-amber-50"
-                : "border-stone-200 hover:border-stone-300"
+                ? "border-[var(--primary-600)] bg-[var(--primary-50)]"
+                : "border-[var(--gray-200)] hover:border-[var(--gray-300)]"
             }`}
           >
             <div className="flex items-start gap-3">
@@ -729,19 +729,19 @@ function StepPreferences({
                 value={option.value}
                 checked={data.checkInFrequency === option.value}
                 onChange={() => updateData({ checkInFrequency: option.value })}
-                className="mt-1 text-amber-600 focus:ring-amber-600"
+                className="mt-1 text-[var(--primary-600)] focus:ring-[var(--primary-600)]"
               />
               <div>
-                <div className="font-medium text-stone-900">{option.label}</div>
-                <div className="text-sm text-stone-500">{option.description}</div>
+                <div className="font-medium text-[var(--gray-900)]">{option.label}</div>
+                <div className="text-sm text-[var(--gray-500)]">{option.description}</div>
               </div>
             </div>
           </label>
         ))}
       </div>
 
-      <div className="mt-6 p-4 bg-stone-50 rounded-lg">
-        <p className="text-sm text-stone-600">
+      <div className="mt-6 p-4 bg-[var(--gray-50)] rounded-[var(--radius-md)]">
+        <p className="text-sm text-[var(--gray-600)]">
           You can change this anytime in your settings. We&apos;ll never send
           anything without your permission.
         </p>
@@ -760,14 +760,14 @@ function CheckboxOption({
   label: string;
 }) {
   return (
-    <label className="flex items-center gap-3 p-3 rounded-lg border border-stone-200 hover:border-stone-300 cursor-pointer transition-colors">
+    <label className="flex items-center gap-3 p-3 rounded-[var(--radius-md)] border border-[var(--gray-200)] hover:border-[var(--gray-300)] cursor-pointer transition-colors min-h-[48px]">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-5 h-5 text-amber-600 rounded focus:ring-amber-600"
+        className="w-5 h-5 text-[var(--primary-600)] rounded focus:ring-[var(--primary-600)]"
       />
-      <span className="text-stone-700">{label}</span>
+      <span className="text-[var(--gray-700)]">{label}</span>
     </label>
   );
 }
