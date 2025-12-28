@@ -457,32 +457,33 @@ function getTaskStats(tasks: Task[]) {
 
 function getUrgentTasks(tasks: Task[], griefStage: GriefStage): Task[] {
   const now = new Date();
-  return tasks.filter((task) => {
-    if (task.status === "completed" || task.status === "skipped") return false;
 
-    // Discovery tasks are always priority - users need to find info first
-    if (task.timeline_category === "discovery") return true;
+  // Filter to incomplete tasks only
+  const incompleteTasks = tasks.filter((task) =>
+    task.status !== "completed" && task.status !== "skipped"
+  );
 
-    // For anticipating stage, priority 1 tasks are most important
-    if (griefStage === "anticipating") {
-      return task.priority === 1;
-    }
+  // Sort by priority (lower number = higher priority)
+  const sortedTasks = [...incompleteTasks].sort((a, b) => a.priority - b.priority);
 
-    // Immediate tasks are always urgent
-    if (task.timeline_category === "immediate") return true;
+  // For immediate stage: return top priority tasks (the TRUE urgencies)
+  // Priority 1-4 are the critical first tasks (body, death certs, notify family, secure home)
+  if (griefStage === "immediate") {
+    return sortedTasks.filter((task) => task.priority <= 4);
+  }
 
-    // Overdue tasks are urgent
-    if (task.due_date && new Date(task.due_date) < now) return true;
+  // For anticipating stage: priority 1-3 tasks are most time-sensitive (POA, care wishes, will)
+  if (griefStage === "anticipating") {
+    return sortedTasks.filter((task) => task.priority <= 3);
+  }
 
-    // Due within 3 days
-    if (task.due_date) {
-      const dueDate = new Date(task.due_date);
-      const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-      if (dueDate <= threeDaysFromNow) return true;
-    }
+  // For navigating stage: priority 1-3 tasks are the next important things
+  if (griefStage === "navigating") {
+    return sortedTasks.filter((task) => task.priority <= 3);
+  }
 
-    return false;
-  });
+  // Fallback: return top 5 tasks by priority
+  return sortedTasks.slice(0, 5);
 }
 
 function formatTaskSummary(tasks: Task[], griefStage: GriefStage): string {

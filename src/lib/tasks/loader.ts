@@ -102,6 +102,8 @@ export function getTasksForUser(options: GetTasksOptions): Task[] {
   }));
 
   // Add discovery tasks for areas where user has 'unknown' status
+  // Discovery tasks slot in around "Find important papers" (priority 5-6)
+  // They help users find specific info they don't know about
   const discoveryTasks: Task[] = [];
   const discoveryTemplates = discoveryData.tasks as DiscoveryTaskTemplate[];
 
@@ -109,9 +111,10 @@ export function getTasksForUser(options: GetTasksOptions): Task[] {
     const triggerArea = template.triggers_on_unknown as keyof KnowledgeStatusMap;
     if (knowledgeStatus[triggerArea] === "unknown") {
       if (template.stages && template.stages.includes(griefStage)) {
-        // Discovery tasks use priority from template, offset by 2 to come after critical immediate tasks
-        // (notify family = 1, funeral home = 2, then discovery = 3+)
-        const discoveryPriority = (template.priority || 1) + 2;
+        // Discovery tasks should come after the first critical tasks (1-4) but around
+        // the same priority as "Find important papers" (5) and "Figure out will" (6)
+        // Base priority of 5, with template priority adding minor ordering within discovery tasks
+        const discoveryPriority = 5 + (template.priority || 1) * 0.1;
         discoveryTasks.push({
           id: template.id,
           user_id: "demo-user-123",
@@ -137,5 +140,9 @@ export function getTasksForUser(options: GetTasksOptions): Task[] {
     }
   }
 
-  return [...discoveryTasks, ...regularTasks];
+  // Combine all tasks and sort by priority (lower number = higher priority)
+  const allTasks = [...regularTasks, ...discoveryTasks];
+  allTasks.sort((a, b) => a.priority - b.priority);
+
+  return allTasks;
 }
