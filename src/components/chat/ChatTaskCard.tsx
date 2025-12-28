@@ -11,7 +11,7 @@ interface ChatTaskCardProps {
 }
 
 const STATUS_BADGE: Record<TaskStatus, { label: string; className: string } | null> = {
-  pending: null, // Don't show badge for pending
+  pending: null,
   in_progress: { label: "In progress", className: "bg-blue-100 text-blue-700" },
   completed: { label: "Done", className: "bg-green-100 text-green-700" },
   blocked: { label: "Stuck", className: "bg-orange-100 text-orange-700" },
@@ -50,10 +50,9 @@ export function ChatTaskCard({
     }
   };
 
-  // Truncate description to ~2 lines
   const truncatedDescription = task.description
-    ? task.description.length > 100
-      ? task.description.slice(0, 100) + "..."
+    ? task.description.length > 80
+      ? task.description.slice(0, 80) + "..."
       : task.description
     : null;
 
@@ -74,12 +73,19 @@ export function ChatTaskCard({
   return (
     <div
       className={`my-2 bg-white border rounded-xl overflow-hidden transition-opacity ${
-        isCompleted ? "border-stone-200 opacity-60" : "border-stone-200 shadow-sm"
+        isCompleted ? "border-stone-200 opacity-60" : "border-amber-200 shadow-sm"
       }`}
     >
-      {/* Task content */}
+      {/* Task header with icon */}
       <div className="px-4 py-3">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          {/* Task icon */}
+          <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+
           <div className="flex-1 min-w-0">
             {/* Title with optional status badge */}
             <div className="flex items-center gap-2 flex-wrap">
@@ -93,9 +99,9 @@ export function ChatTaskCard({
               )}
             </div>
 
-            {/* Description - 2 lines max */}
+            {/* Description */}
             {truncatedDescription && (
-              <p className="text-sm text-stone-500 mt-1 line-clamp-2">
+              <p className="text-sm text-stone-500 mt-1">
                 {truncatedDescription}
               </p>
             )}
@@ -103,29 +109,29 @@ export function ChatTaskCard({
         </div>
       </div>
 
-      {/* Action buttons - only show if not completed */}
+      {/* Action buttons - RCS style, inside card */}
       {!isCompleted && (
-        <div className="px-4 py-2 bg-stone-50 border-t border-stone-100 flex items-center gap-2">
+        <div className="px-3 py-2 border-t border-stone-100 flex flex-wrap gap-2">
+          <button
+            onClick={() => onTellMeMore(task)}
+            disabled={isUpdating}
+            className="flex-1 min-w-[100px] px-4 py-2.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 disabled:opacity-50 transition-colors"
+          >
+            Walk me through it
+          </button>
           <button
             onClick={handleDone}
             disabled={isUpdating}
-            className="px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+            className="px-4 py-2.5 text-sm font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 disabled:opacity-50 transition-colors"
           >
             Done
           </button>
           <button
             onClick={handleSkip}
             disabled={isUpdating}
-            className="px-3 py-1.5 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+            className="px-4 py-2.5 text-sm text-stone-500 border border-stone-200 rounded-lg hover:bg-stone-50 disabled:opacity-50 transition-colors"
           >
             Skip
-          </button>
-          <button
-            onClick={() => onTellMeMore(task)}
-            disabled={isUpdating}
-            className="px-3 py-1.5 text-sm text-amber-700 hover:text-amber-800 hover:bg-amber-50 rounded-lg transition-colors"
-          >
-            Tell me more
           </button>
         </div>
       )}
@@ -133,29 +139,64 @@ export function ChatTaskCard({
   );
 }
 
-// Parser to extract task references from message content
-// Format: [task:task_id] or [[task:task_id]]
-export function parseTaskReferences(content: string): {
+// Types for message actions
+export interface MessageAction {
+  label: string;
+  type: "message" | "action";
+  value?: string; // For message type - the message to send
+  taskId?: string; // For action type
+  action?: "complete" | "skip" | "details"; // For action type
+  primary?: boolean;
+}
+
+// Parser to extract task references and action buttons from message content
+// Formats:
+// - [task:task_id] - Embed a task card
+// - [action:label|type|value] - Add an action button
+export function parseMessageContent(content: string): {
   segments: Array<{ type: "text" | "task"; content: string; taskId?: string }>;
   taskIds: string[];
+  actions: MessageAction[];
 } {
   const taskPattern = /\[\[?task:([a-zA-Z0-9_-]+)\]\]?/g;
+  const actionPattern = /\[action:([^\]]+)\]/g;
+
   const segments: Array<{ type: "text" | "task"; content: string; taskId?: string }> = [];
   const taskIds: string[] = [];
+  const actions: MessageAction[] = [];
 
+  // First, extract actions (they appear at the end usually)
+  let contentWithoutActions = content;
+  let actionMatch;
+  while ((actionMatch = actionPattern.exec(content)) !== null) {
+    const actionStr = actionMatch[1];
+    const parts = actionStr.split("|");
+    if (parts.length >= 2) {
+      const action: MessageAction = {
+        label: parts[0],
+        type: parts[1] as "message" | "action",
+        value: parts[2],
+        taskId: parts[3],
+        action: parts[4] as "complete" | "skip" | "details",
+        primary: parts[5] === "primary",
+      };
+      actions.push(action);
+    }
+    contentWithoutActions = contentWithoutActions.replace(actionMatch[0], "").trim();
+  }
+
+  // Then parse task references from the remaining content
   let lastIndex = 0;
   let match;
 
-  while ((match = taskPattern.exec(content)) !== null) {
-    // Add text before the match
+  while ((match = taskPattern.exec(contentWithoutActions)) !== null) {
     if (match.index > lastIndex) {
-      const text = content.slice(lastIndex, match.index).trim();
+      const text = contentWithoutActions.slice(lastIndex, match.index).trim();
       if (text) {
         segments.push({ type: "text", content: text });
       }
     }
 
-    // Add the task reference
     const taskId = match[1];
     taskIds.push(taskId);
     segments.push({ type: "task", content: match[0], taskId });
@@ -163,23 +204,115 @@ export function parseTaskReferences(content: string): {
     lastIndex = match.index + match[0].length;
   }
 
-  // Add remaining text
-  if (lastIndex < content.length) {
-    const text = content.slice(lastIndex).trim();
+  if (lastIndex < contentWithoutActions.length) {
+    const text = contentWithoutActions.slice(lastIndex).trim();
     if (text) {
       segments.push({ type: "text", content: text });
     }
   }
 
-  // If no tasks found, return the whole content as text
-  if (segments.length === 0) {
-    segments.push({ type: "text", content });
+  if (segments.length === 0 && contentWithoutActions.trim()) {
+    segments.push({ type: "text", content: contentWithoutActions.trim() });
   }
 
-  return { segments, taskIds };
+  return { segments, taskIds, actions };
+}
+
+// Legacy parser for backwards compatibility
+export function parseTaskReferences(content: string): {
+  segments: Array<{ type: "text" | "task"; content: string; taskId?: string }>;
+  taskIds: string[];
+} {
+  const result = parseMessageContent(content);
+  return { segments: result.segments, taskIds: result.taskIds };
 }
 
 // Helper to check if a message contains task references
 export function hasTaskReferences(content: string): boolean {
   return /\[\[?task:[a-zA-Z0-9_-]+\]\]?/.test(content);
+}
+
+// Message action buttons component
+interface MessageActionsProps {
+  actions: MessageAction[];
+  onSendMessage: (message: string) => void;
+  onTaskAction?: (taskId: string, action: "complete" | "skip" | "details") => void;
+}
+
+export function MessageActions({ actions, onSendMessage, onTaskAction }: MessageActionsProps) {
+  if (actions.length === 0) return null;
+
+  return (
+    <div className="flex flex-wrap gap-2 mt-3">
+      {actions.map((action, i) => {
+        const isPrimary = action.primary || i === 0;
+
+        const handleClick = () => {
+          if (action.type === "message" && action.value) {
+            onSendMessage(action.value);
+          } else if (action.type === "action" && action.taskId && action.action && onTaskAction) {
+            onTaskAction(action.taskId, action.action);
+          }
+        };
+
+        return (
+          <button
+            key={i}
+            onClick={handleClick}
+            className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
+              isPrimary
+                ? "bg-amber-600 text-white hover:bg-amber-700"
+                : "border border-stone-200 text-stone-700 hover:bg-stone-50"
+            }`}
+          >
+            {action.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// Generate contextual actions based on message content
+export function generateContextualActions(content: string, taskId?: string): MessageAction[] {
+  const lowerContent = content.toLowerCase();
+  const actions: MessageAction[] = [];
+
+  // If message mentions a task, add task-specific actions
+  if (taskId) {
+    actions.push(
+      { label: "Walk me through it", type: "message", value: `Walk me through ${taskId}`, primary: true },
+      { label: "Done", type: "action", taskId, action: "complete" },
+      { label: "Skip", type: "action", taskId, action: "skip" }
+    );
+    return actions;
+  }
+
+  // Emotional content
+  if (lowerContent.includes("hard") || lowerContent.includes("difficult") || lowerContent.includes("overwhelm")) {
+    actions.push(
+      { label: "I need to keep talking", type: "message", value: "I just need to talk", primary: true },
+      { label: "I'm okay, back to tasks", type: "message", value: "I'm ready to look at practical stuff" }
+    );
+    return actions;
+  }
+
+  // Task-related content
+  if (lowerContent.includes("death certificate") || lowerContent.includes("funeral") || lowerContent.includes("will")) {
+    actions.push(
+      { label: "Tell me more", type: "message", value: "Tell me more about this", primary: true },
+      { label: "What's next?", type: "message", value: "What should I focus on next?" }
+    );
+    return actions;
+  }
+
+  // Default helpful actions
+  if (content.includes("?")) {
+    actions.push(
+      { label: "Yes", type: "message", value: "Yes", primary: true },
+      { label: "Not right now", type: "message", value: "Not right now" }
+    );
+  }
+
+  return actions;
 }

@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@/hooks/useUser";
-import { ChatTaskCard, parseTaskReferences } from "@/components/chat/ChatTaskCard";
+import { ChatTaskCard, parseMessageContent, generateContextualActions, MessageActions, type MessageAction } from "@/components/chat/ChatTaskCard";
 import type { Task, TaskStatus } from "@/lib/supabase/types";
 
 // Types
@@ -13,20 +13,43 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+  suggestedPrompts?: string[];
 }
 
 type ChatMode = "guide" | "therapist";
+type ConversationContext = "initial" | "task" | "emotional" | "general";
 
-// Suggested prompts by mode and context
-const GUIDE_PROMPTS = [
-  "What matters most right now?",
-  "I just need to talk",
-];
+// Contextual prompts based on conversation state
+const PROMPTS = {
+  initial: [
+    "What should I focus on first?",
+    "I don't know where to start",
+    "I just need to talk",
+  ],
+  task: [
+    "Walk me through this",
+    "What's next after this?",
+    "I'm stuck on something",
+    "I need a break",
+  ],
+  emotional: [
+    "This is harder than I expected",
+    "I don't know how I'm supposed to feel",
+    "I think I'm ready to get back to practical stuff",
+  ],
+  general: [
+    "What matters most right now?",
+    "Help me with something specific",
+    "I just need to talk",
+  ],
+  resources: [
+    "Find a grief counselor",
+    "I need legal help",
+    "Help me find professionals",
+  ],
+};
 
-const THERAPIST_PROMPTS = [
-  "I'm having a hard day",
-  "Back to practical stuff",
-];
+const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 
 export default function ChatPage() {
   const router = useRouter();
@@ -40,6 +63,8 @@ export default function ChatPage() {
   const [isReady, setIsReady] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskMap, setTaskMap] = useState<Map<string, Task>>(new Map());
+  const [showFirstTimeHint, setShowFirstTimeHint] = useState(false);
+  const [conversationContext, setConversationContext] = useState<ConversationContext>("initial");
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -56,6 +81,23 @@ export default function ChatPage() {
       router.push("/onboarding");
     }
   }, [userLoading, profile, router]);
+
+  // Check for first visit
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hasVisited = localStorage.getItem(FIRST_VISIT_KEY);
+      if (!hasVisited) {
+        setShowFirstTimeHint(true);
+      }
+    }
+  }, []);
+
+  const dismissFirstTimeHint = () => {
+    setShowFirstTimeHint(false);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(FIRST_VISIT_KEY, "true");
+    }
+  };
 
   // Fetch tasks
   useEffect(() => {
@@ -91,7 +133,6 @@ export default function ChatPage() {
   };
 
   const handleTaskStatusChange = async (taskId: string, status: TaskStatus) => {
-    // Optimistically update local state
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status } : t));
     setTaskMap(prev => {
       const newMap = new Map(prev);
@@ -101,16 +142,31 @@ export default function ChatPage() {
       }
       return newMap;
     });
-
-    // TODO: Persist to database when auth is set up
-    // For now, just update local state
   };
 
   const handleTellMeMore = (task: Task) => {
-    // Send a message asking for more details about this task
     const message = `Tell me more about "${task.title}"`;
     handleSendMessage(message);
   };
+
+  // Detect conversation context from messages
+  const detectContext = useCallback((lastAssistantMessage: string, lastUserMessage: string): ConversationContext => {
+    const combined = (lastAssistantMessage + " " + lastUserMessage).toLowerCase();
+
+    // Check for task-related content
+    const taskIndicators = ["task", "step", "document", "form", "certificate", "account", "bank", "insurance", "will", "probate", "estate"];
+    if (taskIndicators.some(t => combined.includes(t))) {
+      return "task";
+    }
+
+    // Check for emotional content
+    const emotionalIndicators = ["feel", "hard", "difficult", "miss", "grief", "sad", "overwhelm", "cry", "tough", "struggle"];
+    if (emotionalIndicators.some(t => combined.includes(t))) {
+      return "emotional";
+    }
+
+    return "general";
+  }, []);
 
   // Generate initial greeting based on user context and stage
   useEffect(() => {
@@ -118,9 +174,9 @@ export default function ChatPage() {
       hasGreeted.current = true;
       const name = profile.full_name?.split(" ")[0];
       const stage = profile.grief_stage;
+      const parentName = profile.deceased_name;
 
       let greeting = "";
-      const parentName = profile.deceased_name;
       if (stage === "anticipating") {
         greeting = `Hi${name ? ` ${name}` : ""}. I'm here to help you figure out what to ask and what to gather while you still can. What's on your mind?`;
       } else if (stage === "immediate") {
@@ -134,6 +190,7 @@ export default function ChatPage() {
         role: "assistant",
         content: greeting,
         timestamp: new Date(),
+        suggestedPrompts: PROMPTS.initial,
       };
       setMessages([greetingMessage]);
       historyRef.current = [{ role: "assistant", content: greeting }];
@@ -186,6 +243,7 @@ export default function ChatPage() {
       "what do i need to",
       "help me with",
       "next steps",
+      "ready to look at practical",
     ];
 
     if (mode === "guide" && therapistTriggers.some(t => lowerMessage.includes(t))) {
@@ -202,19 +260,41 @@ export default function ChatPage() {
 
     setMode(newMode);
 
-    // Add a transition message
+    // Gentle transition messages
     const transitionMessage: Message = {
       id: crypto.randomUUID(),
       role: "assistant",
       content: newMode === "therapist"
-        ? "I hear you. Let's set the tasks aside for now. How are you doing—really?"
-        : "Okay, back to the practical stuff. What would help to work on?",
+        ? "I'm here. Take your time."
+        : "Okay, I'm here when you need to talk. Let's look at what's next.",
       timestamp: new Date(),
+      suggestedPrompts: newMode === "therapist" ? PROMPTS.emotional : PROMPTS.task,
     };
 
     setMessages(prev => [...prev, transitionMessage]);
     historyRef.current.push({ role: "assistant", content: transitionMessage.content });
+    setConversationContext(newMode === "therapist" ? "emotional" : "task");
   }, [mode]);
+
+  // Generate suggested prompts based on response content
+  const generateSuggestedPrompts = useCallback((content: string, userMessage: string): string[] => {
+    const context = detectContext(content, userMessage);
+    setConversationContext(context);
+
+    // Check if response mentions specific tasks
+    const mentionsTask = content.includes("[task:") ||
+      /death certificate|will|probate|bank|insurance|account/i.test(content);
+
+    if (mentionsTask) {
+      return [
+        "Walk me through this",
+        "What else should I know?",
+        "What's next after this?",
+      ];
+    }
+
+    return PROMPTS[context];
+  }, [detectContext]);
 
   const handleSendMessage = useCallback(async (messageText: string) => {
     if (!messageText.trim() || isStreaming) return;
@@ -222,7 +302,6 @@ export default function ChatPage() {
     // Check for mode switch
     const switchTo = detectModeSwitch(messageText);
     if (switchTo) {
-      // Add user message first
       const userMessage: Message = {
         id: crypto.randomUUID(),
         role: "user",
@@ -260,7 +339,6 @@ export default function ChatPage() {
 
       if (!response.ok) throw new Error("Failed to send message");
 
-      // Update history
       historyRef.current.push({ role: "user", content: messageText });
 
       const stream = response.body;
@@ -299,12 +377,15 @@ export default function ChatPage() {
         }
       }
 
-      // Add assistant message
+      // Generate contextual prompts based on response
+      const suggestedPrompts = generateSuggestedPrompts(fullContent, messageText);
+
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",
         content: fullContent || "I'm sorry, I couldn't generate a response. Please try again.",
         timestamp: new Date(),
+        suggestedPrompts,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -322,7 +403,7 @@ export default function ChatPage() {
       setIsStreaming(false);
       setStreamingContent("");
     }
-  }, [mode, isStreaming, detectModeSwitch, switchMode]);
+  }, [mode, isStreaming, detectModeSwitch, switchMode, generateSuggestedPrompts]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -337,13 +418,12 @@ export default function ChatPage() {
   };
 
   const handlePromptClick = (prompt: string) => {
-    if (prompt === "Back to practical stuff") {
-      switchMode("guide");
-    } else if (prompt === "I need to talk to someone") {
-      handleSendMessage("I need to talk to someone");
-    } else {
-      handleSendMessage(prompt);
-    }
+    handleSendMessage(prompt);
+  };
+
+  const handleHelpRequest = () => {
+    setMenuOpen(false);
+    handleSendMessage("How do I use Grief Guide? What can you help me with?");
   };
 
   if (userLoading || !isReady) {
@@ -358,8 +438,9 @@ export default function ChatPage() {
     return null;
   }
 
-  const currentPrompts = mode === "therapist" ? THERAPIST_PROMPTS : GUIDE_PROMPTS;
-  const modeColor = mode === "therapist" ? "violet" : "amber";
+  // Get current prompts - from last assistant message or based on context
+  const lastAssistantMessage = [...messages].reverse().find(m => m.role === "assistant");
+  const currentPrompts = lastAssistantMessage?.suggestedPrompts || PROMPTS[conversationContext];
 
   return (
     <div className="h-screen flex flex-col bg-stone-50">
@@ -404,6 +485,16 @@ export default function ChatPage() {
             {/* Dropdown menu */}
             {menuOpen && (
               <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-lg border border-stone-200 py-2 z-50">
+                <button
+                  onClick={handleHelpRequest}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-left"
+                >
+                  <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-stone-700">How to use Grief Guide</span>
+                </button>
+                <div className="border-t border-stone-100 my-2" />
                 <Link
                   href="/tasks"
                   className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors"
@@ -413,15 +504,18 @@ export default function ChatPage() {
                   </svg>
                   <span className="text-stone-700">View all tasks</span>
                 </Link>
-                <Link
-                  href="/resources"
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors"
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    handleSendMessage("I need help finding professionals - what kind of help is available?");
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors text-left"
                 >
                   <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                   <span className="text-stone-700">Find help</span>
-                </Link>
+                </button>
                 <div className="border-t border-stone-100 my-2" />
                 <a
                   href="tel:988"
@@ -461,9 +555,24 @@ export default function ChatPage() {
         </div>
       )}
 
+      {/* First-time guidance hint */}
+      {showFirstTimeHint && (
+        <div className="mx-4 mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+          <p className="text-sm text-amber-900 mb-3">
+            You can ask me about what needs to be done, get help with specific tasks, or just talk when things feel heavy. I'm here for all of it.
+          </p>
+          <button
+            onClick={dismissFirstTimeHint}
+            className="text-sm font-medium text-amber-700 hover:text-amber-900 transition-colors"
+          >
+            Got it
+          </button>
+        </div>
+      )}
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <MessageBubble
             key={message.id}
             message={message}
@@ -471,6 +580,8 @@ export default function ChatPage() {
             taskMap={taskMap}
             onTaskStatusChange={handleTaskStatusChange}
             onTellMeMore={handleTellMeMore}
+            onSendMessage={handleSendMessage}
+            isLastMessage={index === messages.length - 1 && !isStreaming}
           />
         ))}
 
@@ -487,6 +598,7 @@ export default function ChatPage() {
             taskMap={taskMap}
             onTaskStatusChange={handleTaskStatusChange}
             onTellMeMore={handleTellMeMore}
+            onSendMessage={handleSendMessage}
             isStreaming
           />
         )}
@@ -507,60 +619,73 @@ export default function ChatPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Suggested prompts - show when few messages */}
-      {messages.length <= 2 && !isStreaming && (
-        <div className="px-4 pb-2">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {currentPrompts.map((prompt, i) => (
-              <button
-                key={i}
-                onClick={() => handlePromptClick(prompt)}
-                className={`px-4 py-2 text-sm rounded-full border transition-colors ${
+      {/* Input area with suggested prompts */}
+      <div className="border-t border-stone-200 bg-white">
+        {/* Suggested prompts - always show below input when not streaming */}
+        {!isStreaming && currentPrompts && currentPrompts.length > 0 && (
+          <div className="px-4 pt-3 pb-1">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {currentPrompts.map((prompt, i) => (
+                <button
+                  key={i}
+                  onClick={() => handlePromptClick(prompt)}
+                  className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
+                    mode === "therapist"
+                      ? "border-violet-200 hover:bg-violet-50 text-violet-700"
+                      : "border-stone-200 hover:bg-stone-50 text-stone-600"
+                  }`}
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Input form */}
+        <div className="p-4 pt-2">
+          <form onSubmit={handleSubmit} className="flex gap-3 max-w-3xl mx-auto">
+            <div className="flex-1 relative">
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={mode === "therapist" ? "Share what's on your mind..." : "Ask me anything..."}
+                disabled={isStreaming}
+                rows={1}
+                className={`w-full px-4 py-3 border rounded-xl resize-none focus:ring-2 disabled:opacity-50 disabled:bg-stone-50 ${
                   mode === "therapist"
-                    ? "border-violet-200 hover:bg-violet-50 text-violet-700"
-                    : "border-stone-200 hover:bg-stone-50 text-stone-700"
+                    ? "border-violet-200 focus:ring-violet-500 focus:border-violet-500"
+                    : "border-stone-300 focus:ring-amber-600 focus:border-amber-600"
                 }`}
-              >
-                {prompt}
-              </button>
-            ))}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={!input.trim() || isStreaming}
+              className={`px-4 py-3 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
+                mode === "therapist"
+                  ? "bg-violet-600 hover:bg-violet-700"
+                  : "bg-amber-600 hover:bg-amber-700"
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </form>
+
+          {/* Subtle crisis support link */}
+          <div className="text-center pb-2">
+            <a
+              href="tel:988"
+              className="text-xs text-stone-400 hover:text-violet-600 transition-colors"
+            >
+              In crisis? Call or text 988
+            </a>
           </div>
         </div>
-      )}
-
-      {/* Input */}
-      <div className="border-t border-stone-200 bg-white p-4">
-        <form onSubmit={handleSubmit} className="flex gap-3 max-w-3xl mx-auto">
-          <div className="flex-1 relative">
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={mode === "therapist" ? "Share what's on your mind..." : "Ask me anything..."}
-              disabled={isStreaming}
-              rows={1}
-              className={`w-full px-4 py-3 border rounded-xl resize-none focus:ring-2 disabled:opacity-50 disabled:bg-stone-50 ${
-                mode === "therapist"
-                  ? "border-violet-200 focus:ring-violet-500 focus:border-violet-500"
-                  : "border-stone-300 focus:ring-amber-600 focus:border-amber-600"
-              }`}
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={!input.trim() || isStreaming}
-            className={`px-4 py-3 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${
-              mode === "therapist"
-                ? "bg-violet-600 hover:bg-violet-700"
-                : "bg-amber-600 hover:bg-amber-700"
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
-        </form>
       </div>
     </div>
   );
@@ -572,14 +697,18 @@ function MessageBubble({
   taskMap,
   onTaskStatusChange,
   onTellMeMore,
+  onSendMessage,
   isStreaming = false,
+  isLastMessage = false,
 }: {
   message: Message;
   mode: ChatMode;
   taskMap: Map<string, Task>;
   onTaskStatusChange: (taskId: string, status: TaskStatus) => Promise<void>;
   onTellMeMore: (task: Task) => void;
+  onSendMessage: (message: string) => void;
   isStreaming?: boolean;
+  isLastMessage?: boolean;
 }) {
   const isUser = message.role === "user";
 
@@ -603,8 +732,25 @@ function MessageBubble({
     );
   }
 
-  // For assistant messages, parse and render task references
-  const { segments } = parseTaskReferences(message.content);
+  // For assistant messages, parse content and generate actions
+  const { segments, taskIds } = parseMessageContent(message.content);
+
+  // Generate contextual actions for the last message (not streaming)
+  const contextualActions = isLastMessage && !isStreaming
+    ? generateContextualActions(message.content, taskIds[0])
+    : [];
+
+  // Handler for task actions from action buttons
+  const handleTaskAction = async (taskId: string, action: "complete" | "skip" | "details") => {
+    if (action === "details") {
+      const task = taskMap.get(taskId);
+      if (task) onTellMeMore(task);
+    } else if (action === "complete") {
+      await onTaskStatusChange(taskId, "completed");
+    } else if (action === "skip") {
+      await onTaskStatusChange(taskId, "skipped");
+    }
+  };
 
   return (
     <div className="flex gap-3">
@@ -623,10 +769,11 @@ function MessageBubble({
         )}
       </div>
 
-      {/* Message content with embedded task cards */}
+      {/* Message content with embedded task cards and action buttons */}
       <div className="max-w-[85%] space-y-2">
         {segments.map((segment, index) => {
           if (segment.type === "text") {
+            const isLastSegment = index === segments.length - 1;
             return (
               <div
                 key={index}
@@ -634,10 +781,19 @@ function MessageBubble({
               >
                 <div className="whitespace-pre-wrap break-words text-stone-700">
                   {segment.content}
-                  {isStreaming && index === segments.length - 1 && (
+                  {isStreaming && isLastSegment && (
                     <span className={`inline-block w-1.5 h-4 ml-0.5 ${mode === "therapist" ? "bg-violet-600" : "bg-amber-600"} animate-pulse`} />
                   )}
                 </div>
+
+                {/* Inline action buttons for last text segment of last message */}
+                {isLastSegment && isLastMessage && !isStreaming && contextualActions.length > 0 && taskIds.length === 0 && (
+                  <MessageActions
+                    actions={contextualActions}
+                    onSendMessage={onSendMessage}
+                    onTaskAction={handleTaskAction}
+                  />
+                )}
               </div>
             );
           } else if (segment.type === "task" && segment.taskId) {
@@ -652,10 +808,23 @@ function MessageBubble({
                 />
               );
             } else {
-              // Task not found - show placeholder
+              // Task not found - show a helpful message instead of error
               return (
-                <div key={index} className="my-2 px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-500 italic">
-                  Task not found: {segment.taskId}
+                <div key={index} className="my-2 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl">
+                  <div className="flex items-center gap-2 text-amber-700">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <span className="text-sm font-medium">Task: {segment.taskId}</span>
+                  </div>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      onClick={() => onSendMessage(`Tell me more about "${segment.taskId}"`)}
+                      className="px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-100 rounded-lg hover:bg-amber-200 transition-colors"
+                    >
+                      Tell me more
+                    </button>
+                  </div>
                 </div>
               );
             }

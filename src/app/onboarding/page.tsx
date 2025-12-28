@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { OnboardingChat } from "@/components/onboarding/OnboardingChat";
 import { useUser } from "@/hooks/useUser";
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const router = useRouter();
   const { profile, isLoading, initialize } = useUser();
 
@@ -28,4 +28,16 @@ export default function OnboardingPage() {
   }
 
   return <OnboardingChat />;
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-stone-50">
+        <div className="text-stone-600">Loading...</div>
+      </div>
+    }>
+      <OnboardingContent />
+    </Suspense>
+  );
 }

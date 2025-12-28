@@ -4,11 +4,26 @@ import {
   formatMessagesForAPI,
   type GuideAgentContext,
 } from "@/lib/agents/guide";
-import type { Task, Profile } from "@/lib/supabase/types";
+import { getTasksForUser } from "@/lib/tasks/loader";
+import type { Profile } from "@/lib/supabase/types";
+import { cookies } from "next/headers";
 
 export const runtime = "nodejs";
 
-// Demo mode profile
+async function getProfileFromCookies(): Promise<Profile | null> {
+  try {
+    const cookieStore = await cookies();
+    const profileCookie = cookieStore.get("grief-guide-profile");
+    if (profileCookie?.value) {
+      return JSON.parse(profileCookie.value);
+    }
+  } catch (e) {
+    console.error("Error reading profile cookie:", e);
+  }
+  return null;
+}
+
+// Fallback demo profile
 const DEMO_PROFILE: Profile = {
   id: "demo-user-123",
   email: "demo@griefguide.app",
@@ -32,34 +47,6 @@ const DEMO_PROFILE: Profile = {
   updated_at: new Date().toISOString(),
 };
 
-// Demo tasks (subset for context)
-const DEMO_TASKS: Partial<Task>[] = [
-  {
-    id: "1",
-    title: "Obtain death certificates",
-    status: "pending",
-    timeline_category: "immediate",
-    task_type: "paperwork",
-    priority: 1,
-  },
-  {
-    id: "2",
-    title: "Notify Social Security",
-    status: "pending",
-    timeline_category: "first_week",
-    task_type: "paperwork",
-    priority: 1,
-  },
-  {
-    id: "3",
-    title: "Contact estate attorney",
-    status: "pending",
-    timeline_category: "first_week",
-    task_type: "legal",
-    priority: 2,
-  },
-];
-
 export async function POST(request: Request) {
   try {
     // Parse request body
@@ -73,10 +60,25 @@ export async function POST(request: Request) {
       });
     }
 
-    // Build context for the agent (using demo data)
+    // Get profile from cookies or use demo
+    const profile = (await getProfileFromCookies()) || DEMO_PROFILE;
+
+    // Get tasks for this user
+    const tasks = getTasksForUser({
+      griefStage: profile.grief_stage || "immediate",
+      userRole: profile.user_role || "executor",
+      state: profile.state,
+      knowsWill: profile.knows_will_status,
+      knowsTrust: profile.knows_trust_status,
+      knowsProperty: profile.knows_property_status,
+      knowsAccounts: profile.knows_accounts_status,
+      knowsInsurance: profile.knows_insurance_status,
+    });
+
+    // Build context for the agent
     const context: GuideAgentContext = {
-      profile: DEMO_PROFILE,
-      tasks: DEMO_TASKS as Task[],
+      profile,
+      tasks,
       conversationHistory: history,
     };
 
