@@ -7,6 +7,7 @@ import { useUser } from "@/hooks/useUser";
 import { ChatTaskCard, parseMessageContent, generateContextualActions, MessageActions, type MessageAction } from "@/components/chat/ChatTaskCard";
 import { FuneralHomeSearch, parseFuneralHomeSearch } from "@/components/chat/FuneralHomeSearch";
 import { ChatInput, parseInputRequest } from "@/components/chat/ChatInput";
+import { PhoneButton, CallScriptCard, InteractiveChecklist, parseTaskFlowContent } from "@/components/chat/TaskFlowComponents";
 import type { Task, TaskStatus } from "@/lib/supabase/types";
 
 // Types
@@ -58,7 +59,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "5";
+const CURRENT_CACHE_VERSION = "6";
 
 interface StoredChatState {
   messages: Message[];
@@ -884,15 +885,22 @@ function MessageBubble({
   const { hasSearch: hasFuneralHomeSearch, zipCode: funeralHomeZip, remainingContent: contentAfterSearch } = parseFuneralHomeSearch(message.content);
 
   // Check for input requests
-  const { hasInput, inputType, label: inputLabel, remainingContent } = parseInputRequest(contentAfterSearch);
+  const { hasInput, inputType, label: inputLabel, remainingContent: contentAfterInput } = parseInputRequest(contentAfterSearch);
 
-  // Then parse the remaining content for tasks and actions
-  const { segments, taskIds, actions: explicitActions } = parseMessageContent(remainingContent);
+  // Parse task flow components (phone, call-script, checklist)
+  const taskFlowContent = parseTaskFlowContent(contentAfterInput);
+
+  // Then parse the remaining content for tasks and actions (from text segments only)
+  const textContent = taskFlowContent.segments
+    .filter(s => s.type === "text")
+    .map(s => s.content)
+    .join("\n");
+  const { segments, taskIds, actions: explicitActions } = parseMessageContent(textContent);
 
   // Use explicit actions from message if present, otherwise generate contextual actions
   // Don't show contextual actions if there's an input request (the input IS the action)
   const effectiveActions = isLastMessage && !isStreaming && !hasInput
-    ? (explicitActions.length > 0 ? explicitActions : generateContextualActions(remainingContent, taskIds[0]))
+    ? (explicitActions.length > 0 ? explicitActions : generateContextualActions(textContent, taskIds[0]))
     : [];
 
   const handleTaskAction = async (taskId: string, action: "complete" | "skip" | "details") => {
@@ -998,6 +1006,28 @@ function MessageBubble({
                 </div>
               );
             }
+          }
+          return null;
+        })}
+
+        {/* Task Flow Components (phone buttons, call scripts, checklists) */}
+        {taskFlowContent.segments.map((segment, index) => {
+          if (segment.type === "phone" && segment.phoneNumber && segment.phoneLabel) {
+            return (
+              <div key={`flow-${index}`} className="my-2">
+                <PhoneButton number={segment.phoneNumber} label={segment.phoneLabel} />
+              </div>
+            );
+          }
+          if (segment.type === "call-script" && segment.scriptType) {
+            return (
+              <CallScriptCard key={`flow-${index}`} type={segment.scriptType} />
+            );
+          }
+          if (segment.type === "checklist" && segment.checklistType) {
+            return (
+              <InteractiveChecklist key={`flow-${index}`} type={segment.checklistType} />
+            );
           }
           return null;
         })}
