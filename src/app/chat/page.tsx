@@ -59,7 +59,27 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "9";
+const CURRENT_CACHE_VERSION = "10";
+
+// Parse suggested prompts from message content
+// Format: [prompts:Prompt 1|Prompt 2|Prompt 3]
+function parseSuggestedPrompts(content: string): { prompts: string[]; remainingContent: string } {
+  const pattern = /\[prompts:([^\]]+)\]/;
+  const match = content.match(pattern);
+
+  if (match) {
+    const prompts = match[1].split("|").map(p => p.trim()).filter(p => p.length > 0);
+    return {
+      prompts,
+      remainingContent: content.replace(pattern, "").trim(),
+    };
+  }
+
+  return {
+    prompts: [],
+    remainingContent: content,
+  };
+}
 
 interface StoredChatState {
   messages: Message[];
@@ -437,18 +457,24 @@ export default function ChatPage() {
         }
       }
 
-      const suggestedPrompts = generateSuggestedPrompts(fullContent, messageText);
+      // Parse suggested prompts from the response (if Guide provided them)
+      const { prompts: parsedPrompts, remainingContent: contentWithoutPrompts } = parseSuggestedPrompts(fullContent);
+
+      // Use parsed prompts if available, otherwise fall back to generic context-based prompts
+      const suggestedPrompts = parsedPrompts.length > 0
+        ? parsedPrompts
+        : generateSuggestedPrompts(contentWithoutPrompts, messageText);
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",
-        content: fullContent || "I'm sorry, I couldn't generate a response. Please try again.",
+        content: contentWithoutPrompts || "I'm sorry, I couldn't generate a response. Please try again.",
         timestamp: new Date(),
         suggestedPrompts,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
-      historyRef.current.push({ role: "assistant", content: assistantMessage.content });
+      historyRef.current.push({ role: "assistant", content: contentWithoutPrompts });
     } catch (error) {
       console.error("Chat error:", error);
       const errorMessage: Message = {
