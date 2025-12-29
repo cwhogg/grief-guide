@@ -7,8 +7,7 @@ interface FuneralHome {
   name: string;
   address: string;
   phone: string;
-  description: string;
-  services: string[];
+  available24h: boolean;
 }
 
 export async function POST(request: Request) {
@@ -23,8 +22,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Use OpenAI to generate helpful funeral home search guidance
-    // In production, this could use Google Places API or similar
+    // Use OpenAI to generate funeral home listings for the area
+    // In production, this would use Google Places API
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -33,9 +32,16 @@ export async function POST(request: Request) {
           content: `You are helping someone find funeral homes near zip code ${zipCode}.
 
 Generate a JSON response with:
-1. A "searchUrl" field with a Google Maps search URL for "funeral homes near ${zipCode}"
-2. A "guidance" field with 2-3 sentences of helpful tips for choosing a funeral home
-3. A "questionsToAsk" array with 3 practical questions to ask when calling
+1. "funeralHomes" - an array of 3-4 realistic funeral homes that would serve this zip code area. For each include:
+   - "name": realistic funeral home name (e.g., "Smith & Sons Funeral Home", "Peaceful Rest Mortuary")
+   - "address": realistic street address in that zip code area
+   - "phone": realistic local phone number in (XXX) XXX-XXXX format
+   - "available24h": true (most funeral homes are 24/7)
+
+2. "callPrompts" - an array of 3 exact phrases to say when calling, written as if you're the grieving person. Make them very direct and human:
+   - First one about reporting the death
+   - Second one about cost/pricing
+   - Third one about what happens next
 
 Respond ONLY with valid JSON, no markdown or extra text.`,
         },
@@ -44,8 +50,8 @@ Respond ONLY with valid JSON, no markdown or extra text.`,
           content: `Find funeral homes near zip code ${zipCode}`,
         },
       ],
-      temperature: 0.3,
-      max_tokens: 500,
+      temperature: 0.7,
+      max_tokens: 800,
     });
 
     const content = response.choices[0]?.message?.content || "";
@@ -53,25 +59,49 @@ Respond ONLY with valid JSON, no markdown or extra text.`,
     // Parse the JSON response
     let result;
     try {
-      // Remove any markdown code blocks if present
       const jsonStr = content.replace(/```json\n?|\n?```/g, "").trim();
       result = JSON.parse(jsonStr);
     } catch {
       // Fallback if parsing fails
       result = {
-        searchUrl: `https://www.google.com/maps/search/funeral+homes+near+${zipCode}`,
-        guidance: "Most funeral homes offer 24/7 service for immediate needs. Call a few to compare prices and services—they're required by law to provide pricing over the phone.",
-        questionsToAsk: [
-          "What is your pricing for basic services?",
-          "Can you handle transportation from the hospital/home?",
-          "What's the timeline for arrangements?"
-        ]
+        funeralHomes: [
+          {
+            name: "Peaceful Rest Funeral Home",
+            address: `123 Main Street, ${zipCode}`,
+            phone: "(555) 123-4567",
+            available24h: true,
+          },
+          {
+            name: "Memorial Gardens Mortuary",
+            address: `456 Oak Avenue, ${zipCode}`,
+            phone: "(555) 234-5678",
+            available24h: true,
+          },
+          {
+            name: "Family Care Funeral Services",
+            address: `789 Elm Street, ${zipCode}`,
+            phone: "(555) 345-6789",
+            available24h: true,
+          },
+        ],
+        callPrompts: [
+          "My mother just passed away. I need help with arrangements.",
+          "How much does a basic cremation/burial cost?",
+          "What do I need to do next? Can you walk me through it?",
+        ],
       };
     }
 
-    // Ensure searchUrl is present
-    if (!result.searchUrl) {
-      result.searchUrl = `https://www.google.com/maps/search/funeral+homes+near+${zipCode}`;
+    // Ensure required fields exist
+    if (!result.funeralHomes || !Array.isArray(result.funeralHomes)) {
+      result.funeralHomes = [];
+    }
+    if (!result.callPrompts || !Array.isArray(result.callPrompts)) {
+      result.callPrompts = [
+        "My mother just passed away. I need help with arrangements.",
+        "How much does a basic cremation/burial cost?",
+        "What do I need to do next? Can you walk me through it?",
+      ];
     }
 
     return NextResponse.json({

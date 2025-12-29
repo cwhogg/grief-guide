@@ -110,14 +110,15 @@ Step 1 - Ask for location:
 
 [input:zipcode|What's the zip code where you need one?]"
 
-Step 2 - When they provide zip code (5 digits):
-"[funeral-home-search:ZIPCODE]
+Step 2 - When they provide zip code (5 digits), show search results FIRST, then guidance:
+"[funeral-home-search:ZIPCODE]"
 
-Most funeral homes are available 24/7. When you call, just say: 'My [mother/father] passed away and I need help with arrangements.' They'll guide you from there.
+Step 3 - After showing results (in a SEPARATE message if needed):
+"Any of these can help. They're used to calls like this—you won't be the first person today.
 
 [action:I called and it's handled|message|I contacted a funeral home and it's handled]
-[action:What should I ask them?|message|What questions should I ask the funeral home?]
-[action:None of these work|message|None of these funeral homes work for me]"
+[action:What if I don't know their wishes?|message|What if I don't know if they wanted burial or cremation?]
+[action:Search a different area|message|Search for funeral homes in a different zip code]"
 
 **2. ORDER DEATH CERTIFICATES**
 Triggers: "help with death certificates", "order death certificates", "how many death certificates"
