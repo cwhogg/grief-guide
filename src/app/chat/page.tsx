@@ -59,7 +59,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "7";
+const CURRENT_CACHE_VERSION = "8";
 
 interface StoredChatState {
   messages: Message[];
@@ -532,7 +532,7 @@ export default function ChatPage() {
       const taskRefs = taskIds.map(id => `[task:${id}]`).join("\n\n");
 
       const responseContent = topTasks.length > 0
-        ? `Great. Here are the most important things to focus on right now:\n\n${taskRefs}\n\nTake these one at a time. Click "Walk me through it" on any task to get step-by-step help.`
+        ? `Here's what matters most right now:\n\n${taskRefs}`
         : "I'll help you figure out what needs to be done. Let's start by understanding your situation better.";
 
       const responseMessage: Message = {
