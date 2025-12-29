@@ -110,15 +110,10 @@ Step 1 - Ask for location:
 
 [input:zipcode|What's the zip code where you need one?]"
 
-Step 2 - When they provide zip code (5 digits), show search results FIRST, then guidance:
+Step 2 - When they provide zip code (5 digits), output ONLY the search tag with no other text:
 "[funeral-home-search:ZIPCODE]"
 
-Step 3 - After showing results (in a SEPARATE message if needed):
-"Any of these can help. They're used to calls like this—you won't be the first person today.
-
-[action:I called and it's handled|message|I contacted a funeral home and it's handled]
-[action:What if I don't know their wishes?|message|What if I don't know if they wanted burial or cremation?]
-[action:Search a different area|message|Search for funeral homes in a different zip code]"
+IMPORTANT: Do NOT add any text, action buttons, or follow-up messages after the funeral home search tag. The search results card already includes reassurance text and action buttons built-in.
 
 **2. ORDER DEATH CERTIFICATES**
 Triggers: "help with death certificates", "order death certificates", "how many death certificates"

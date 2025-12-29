@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 interface FuneralHomeSearchProps {
   zipCode: string;
   onComplete?: () => void;
+  onSendMessage?: (message: string) => void;
 }
 
 interface FuneralHome {
@@ -20,7 +21,7 @@ interface SearchResult {
   callPrompts: string[];
 }
 
-export function FuneralHomeSearch({ zipCode, onComplete }: FuneralHomeSearchProps) {
+export function FuneralHomeSearch({ zipCode, onComplete, onSendMessage }: FuneralHomeSearchProps) {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<SearchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -154,8 +155,35 @@ export function FuneralHomeSearch({ zipCode, onComplete }: FuneralHomeSearchProp
         </div>
       )}
 
-      {/* Fallback link */}
+      {/* Reassurance and actions */}
       <div className="mt-4 pt-3 border-t border-[var(--gray-100)]">
+        <p className="text-sm text-[var(--gray-600)] mb-3">
+          Any of these can help. They're used to calls like this—you won't be the first person today.
+        </p>
+
+        {onSendMessage && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            <button
+              onClick={() => onSendMessage("I contacted a funeral home and it's handled")}
+              className="px-3 py-2 bg-[var(--gray-100)] text-[var(--gray-700)] text-sm font-medium rounded-[var(--radius-md)] hover:bg-[var(--gray-200)] transition-colors"
+            >
+              I called and it's handled
+            </button>
+            <button
+              onClick={() => onSendMessage("What if I don't know if they wanted burial or cremation?")}
+              className="px-3 py-2 bg-[var(--gray-100)] text-[var(--gray-700)] text-sm font-medium rounded-[var(--radius-md)] hover:bg-[var(--gray-200)] transition-colors"
+            >
+              What if I don't know their wishes?
+            </button>
+            <button
+              onClick={() => onSendMessage("Search for funeral homes in a different zip code")}
+              className="px-3 py-2 bg-[var(--gray-100)] text-[var(--gray-700)] text-sm font-medium rounded-[var(--radius-md)] hover:bg-[var(--gray-200)] transition-colors"
+            >
+              Search a different area
+            </button>
+          </div>
+        )}
+
         <a
           href={`https://www.google.com/maps/search/funeral+homes+near+${zipCode}`}
           target="_blank"

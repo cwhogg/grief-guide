@@ -59,7 +59,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "8";
+const CURRENT_CACHE_VERSION = "9";
 
 interface StoredChatState {
   messages: Message[];
@@ -1034,7 +1034,7 @@ function MessageBubble({
 
         {/* Funeral Home Search Results */}
         {hasFuneralHomeSearch && funeralHomeZip && (
-          <FuneralHomeSearch zipCode={funeralHomeZip} />
+          <FuneralHomeSearch zipCode={funeralHomeZip} onSendMessage={onSendMessage} />
         )}
 
         {/* Input Request */}
