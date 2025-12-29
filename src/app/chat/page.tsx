@@ -59,7 +59,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "10";
+const CURRENT_CACHE_VERSION = "11";
 
 // Parse suggested prompts from message content
 // Format: [prompts:Prompt 1|Prompt 2|Prompt 3]
