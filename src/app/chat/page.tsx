@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useUser } from "@/hooks/useUser";
 import { ChatTaskCard, parseMessageContent, generateContextualActions, MessageActions, type MessageAction } from "@/components/chat/ChatTaskCard";
 import { FuneralHomeSearch, parseFuneralHomeSearch } from "@/components/chat/FuneralHomeSearch";
+import { ChatInput, parseInputRequest } from "@/components/chat/ChatInput";
 import type { Task, TaskStatus } from "@/lib/supabase/types";
 
 // Types
@@ -57,7 +58,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "4";
+const CURRENT_CACHE_VERSION = "5";
 
 interface StoredChatState {
   messages: Message[];
@@ -880,13 +881,17 @@ function MessageBubble({
 
   // Assistant messages
   // First check for funeral home search
-  const { hasSearch: hasFuneralHomeSearch, zipCode: funeralHomeZip, remainingContent } = parseFuneralHomeSearch(message.content);
+  const { hasSearch: hasFuneralHomeSearch, zipCode: funeralHomeZip, remainingContent: contentAfterSearch } = parseFuneralHomeSearch(message.content);
+
+  // Check for input requests
+  const { hasInput, inputType, label: inputLabel, remainingContent } = parseInputRequest(contentAfterSearch);
 
   // Then parse the remaining content for tasks and actions
   const { segments, taskIds, actions: explicitActions } = parseMessageContent(remainingContent);
 
   // Use explicit actions from message if present, otherwise generate contextual actions
-  const effectiveActions = isLastMessage && !isStreaming
+  // Don't show contextual actions if there's an input request (the input IS the action)
+  const effectiveActions = isLastMessage && !isStreaming && !hasInput
     ? (explicitActions.length > 0 ? explicitActions : generateContextualActions(remainingContent, taskIds[0]))
     : [];
 
@@ -1000,6 +1005,15 @@ function MessageBubble({
         {/* Funeral Home Search Results */}
         {hasFuneralHomeSearch && funeralHomeZip && (
           <FuneralHomeSearch zipCode={funeralHomeZip} />
+        )}
+
+        {/* Input Request */}
+        {hasInput && inputType && isLastMessage && !isStreaming && (
+          <ChatInput
+            type={inputType}
+            label={inputLabel || undefined}
+            onSubmit={(value) => onSendMessage(value)}
+          />
         )}
       </div>
     </div>

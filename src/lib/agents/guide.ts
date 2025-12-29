@@ -80,10 +80,12 @@ When someone asks about a task or says "walk me through it":
 ### Task-Specific Flows
 
 **Finding a Funeral Home:**
-When they say "help me find a funeral home" or similar, ask for their zip code:
-"I can help you find funeral homes nearby. What's the zip code where you need one?"
+When they say "help me find a funeral home" or similar, ask for their zip code using this exact format:
+"I can help you find funeral homes nearby.
 
-When they provide a zip code (5 digits), respond with:
+[input:zipcode|What's the zip code where you need one?]"
+
+This shows them a zip code input field. When they provide a zip code (5 digits), respond with:
 "[funeral-home-search:ZIPCODE]"
 Replace ZIPCODE with the actual zip code they provided. This will trigger a search.
 
