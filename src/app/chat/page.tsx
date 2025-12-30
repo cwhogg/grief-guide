@@ -59,7 +59,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "13";
+const CURRENT_CACHE_VERSION = "14";
 
 // Parse suggested prompts from message content
 // Format: [prompts:Prompt 1|Prompt 2|Prompt 3]
@@ -90,6 +90,19 @@ function parseTaskCompletions(content: string): { completedTaskIds: string[]; re
 
   return {
     completedTaskIds,
+    remainingContent: content.replace(pattern, "").trim(),
+  };
+}
+
+// Parse task in-progress tags from message content
+// Format: [task-in-progress:TASK_ID]
+function parseTaskInProgress(content: string): { inProgressTaskIds: string[]; remainingContent: string } {
+  const pattern = /\[task-in-progress:([^\]]+)\]/g;
+  const matches = [...content.matchAll(pattern)];
+  const inProgressTaskIds = matches.map(m => m[1].trim());
+
+  return {
+    inProgressTaskIds,
     remainingContent: content.replace(pattern, "").trim(),
   };
 }
@@ -485,12 +498,20 @@ export default function ChatPage() {
       // Parse task completions from the response (if Guide marked tasks complete)
       const { completedTaskIds, remainingContent: contentWithoutCompletions } = parseTaskCompletions(fullContent);
 
+      // Parse task in-progress tags from the response
+      const { inProgressTaskIds, remainingContent: contentWithoutInProgress } = parseTaskInProgress(contentWithoutCompletions);
+
       // Parse suggested prompts from the response (if Guide provided them)
-      const { prompts: parsedPrompts, remainingContent: contentWithoutPrompts } = parseSuggestedPrompts(contentWithoutCompletions);
+      const { prompts: parsedPrompts, remainingContent: contentWithoutPrompts } = parseSuggestedPrompts(contentWithoutInProgress);
 
       // Mark any tasks as completed
       for (const taskId of completedTaskIds) {
         handleTaskStatusChange(taskId, "completed");
+      }
+
+      // Mark any tasks as in-progress
+      for (const taskId of inProgressTaskIds) {
+        handleTaskStatusChange(taskId, "in_progress");
       }
 
       // Use parsed prompts if available, otherwise fall back to generic context-based prompts
