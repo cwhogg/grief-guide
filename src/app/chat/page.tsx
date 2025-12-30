@@ -59,7 +59,7 @@ const FIRST_VISIT_KEY = "grief-guide-chat-visited";
 const CHAT_STORAGE_KEY = "grief-guide-chat-state";
 const CACHE_VERSION_KEY = "grief-guide-cache-version";
 // Increment this when task structure changes to force cache clear
-const CURRENT_CACHE_VERSION = "12";
+const CURRENT_CACHE_VERSION = "13";
 
 // Parse suggested prompts from message content
 // Format: [prompts:Prompt 1|Prompt 2|Prompt 3]
@@ -78,6 +78,19 @@ function parseSuggestedPrompts(content: string): { prompts: string[]; remainingC
   return {
     prompts: [],
     remainingContent: content,
+  };
+}
+
+// Parse task completion tags from message content
+// Format: [task-complete:TASK_ID]
+function parseTaskCompletions(content: string): { completedTaskIds: string[]; remainingContent: string } {
+  const pattern = /\[task-complete:([^\]]+)\]/g;
+  const matches = [...content.matchAll(pattern)];
+  const completedTaskIds = matches.map(m => m[1].trim());
+
+  return {
+    completedTaskIds,
+    remainingContent: content.replace(pattern, "").trim(),
   };
 }
 
@@ -244,6 +257,7 @@ export default function ChatPage() {
   };
 
   const handleTaskStatusChange = async (taskId: string, status: TaskStatus) => {
+    // Update local state immediately for responsiveness
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status } : t));
     setTaskMap(prev => {
       const newMap = new Map(prev);
@@ -253,6 +267,17 @@ export default function ChatPage() {
       }
       return newMap;
     });
+
+    // Persist to API
+    try {
+      await fetch("/api/tasks", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: taskId, status }),
+      });
+    } catch (error) {
+      console.error("Failed to update task status:", error);
+    }
   };
 
   const handleTellMeMore = (task: Task) => {
@@ -457,8 +482,16 @@ export default function ChatPage() {
         }
       }
 
+      // Parse task completions from the response (if Guide marked tasks complete)
+      const { completedTaskIds, remainingContent: contentWithoutCompletions } = parseTaskCompletions(fullContent);
+
       // Parse suggested prompts from the response (if Guide provided them)
-      const { prompts: parsedPrompts, remainingContent: contentWithoutPrompts } = parseSuggestedPrompts(fullContent);
+      const { prompts: parsedPrompts, remainingContent: contentWithoutPrompts } = parseSuggestedPrompts(contentWithoutCompletions);
+
+      // Mark any tasks as completed
+      for (const taskId of completedTaskIds) {
+        handleTaskStatusChange(taskId, "completed");
+      }
 
       // Use parsed prompts if available, otherwise fall back to generic context-based prompts
       const suggestedPrompts = parsedPrompts.length > 0
